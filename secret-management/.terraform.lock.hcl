@@ -1,0 +1,24 @@
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/infisical/infisical" {
+  version = "0.13.0"
+  hashes = [
+    "h1:M9Urduc8NsWR/E9m1a/FM4kUX8eTkDShbFv+nxKtrZE=",
+    "zh:1917392ee1a8fb76e06a1fd75e854061800e44a4cc38f8f8fbd08b37ac565fd8",
+    "zh:1d2b82ac731ade29b0029afddb5957ca620cb6f0abf8d30e665b6d85c5aa6404",
+    "zh:4b0d0354d2bfa3a546db59ea81628d840fa00cf2b97a7b27f3311bfc771a1dbc",
+    "zh:4c47c45548b88aa1c2950b2782979ee6a2f75d890613d0b1381a46b39295347d",
+    "zh:62318fe166ec965154dfa88fa0d78e3254941cef07eb52e47c1303c359897600",
+    "zh:73175363264a0b2a575b5b48974dd9f9195aeedb3fe6fe499f5ff0c91a3b2b10",
+    "zh:78ab4c6cd2b90b6eff31a5e1ead27e96800e1919e4a881ee2b2e06c2820279dd",
+    "zh:890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
+    "zh:a1490516333e5e495d50d477c29ea242a0c4ccef611e8ad5bc3450c9ef161499",
+    "zh:a68544a220c93e1e3b54129e3e2d87ec8328b034738a69d98003bf7dc5f12d14",
+    "zh:ce7d76fe9593070bf4cb7b9b49403b17bf89b1c114b90dec8028235ccce95f76",
+    "zh:d4396788e1bd24b8e207f3f7e34e8992ba0a2a119cf0a5aee1b80f763f733881",
+    "zh:d47039f3a3f3f25b463435c09ee8833fb66ce310222a24b4892e1cbe5b00c6fa",
+    "zh:e6ce327c05363050c0f2a84a9935bfddaf6c14fd61a43dccc8912f1e8abc538c",
+    "zh:e798d8db33289e7cf2061a703464f62505c7416630087148a0411b172f3b556f",
+  ]
+}
