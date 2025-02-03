@@ -1,3 +1,10 @@
+module "main" {
+  source = "../"
+  host = var.host
+  token = var.token
+  client_id = var.client_id
+}
+
 resource "infisical_project" "kubernetes" {
   name        = "Kubernetes"
   slug        = "kubernetes"
