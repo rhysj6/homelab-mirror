@@ -4,6 +4,9 @@ terraform {
       source = "infisical/infisical"
     }
   }
+  backend "s3" {
+    key = "secret-management/kubernetes.tfstate"
+  }
 }
 
 provider "infisical" {
