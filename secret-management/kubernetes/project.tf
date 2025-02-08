@@ -4,6 +4,13 @@ resource "infisical_project" "kubernetes" {
   description = "Contains all the resources related to the Kubernetes clusters"
 }
 
+resource "infisical_project_environment" "management" {
+  name       = "management"
+  project_id = infisical_project.kubernetes.id
+  slug       = "management"
+  position   = 3 # Optional
+}
+
 resource "infisical_project_environment" "test" {
   name       = "test"
   project_id = infisical_project.kubernetes.id
