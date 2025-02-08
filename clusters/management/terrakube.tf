@@ -3,19 +3,9 @@ locals {
 }
 
 ## Create a Minio bucket for Terrakube with applicable IAM policies
-
 resource "minio_s3_bucket" "terrakube" {
   bucket = "terrakube"
   acl    = "private"
-}
-
-resource "minio_s3_bucket_versioning" "terrakube" {
-  depends_on = [minio_s3_bucket.terrakube]
-  bucket     = minio_s3_bucket.terrakube.bucket
-
-  versioning_configuration {
-    status = "Enabled"
-  }
 }
 
 resource "minio_iam_policy" "terrakube" {
@@ -31,7 +21,6 @@ resource "minio_iam_policy" "terrakube" {
     ]
   })
 }
-
 
 resource "minio_iam_user" "terrakube" {
   name = "terrakube"
