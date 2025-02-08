@@ -171,3 +171,22 @@ resource "helm_release" "terrakube" {
   }
 }
 
+# Cluster role binding for the Terrakube service account
+resource "kubernetes_cluster_role_binding" "terrakube" {
+  depends_on = [helm_release.terrakube]
+  metadata {
+    name = "terrakube"
+  }
+
+  role_ref {
+    kind = "ClusterRole"
+    name = "cluster-admin"
+    api_group = "rbac.authorization.k8s.io"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "default"
+    namespace = helm_release.terrakube.namespace
+  }
+}
