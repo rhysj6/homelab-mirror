@@ -33,7 +33,8 @@
 	},
 
 	"remoteEnv": {
-		"SYNC_LOCALHOST_KUBECONFIG": "true"
+		"SYNC_LOCALHOST_KUBECONFIG": "true",
+		"TF_CLOUD_HOSTNAME": "${localEnv:TF_CLOUD_HOSTNAME}"
 	},
 
 	"initializeCommand": "cd .devcontainer && bash ensure-mount-sources",

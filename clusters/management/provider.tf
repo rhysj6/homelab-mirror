@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "Homelab"
+    workspaces {
+      name = "Rancher_Cluster"
+    }
+  }
+
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -28,32 +35,33 @@ terraform {
   }
 }
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  // Handled in the environment variables.
+  # config_path = "~/.kube/config"
 }
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    // Handled in the environment variables.
+    # config_path = "~/.kube/config"
   }
 }
 
 provider "infisical" {
-  host = var.infisical.host
-  auth = {
-    universal = {
-      client_id     = var.infisical.machine_id
-      client_secret = var.infisical.token
-    }
-  }
+  // Handled in the environment variables.
+  // INFISICAL_HOST
+  // INFISICAL_UNIVERSAL_AUTH_CLIENT_ID
+  // INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET
 }
 
 provider "authentik" {
-  url   = "https://${var.authentik_host}"
-  token = data.infisical_secrets.bootstrap_secrets.secrets["authentik_token"].value
+  // Handled in the environment variables.
+  // AUTHENTIK_URL
+  // AUTHENTIK_TOKEN
 }
 
 provider "minio" {
-  minio_server   = data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value
-  minio_user     = data.infisical_secrets.bootstrap_secrets.secrets["minio_key"].value
-  minio_password = data.infisical_secrets.bootstrap_secrets.secrets["minio_token"].value
+  // Handled in the environment variables.
+  // MINIO_ENDPOINT
+  // MINIO_USER
+  // MINIO_PASSWORD
   minio_ssl      = true
 }

@@ -4,7 +4,7 @@ data "authentik_flow" "default-authorization-flow" {
 }
 
 data "authentik_certificate_key_pair" "authentik_host" {
-  name = var.authentik_host
+  name = local.authentik_host
 }
 
 # data "authentik_property_mapping_provider_scope" "scope-email" {
