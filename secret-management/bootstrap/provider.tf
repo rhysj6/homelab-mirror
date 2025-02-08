@@ -4,9 +4,6 @@ terraform {
       source = "infisical/infisical"
     }
   }
-  backend "s3" {
-    key = "secret-management/boostrap.tfstate"
-  }
 }
 
 provider "infisical" {
