@@ -1,10 +1,10 @@
 terraform {
-  cloud {
-    organization = "Homelab"
-    workspaces {
-      name = "Rancher_Cluster"
-    }
-  }
+  # cloud {
+  #   organization = "Homelab"
+  #   workspaces {
+  #     name = "Rancher_Cluster"
+  #   }
+  # }
 
   required_providers {
     kubernetes = {
@@ -36,12 +36,12 @@ terraform {
 }
 provider "kubernetes" {
   // Handled in the environment variables.
-  # config_path = "~/.kube/config"
+  config_path = "~/.kube/config"
 }
 provider "helm" {
   kubernetes {
     // Handled in the environment variables.
-    # config_path = "~/.kube/config"
+    config_path = "~/.kube/config"
   }
 }
 
