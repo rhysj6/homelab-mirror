@@ -59,7 +59,7 @@ resource "authentik_provider_oauth2" "terrakube" {
   property_mappings = [
     "fa7e62f8-1719-40b5-8352-3a675aef2b07", # data.authentik_property_mapping_provider_scope.scope-email.id,
     "c02d98e6-3ec2-4d2c-8d98-1a03b21f5ebc", # data.authentik_property_mapping_provider_scope.scope-openid.id,
-    "7df79a96-9f18-4451-9faa-0a879302efd6" # data.authentik_property_mapping_provider_scope.scope-profile.id,
+    "7df79a96-9f18-4451-9faa-0a879302efd6"  # data.authentik_property_mapping_provider_scope.scope-profile.id,
   ]
 }
 
@@ -107,7 +107,7 @@ resource "helm_release" "terrakube" {
   }
   set {
     name  = "dex.config.connectors[0].config.issuer"
-    value = "https://${var.authentik_host}/application/o/${authentik_application.terrakube.id}/"
+    value = "https://${local.authentik_host}/application/o/${authentik_application.terrakube.id}/"
   }
   set {
     name  = "dex.config.connectors[0].config.clientSecret"
@@ -118,8 +118,14 @@ resource "helm_release" "terrakube" {
     value = "https://api.${local.terrakube_hostname}/dex/callback"
   }
   set_list {
-    name  = "dex.config.staticClients[0].redirectURIs"
-    value = ["https://api.${local.terrakube_hostname}/dex", "https://${local.terrakube_hostname}"]
+    name = "dex.config.staticClients[0].redirectURIs"
+    value = [
+      "https://api.${local.terrakube_hostname}/dex",
+      "https://${local.terrakube_hostname}",
+      "/device/callback",
+      "http://localhost:10000/login",
+      "http://localhost:10001/login"
+    ]
   }
 
   ## Set the random Redis and PostgreSQL passwords.
@@ -147,7 +153,7 @@ resource "helm_release" "terrakube" {
   }
   set {
     name  = "storage.minio.endpoint"
-    value = data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value
+    value = "https://${data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value}"
   }
 
   ## Set the domains for the Terrakube application.
