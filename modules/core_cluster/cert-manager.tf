@@ -10,6 +10,7 @@ resource "helm_release" "cert_manager" {
   name       = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.id
   version    = "1.17.0"
+  max_history = 2
   set {
     name  = "installCRDs"
     value = "true"
