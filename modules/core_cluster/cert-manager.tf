@@ -12,7 +12,7 @@ resource "helm_release" "cert_manager" {
   version    = "1.17.0"
   max_history = 2
   set {
-    name  = "installCRDs"
+    name  = "crds.enabled"
     value = "true"
   }
 }
