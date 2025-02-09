@@ -28,3 +28,5 @@ resource "helm_release" "longhorn" {
     value = "longhorn.${data.infisical_secrets.kubernetes.secrets["cluster_subdomain"].value}"
   }
 }
+
+// Note: Make sure to deal with multi-path issues per node https://longhorn.io/kb/troubleshooting-volume-with-multipath/
