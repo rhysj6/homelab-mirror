@@ -61,21 +61,21 @@ ingress:
     ingressClassName: "traefik"
     tlsSecretName: tls-secret-ui-terrakube
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-production
+      cert-manager.io/cluster-issuer: cert-manager
   api:
     domain: "terrakube-api.minikube.net"
     ingressClassName: "traefik"
     tlsSecretName: tls-secret-api-terrakube
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-production
+      cert-manager.io/cluster-issuer: cert-manager
   registry:
     domain: "terrakube-reg.minikube.net"
     ingressClassName: "traefik"
     tlsSecretName: tls-secret-reg-terrakube
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-production
+      cert-manager.io/cluster-issuer: cert-manager
   dex:
     path: "/dex/"
     pathType: "Prefix"
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-production
+      cert-manager.io/cluster-issuer: cert-manager
