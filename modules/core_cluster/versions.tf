@@ -30,12 +30,3 @@ terraform {
     }
   }
 }
-provider "cloudflare" {
-  // Configured in the environment variables.
-  // CLOUDFLARE_API_TOKEN
-  # api_token = ""
-}
-
-provider "kubernetes" {
-      # config_path = "~/.kube/config"
-}
