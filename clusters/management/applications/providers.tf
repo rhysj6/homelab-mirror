@@ -36,12 +36,12 @@ terraform {
 }
 provider "kubernetes" {
   // Handled in the environment variables.
-  config_path = "~/.kube/config"
+  config_path = "/workspaces/homelab/management_kubeconfig"
 }
 provider "helm" {
   kubernetes {
     // Handled in the environment variables.
-    config_path = "~/.kube/config"
+    config_path = "/workspaces/homelab/management_kubeconfig"
   }
 }
 
