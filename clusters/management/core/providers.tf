@@ -44,17 +44,3 @@ provider "helm" {
     config_path = "/workspaces/homelab/management_kubeconfig"
   }
 }
-
-provider "infisical" {
-  // Handled in the environment variables.
-  // INFISICAL_HOST
-  // INFISICAL_UNIVERSAL_AUTH_CLIENT_ID
-  // INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET
-}
-
-provider "authentik" {
-  // Handled in the environment variables.
-  // AUTHENTIK_URL
-  // AUTHENTIK_TOKEN
-}
-
