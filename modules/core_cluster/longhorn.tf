@@ -17,7 +17,7 @@ resource "helm_release" "longhorn" {
   }
   set {
     name  = "ingress.annotations.cert-manager\\.io/cluster-issuer"
-    value = resource.kubernetes_manifest.cluster_issuer.manifest.metadata.name
+    value = "cert-manager"
   }
   set {
     name  = "ingress.tls"
