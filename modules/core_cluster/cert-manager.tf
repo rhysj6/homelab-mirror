@@ -29,7 +29,15 @@ resource "kubernetes_secret" "cluster_issuer" {
 
 data "cloudflare_zones" "zones" {}
 
+data "kubernetes_resources" "cluster-issuer-crd" {
+  api_version = "apiextensions.k8s.io/v1"
+  kind        = "CustomResourceDefinition"
+  field_selector = "metadata.name=clusterissuers.cert-manager.io"
+  limit = 1
+}
+
 resource "kubernetes_manifest" "cluster_issuer" {
+  count = length(data.kubernetes_resources.cluster-issuer-crd.objects)
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
