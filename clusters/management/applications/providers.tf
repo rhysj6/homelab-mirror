@@ -37,6 +37,14 @@ terraform {
 provider "kubernetes" {
   // Handled in the environment variables.
   config_path = "/workspaces/homelab/management_kubeconfig"
+  ignore_annotations = [
+    ".*cattle\\.io.*",
+    "cattle\\.io/status"
+  ]
+  ignore_labels = [
+    ".*cattle\\.io.*"
+  ]
+
 }
 provider "helm" {
   kubernetes {
@@ -63,5 +71,5 @@ provider "minio" {
   // MINIO_ENDPOINT
   // MINIO_USER
   // MINIO_PASSWORD
-  minio_ssl      = true
+  minio_ssl = true
 }
