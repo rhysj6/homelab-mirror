@@ -38,13 +38,11 @@ provider "kubernetes" {
   // Handled in the environment variables.
   config_path = "/workspaces/homelab/management_kubeconfig"
   ignore_annotations = [
-    ".*cattle\\.io.*",
-    "cattle\\.io/status"
+    ".*cattle\\.io.*"
   ]
   ignore_labels = [
     ".*cattle\\.io.*"
   ]
-
 }
 provider "helm" {
   kubernetes {
