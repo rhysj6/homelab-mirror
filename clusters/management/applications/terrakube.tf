@@ -38,7 +38,7 @@ resource "minio_iam_service_account" "terrakube" {
 ## Create the authentik authentication provider and application and an admin group
 
 resource "authentik_provider_oauth2" "terrakube" {
-  name               = "terrakube"
+  name               = "Terrakube - (Managed via Terraform)"
   client_id          = "terrakube"
   authorization_flow = data.authentik_flow.authorization-flow.id
   signing_key        = data.authentik_certificate_key_pair.authentik_host.id
