@@ -21,7 +21,7 @@ terraform {
     }
     authentik = {
       source  = "goauthentik/authentik"
-      version = "2024.6.1" ## TODO: Update this when redeploying authentik.
+      version = "2024.12.1"
     }
     minio = {
       source  = "aminueza/minio"

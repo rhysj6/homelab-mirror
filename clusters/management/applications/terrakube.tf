@@ -40,15 +40,20 @@ resource "minio_iam_service_account" "terrakube" {
 resource "authentik_provider_oauth2" "terrakube" {
   name               = "terrakube"
   client_id          = "terrakube"
-  authorization_flow = data.authentik_flow.default-authorization-flow.id
+  authorization_flow = data.authentik_flow.authorization-flow.id
   signing_key        = data.authentik_certificate_key_pair.authentik_host.id
-  redirect_uris = [
-    "https://api.${local.terrakube_hostname}/dex/callback",
+  allowed_redirect_uris = [
+    {
+      url = "https://api.${local.terrakube_hostname}/dex/callback"
+      matching_mode = "strict"
+    }
   ]
+  authentication_flow = data.authentik_flow.authorization-flow.id
+  invalidation_flow = data.authentik_flow.invalidation-flow.id
   property_mappings = [
-    "fa7e62f8-1719-40b5-8352-3a675aef2b07", # data.authentik_property_mapping_provider_scope.scope-email.id,
-    "c02d98e6-3ec2-4d2c-8d98-1a03b21f5ebc", # data.authentik_property_mapping_provider_scope.scope-openid.id,
-    "7df79a96-9f18-4451-9faa-0a879302efd6"  # data.authentik_property_mapping_provider_scope.scope-profile.id,
+    data.authentik_property_mapping_provider_scope.scope-email.id,
+    data.authentik_property_mapping_provider_scope.scope-openid.id,
+    data.authentik_property_mapping_provider_scope.scope-profile.id,
   ]
 }
 
