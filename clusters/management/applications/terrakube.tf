@@ -44,12 +44,12 @@ resource "authentik_provider_oauth2" "terrakube" {
   signing_key        = data.authentik_certificate_key_pair.authentik_host.id
   allowed_redirect_uris = [
     {
-      url = "https://api.${local.terrakube_hostname}/dex/callback"
+      url           = "https://api.${local.terrakube_hostname}/dex/callback"
       matching_mode = "strict"
     }
   ]
   authentication_flow = data.authentik_flow.authorization-flow.id
-  invalidation_flow = data.authentik_flow.invalidation-flow.id
+  invalidation_flow   = data.authentik_flow.invalidation-flow.id
   property_mappings = [
     data.authentik_property_mapping_provider_scope.scope-email.id,
     data.authentik_property_mapping_provider_scope.scope-openid.id,
@@ -60,6 +60,7 @@ resource "authentik_provider_oauth2" "terrakube" {
 resource "authentik_application" "terrakube" {
   name              = "Terrakube"
   slug              = "terrakube"
+  group             = "Infrastructure"
   meta_launch_url   = "https://${local.terrakube_hostname}"
   open_in_new_tab   = true
   protocol_provider = authentik_provider_oauth2.terrakube.id
@@ -173,8 +174,8 @@ resource "kubernetes_cluster_role_binding" "terrakube" {
   }
 
   role_ref {
-    kind = "ClusterRole"
-    name = "cluster-admin"
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
     api_group = "rbac.authorization.k8s.io"
   }
 
