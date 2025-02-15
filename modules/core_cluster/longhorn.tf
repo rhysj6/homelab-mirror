@@ -12,22 +12,6 @@ resource "helm_release" "longhorn" {
   version     = "1.8.0"
   max_history = 2
   set {
-    name  = "ingress.enabled"
-    value = true
-  }
-  set {
-    name  = "ingress.annotations.cert-manager\\.io/cluster-issuer"
-    value = "cert-manager"
-  }
-  set {
-    name  = "ingress.tls"
-    value = true
-  }
-  set {
-    name  = "ingress.host"
-    value = "longhorn.${data.infisical_secrets.kubernetes.secrets["cluster_subdomain"].value}"
-  }
-  set {
     name  = "persistence.defaultClassReplicaCount"
     value = var.number_of_nodes
   }
