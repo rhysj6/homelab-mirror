@@ -27,6 +27,10 @@ resource "helm_release" "longhorn" {
     name  = "ingress.host"
     value = "longhorn.${data.infisical_secrets.kubernetes.secrets["cluster_subdomain"].value}"
   }
+  set {
+    name  = "persistence.defaultClassReplicaCount"
+    value = var.number_of_nodes
+  }
 }
 
 // Note: Make sure to deal with multi-path issues per node https://longhorn.io/kb/troubleshooting-volume-with-multipath/

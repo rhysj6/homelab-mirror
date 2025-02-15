@@ -17,3 +17,9 @@ variable "ingress_controller_ip" {
   description = "The IP address of the Ingress Controller"
   type        = string
 }
+
+variable "number_of_nodes" {
+  description = "The number of nodes in the cluster"
+  type        = number
+  default = 3
+}
