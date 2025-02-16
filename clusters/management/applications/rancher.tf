@@ -3,6 +3,9 @@ resource "kubernetes_namespace" "rancher" {
   metadata {
     name = "cattle-system"
   }
+  lifecycle {
+    ignore_changes = [ metadata[0].annotations ]
+  }
 }
 
 resource "helm_release" "rancher" {

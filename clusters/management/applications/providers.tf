@@ -31,14 +31,19 @@ terraform {
       source  = "hashicorp/random"
       version = "3.6.3"
     }
-
+    rancher2 = {
+      source = "rancher/rancher2"
+      version = "6.0.0"
+    }
   }
 }
 provider "kubernetes" {
   // Handled in the environment variables.
   config_path = "/workspaces/homelab/management_kubeconfig"
   ignore_annotations = [
-    ".*cattle\\.io.*"
+    ".*lifecycle\\.cattle\\.io.*",
+    ".*management\\.cattle\\.io.*",
+    "cattle.io/status"
   ]
   ignore_labels = [
     ".*cattle\\.io.*"
