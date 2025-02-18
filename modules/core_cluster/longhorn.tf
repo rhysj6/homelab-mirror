@@ -17,4 +17,4 @@ resource "helm_release" "longhorn" {
   }
 }
 
-// Note: Make sure to prepare nodes https://longhorn.io/docs/1.8.0/deploy/install/#installation-requirements
+// Note: Make sure to prepare nodes https://longhorn.io/docs/1.8.0/v2-data-engine/quick-start/#prerequisites
