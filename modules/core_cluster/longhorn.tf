@@ -17,4 +17,4 @@ resource "helm_release" "longhorn" {
   }
 }
 
-// Note: Make sure to deal with multi-path issues per node https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+// Note: Make sure to prepare nodes https://longhorn.io/docs/1.8.0/deploy/install/#installation-requirements
