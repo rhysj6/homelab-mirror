@@ -30,4 +30,8 @@ resource "helm_release" "rancher" {
     name = "replicas"
     value = 1
   }
+  set {
+    name  = "agentTLSMode"
+    value = "system-store"
+  }
 }
