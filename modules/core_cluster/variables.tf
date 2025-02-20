@@ -3,11 +3,6 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "main_node_ip" {
-  description = "The IP address of the first control plane node"
-  type        = string
-}
-
 variable "cilium_loadbalancer_ip_pool_cidr" {
   description = "The CIDR block for the Cilium LoadBalancer IP Pool"
   type        = string
