@@ -1,4 +1,3 @@
-
 data "infisical_projects" "bootstrap-project" {
   slug = "bootstrap"
 }

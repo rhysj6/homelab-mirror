@@ -1,25 +1,23 @@
-
-import {
-    to = rancher2_cluster_v2.management
-    id = "fleet-local/local"
+data "rancher2_cluster_v2" "management" {
+  name = "local"
+  fleet_namespace = "fleet-local"
 }
 
-resource "rancher2_cluster_v2" "management" {
-  name = "local"
-  kubernetes_version = "v1.31.5+k3s1"
-  fleet_namespace = "fleet-local"
-  rke_config {
-    etcd {
-      snapshot_schedule_cron = "0 */12 * * *"
-      snapshot_retention = 10
-      s3_config {
-        bucket = minio_s3_bucket.management-etcd.bucket
-        endpoint = "https://${data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value}"
-        cloud_credential_name = rancher2_cloud_credential.minio_etc_bucket.name
-      }
+# Create a new rancher2 Etcd Backup
+resource "rancher2_etcd_backup" "backup" {
+  backup_config {
+    enabled = true
+    interval_hours = 12
+    retention = 10
+    s3_backup_config {
+      access_key = minio_iam_service_account.management-etcd.access_key
+      bucket_name = minio_s3_bucket.management-etcd.bucket
+      endpoint = "https://${data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value}"
+      secret_key = minio_iam_service_account.management-etcd.secret_key
     }
   }
-
+  cluster_id = data.rancher2_cluster_v2.management.cluster_v1_id
+  name = "backup"
 }
 
 ## Create a Minio bucket for management-etcd with applicable IAM policies
