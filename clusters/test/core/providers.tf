@@ -28,9 +28,16 @@ terraform {
   }
 }
 
+module "management_cluster_config" {
+  source          = "../../../modules/rancher_cluster_config"
+  cluster_name    = "local"
+  fleet_namespace = "fleet-local"
+}
+
 provider "kubernetes" {
-  alias       = "management"
-  config_path = "/workspaces/homelab/management_kubeconfig"
+  alias = "management"
+  host  = module.management_cluster_config.host
+  token = module.management_cluster_config.token
   ignore_annotations = [
     ".*cattle\\.io.*"
   ]
@@ -40,7 +47,7 @@ provider "kubernetes" {
 }
 
 module "test_cluster_config" {
-  source = "../../../modules/rancher_cluster_config"
+  source       = "../../../modules/rancher_cluster_config"
   cluster_name = "test"
 }
 
