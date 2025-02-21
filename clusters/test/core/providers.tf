@@ -38,12 +38,28 @@ provider "kubernetes" {
     ".*cattle\\.io.*"
   ]
 }
-# provider "helm" {
-#   kubernetes {
-#     // Handled in the environment variables.
-#     config_path = "/workspaces/homelab/management_kubeconfig"
-#   }
-# }
+
+module "test_cluster_config" {
+  source = "../../../modules/rancher_cluster_config"
+  cluster_name = "test"
+}
+
+provider "kubernetes" {
+  host  = module.test_cluster_config.host
+  token = module.test_cluster_config.token
+  ignore_annotations = [
+    ".*cattle\\.io.*"
+  ]
+  ignore_labels = [
+    ".*cattle\\.io.*"
+  ]
+}
+provider "helm" {
+  kubernetes {
+    host  = module.test_cluster_config.host
+    token = module.test_cluster_config.token
+  }
+}
 
 provider "minio" {
   // Handled in the environment variables.
