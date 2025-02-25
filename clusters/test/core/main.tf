@@ -14,9 +14,9 @@ module "cluster" {
 }
 
 module "core" {
-  count                            = module.test_cluster_config.cluster_exists ? 1 : 0
+  count = var.firstrun ? 0 : 1
   source                           = "../../../modules/core_cluster"
-  cluster_name                     = "management"
+  cluster_name                     = "test"
   cilium_loadbalancer_ip_pool_cidr = "10.20.31.1/24"
   ingress_controller_ip            = "10.20.31.11"
 }
