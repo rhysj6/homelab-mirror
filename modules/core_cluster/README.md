@@ -1,6 +1,23 @@
 # What is this module?
 This contains all cluster infrastructure that must be deployed to each new cluster
 
+## Disk size increase
+In root
+```
+vgdisplay
+```
+
+```
+lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+```
+
+```
+resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+```
+```
+vgdisplay
+```
+
 ## Longhorn setup
 Before installing make sure to do the following per node to ensure longhorn works
 
