@@ -7,8 +7,8 @@ data "authentik_flow" "invalidation-flow" {
   slug = "default-provider-invalidation-flow"
 }
 
-data "authentik_certificate_key_pair" "authentik_host" {
-  name = local.authentik_host
+data "authentik_certificate_key_pair" "domain" {
+  name = "domain"
 }
 
 data "authentik_property_mapping_provider_scope" "scope-email" {

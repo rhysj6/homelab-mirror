@@ -41,7 +41,7 @@ resource "authentik_provider_oauth2" "terrakube" {
   name               = "Terrakube - (Managed via Terraform)"
   client_id          = "terrakube"
   authorization_flow = data.authentik_flow.authorization-flow.id
-  signing_key        = data.authentik_certificate_key_pair.authentik_host.id
+  signing_key        = data.authentik_certificate_key_pair.domain.id
   allowed_redirect_uris = [
     {
       url           = "https://api.${local.terrakube_hostname}/dex/callback"
