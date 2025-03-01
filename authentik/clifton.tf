@@ -7,7 +7,7 @@ resource "authentik_provider_oauth2" "clifton" {
   client_id          = "jiahVbymfBlRaAdegM7I2rpAI9uaquN0AYyiyxh6"
   client_secret      = random_password.clifton_client_secret.result
   authorization_flow = data.authentik_flow.authorization-flow.id
-  signing_key        = data.authentik_certificate_key_pair.self_signed.id
+  signing_key        = data.authentik_certificate_key_pair.domain.id
   allowed_redirect_uris = [
     {
       url           = "https://clifton.hl.${local.domain}"
@@ -27,7 +27,7 @@ resource "authentik_application" "clifton" {
   name              = "Clifton"
   slug              = "clifton"
   group             = "Infrastructure"
-  meta_launch_url   = "https://clifton.hl${local.domain}"
+  meta_launch_url   = "https://clifton.hl.${local.domain}"
   open_in_new_tab   = true
   protocol_provider = authentik_provider_oauth2.clifton.id
 }

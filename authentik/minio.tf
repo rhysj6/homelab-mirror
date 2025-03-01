@@ -7,7 +7,7 @@ resource "authentik_provider_oauth2" "minio" {
   client_id          = "dvJ3fb7S8PtnThqopKCXNJSZSvxIsELjZ0w0E06c"
   client_secret      = random_password.minio_client_secret.result
   authorization_flow = data.authentik_flow.authorization-flow.id
-  signing_key        = data.authentik_certificate_key_pair.self_signed.id
+  signing_key        = data.authentik_certificate_key_pair.domain.id
   allowed_redirect_uris = [
     {
       url           = "https://minio.hl.${local.domain}/oauth_callback"
