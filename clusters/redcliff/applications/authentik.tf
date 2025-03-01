@@ -5,12 +5,12 @@ resource "kubernetes_namespace" "authentik" {
 }
 
 resource "random_password" "authentik_secret" {
-  length  = 32
+  length  = 64
   special = false
 }
 
 resource "random_password" "authentik_db" {
-  length  = 32
+  length  = 64
   special = false
 }
 
