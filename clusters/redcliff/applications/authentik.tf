@@ -29,6 +29,34 @@ resource "helm_release" "authentik" {
         password = random_password.authentik_db.result
       }
     },
+    global = {
+      volumes = [
+        {
+          name = "cluster-domain-cert"
+          secret = {
+            secretName  = "authentik-server-tls"
+            # defaultMode = "0666"
+            items = [
+              {
+                key  = "tls.crt"
+                path = "fullchain.pem"
+              },
+              {
+                key  = "tls.key"
+                path = "privkey.pem"
+              }
+            ]
+          }
+        }
+      ]
+      volumeMounts = [
+        {
+          name      = "cluster-domain-cert"
+          mountPath = "/certs/domain"
+          readOnly  = true
+        }
+      ]
+    }
     server = {
       ingress = {
         enabled = true,
