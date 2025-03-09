@@ -46,7 +46,9 @@ provider "kubernetes" {
   ignore_annotations = [
     ".*lifecycle\\.cattle\\.io.*",
     ".*management\\.cattle\\.io.*",
-    "cattle.io/status"
+    "cattle.io/status",
+    "field.cattle.io/publicEndpoints",
+    "cattle.io/timestamp"
   ]
   ignore_labels = [
     ".*cattle\\.io.*"
