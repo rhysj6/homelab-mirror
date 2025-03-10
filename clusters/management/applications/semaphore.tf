@@ -38,21 +38,16 @@ resource "kubernetes_namespace" "semaphore" {
   }
 }
 
-## Create the semaphore application
-resource "kubernetes_persistent_volume_claim" "semaphore_boltdb" {
-  metadata {
-    name      = "semaphore-boltdb"
-    namespace = kubernetes_namespace.semaphore.id
-  }
-  spec {
-    access_modes = ["ReadWriteOnce"]
-    resources {
-      requests = {
-        storage = "10Gi"
-      }
-    }
-  }
+module "postgresql" {
+  source             = "../../../modules/postgres_cluster"
+  namespace          = kubernetes_namespace.semaphore.id
+  name               = "semaphore"
+  cluster_name       = "management"
+  is_superuser_password_same = true
+  number_of_replicas = 1
 }
+
+## Create the semaphore application
 resource "kubernetes_service_account" "semaphore" {
   metadata {
     name      = "semaphore"
@@ -111,15 +106,38 @@ resource "kubernetes_deployment" "semaphore" {
       }
       spec {
         service_account_name = kubernetes_service_account.semaphore.metadata.0.name
-        security_context {
-          fs_group = 1001
-        }
         container {
           name  = "semaphore"
           image = "semaphoreui/semaphore:v2.12.14"
           env {
             name  = "SEMAPHORE_DB_DIALECT"
-            value = "bolt"
+            value = "postgres"
+          }
+          env {
+            name  = "SEMAPHORE_DB_HOST"
+            value = module.postgresql.service_name
+          }
+          env {
+            name = "SEMAPHORE_DB_USER"
+            value_from {
+              secret_key_ref {
+                name = module.postgresql.secret_name
+                key  = "username"
+              }
+            }
+          }
+          env {
+            name = "SEMAPHORE_DB_PASS"
+            value_from {
+              secret_key_ref {
+                name = module.postgresql.secret_name
+                key  = "password"
+              }
+            }
+          }
+          env {
+            name  = "SEMAPHORE_DB_NAME"
+            value = "semaphore"
           }
           env {
             name  = "SEMAPHORE_PASSWORD_LOGIN_DISABLED"
@@ -159,21 +177,11 @@ resource "kubernetes_deployment" "semaphore" {
             mount_path = "/etc/semaphore/config.json"
             sub_path   = "config.json"
           }
-          volume_mount {
-            name       = "boltdb"
-            mount_path = "/var/lib/semaphore"
-          }
         }
         volume {
           name = "config"
           config_map {
             name = kubernetes_config_map.semaphore.metadata.0.name
-          }
-        }
-        volume {
-          name = "boltdb"
-          persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.semaphore_boltdb.metadata.0.name
           }
         }
       }
