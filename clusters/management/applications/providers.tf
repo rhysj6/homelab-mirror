@@ -48,10 +48,12 @@ provider "kubernetes" {
     ".*management\\.cattle\\.io.*",
     "cattle.io/status",
     "field.cattle.io/publicEndpoints",
-    "cattle.io/timestamp"
+    "cattle.io/timestamp",
+    "cnpg.io/*"
   ]
   ignore_labels = [
-    ".*cattle\\.io.*"
+    ".*cattle\\.io.*",
+    "cnpg.io/*"
   ]
 }
 provider "helm" {
