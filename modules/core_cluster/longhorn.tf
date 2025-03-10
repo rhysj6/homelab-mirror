@@ -11,18 +11,23 @@ resource "helm_release" "longhorn" {
   namespace   = kubernetes_namespace.longhorn.id
   version     = "1.8.0"
   max_history = 2
-  set {
-    name  = "persistence.defaultClassReplicaCount"
-    value = var.number_of_nodes
-  }
-  set {
-    name  = "defaultBackupStore.backupTarget"
-    value = "s3://${minio_s3_bucket.longhorn_backup.bucket}@us-east-1/"
-  }
-  set {
-    name  = "defaultBackupStore.backupTargetCredentialSecret"
-    value = kubernetes_secret.longhorn_backup.metadata[0].name
-  }
+  values = [
+    yamlencode({
+      defaultSettings = {
+        orphanAutoDeletion                          = false
+        autoDeletePodWhenVolumeDetachedUnexpectedly = true
+        nodeDownPodDeletionPolicy                   = "delete-both-statefulset-and-deployment-pod"
+        nodeDrainPolicy                             = "always-allow"
+      }
+      persistence = {
+        defaultClassReplicaCount = var.number_of_nodes
+      }
+      backupTarget = {
+        backupTarget = "s3://${minio_s3_bucket.longhorn_backup.bucket}@us-east-1/"
+        backupTargetCredentialSecret = kubernetes_secret.longhorn_backup.metadata[0].name
+      }
+    })
+  ]
 }
 
 resource "kubernetes_secret" "longhorn_backup" {
