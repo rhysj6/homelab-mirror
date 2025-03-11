@@ -44,7 +44,7 @@ module "postgresql" {
   name               = "semaphore"
   cluster_name       = "management"
   is_superuser_password_same = true
-  number_of_replicas = 1
+  volume_size = 10
 }
 
 ## Create the semaphore application
