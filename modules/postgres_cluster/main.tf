@@ -1,4 +1,6 @@
-
+locals {
+  name_prefix = "${var.name}-postgres"
+}
 resource "minio_iam_service_account" "backup" {
   target_user = "${var.cluster_name}-postgres-backup"
 }
@@ -19,7 +21,7 @@ resource "kubernetes_manifest" "cluster" {
     apiVersion = "postgresql.cnpg.io/v1"
     kind       = "Cluster"
     metadata = {
-      name      = "${var.name}-postgres"
+      name      = local.name_prefix
       namespace = var.namespace
     }
     spec = {
@@ -30,7 +32,7 @@ resource "kubernetes_manifest" "cluster" {
         size         = "${var.volume_size}Gi"
       }
       superuserSecret = {
-        name = "${var.secret_name}-superuser"
+        name = "${local.name_prefix}-superuser"
       }
       enableSuperuserAccess = true
       bootstrap = {
@@ -38,7 +40,7 @@ resource "kubernetes_manifest" "cluster" {
           database = var.name
           owner    = var.name
           secret = {
-            name = var.secret_name
+            name = local.name_prefix
           }
         }
       }
@@ -48,20 +50,24 @@ resource "kubernetes_manifest" "cluster" {
           destinationPath = "s3://${var.cluster_name}-postgres-backup/${var.namespace}/${var.name}"
           s3Credentials = {
             accessKeyId = {
-              name = "minio-postgres-backup"
+              name = "${local.name_prefix}-minio-backup"
               key  = "access_key"
             }
             secretAccessKey = {
-              name = "minio-postgres-backup"
+              name = "${local.name_prefix}-minio-backup"
               key  = "secret_key"
             }
           }
           data = {
             compression = "gzip"
           }
+          wal = {
+            compression = "gzip"
+          }
         }
         retentionPolicy = "90d"
       }
+      externalClusters = var.external_clusters
     }
   }
 }
@@ -71,7 +77,7 @@ resource "kubernetes_manifest" "backup_schedule" {
     apiVersion = "postgresql.cnpg.io/v1"
     kind       = "ScheduledBackup"
     metadata = {
-      name      = "${var.name}-postgres-backup"
+      name      = "${local.name_prefix}-backup"
       namespace = var.namespace
     }
     spec = {
@@ -86,7 +92,7 @@ resource "kubernetes_manifest" "backup_schedule" {
 
 resource "kubernetes_secret_v1" "superuser" {
   metadata {
-    name      = "${var.secret_name}-superuser"
+    name      = "${local.name_prefix}-superuser"
     namespace = var.namespace
   }
   data = {
@@ -98,11 +104,11 @@ resource "kubernetes_secret_v1" "superuser" {
 
 resource "kubernetes_secret_v1" "password" {
   metadata {
-    name      = var.secret_name
+    name      = local.name_prefix
     namespace = var.namespace
   }
   data = {
-    username = "postgres"
+    username = var.name
     password = random_password.password.result
   }
   type = "kubernetes.io/basic-auth"
@@ -110,7 +116,7 @@ resource "kubernetes_secret_v1" "password" {
 
 resource "kubernetes_secret_v1" "minio" {
   metadata {
-    name      = "minio-postgres-backup"
+    name      = "${local.name_prefix}-minio-backup"
     namespace = var.namespace
   }
   data = {
