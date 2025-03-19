@@ -9,9 +9,12 @@ resource "random_password" "authentik_secret" {
   special = false
 }
 
-resource "random_password" "authentik_db" {
-  length  = 64
-  special = false
+module "postgresql" {
+  source                     = "../../../modules/postgres_cluster"
+  namespace                  = kubernetes_namespace.authentik.id
+  name                       = "authentik"
+  cluster_name               = "test" ## TODO: Change this to the correct cluster name
+  is_superuser_password_same = true
 }
 
 resource "helm_release" "authentik" {
@@ -26,7 +29,9 @@ resource "helm_release" "authentik" {
     authentik = {
       secret_key = random_password.authentik_secret.result,
       postgresql = {
-        password = random_password.authentik_db.result
+        host     = module.postgresql.service_name
+        user     = "file:///postgres-creds/username"
+        password = "file:///postgres-creds/password"
       }
     },
     global = {
@@ -34,8 +39,7 @@ resource "helm_release" "authentik" {
         {
           name = "cluster-domain-cert"
           secret = {
-            secretName  = "authentik-server-tls"
-            # defaultMode = "0666"
+            secretName = "authentik-server-tls"
             items = [
               {
                 key  = "tls.crt"
@@ -47,12 +51,23 @@ resource "helm_release" "authentik" {
               }
             ]
           }
+        },
+        {
+          name = "postgres-creds"
+          secret = {
+            secretName = module.postgresql.secret_name
+          }
         }
       ]
       volumeMounts = [
         {
           name      = "cluster-domain-cert"
           mountPath = "/certs/domain"
+          readOnly  = true
+        },
+        {
+          name      = "postgres-creds"
+          mountPath = "/postgres-creds"
           readOnly  = true
         }
       ]
@@ -74,12 +89,6 @@ resource "helm_release" "authentik" {
         annotations = {
           "cert-manager.io/cluster-issuer" = "cert-manager"
         }
-      }
-    },
-    postgresql = {
-      enabled = true,
-      auth = {
-        password = random_password.authentik_db.result
       }
     },
     redis = {
