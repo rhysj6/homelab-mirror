@@ -1,14 +1,3 @@
-# resource "kubernetes_manifest" "cluster" {
-#   count = var.firstrun ? 0 : 1
-#   manifest = yamldecode(templatefile("${path.module}/templates/cluster.yaml", {
-#     cluster_name          = var.cluster_name,
-#     kubernetes_version    = "v1.31.5+rke2r1",
-#     bucket_name           = minio_s3_bucket.etcd.bucket,
-#     cloud_credential_name = rancher2_cloud_credential.minio_etc_bucket.id,
-#     s3_endpoint           = "https://${data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value}"
-#   }))
-# }
-
 resource "rancher2_cluster_v2" "cluster" {
   name               = var.cluster_name
   kubernetes_version = "v1.31.5+rke2r1"
