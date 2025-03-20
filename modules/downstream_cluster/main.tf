@@ -44,6 +44,10 @@ resource "rancher2_cluster_v2" "cluster" {
               "10.42.0.0/16"
             ]
           }
+        },
+        encryption = {
+          enabled = true,
+          type = "wireguard"
         }
       }
     })
