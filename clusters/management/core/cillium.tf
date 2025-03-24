@@ -7,6 +7,6 @@ resource "helm_release" "cilium" {
   version     = "1.17.1"
   max_history = 2
   values = [
-    "${file("${path.module}/cilium_values.yaml")}"
+    file("${path.module}/cilium_values.yaml")
   ]
 }

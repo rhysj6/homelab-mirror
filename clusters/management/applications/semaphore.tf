@@ -39,12 +39,12 @@ resource "kubernetes_namespace" "semaphore" {
 }
 
 module "postgresql" {
-  source             = "../../../modules/postgres_cluster"
-  namespace          = kubernetes_namespace.semaphore.id
-  name               = "semaphore"
-  cluster_name       = "management"
+  source                     = "../../../modules/postgres_cluster"
+  namespace                  = kubernetes_namespace.semaphore.id
+  name                       = "semaphore"
+  cluster_name               = "management"
   is_superuser_password_same = true
-  volume_size = 10
+  volume_size                = 10
 }
 
 ## Create the semaphore application
@@ -105,7 +105,7 @@ resource "kubernetes_deployment" "semaphore" {
         }
       }
       spec {
-        service_account_name = kubernetes_service_account.semaphore.metadata.0.name
+        service_account_name = kubernetes_service_account.semaphore.metadata[0].name
         container {
           name  = "semaphore"
           image = "semaphoreui/semaphore:v2.12.14"
@@ -181,7 +181,7 @@ resource "kubernetes_deployment" "semaphore" {
         volume {
           name = "config"
           config_map {
-            name = kubernetes_config_map.semaphore.metadata.0.name
+            name = kubernetes_config_map.semaphore.metadata[0].name
           }
         }
       }
@@ -222,7 +222,7 @@ resource "kubernetes_ingress_v1" "semaphore" {
           path = "/"
           backend {
             service {
-              name = kubernetes_service.semaphore.metadata.0.name
+              name = kubernetes_service.semaphore.metadata[0].name
               port {
                 name = "http"
               }
