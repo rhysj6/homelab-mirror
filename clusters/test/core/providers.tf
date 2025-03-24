@@ -1,4 +1,5 @@
 terraform {
+  required_version = ">= 1.11.1"
   backend "s3" {
     bucket = "terraform"
     key    = "clusters/test/core/terraform.tfstate"
@@ -25,6 +26,10 @@ terraform {
     infisical = {
       version = ">= 0.13.0"
       source  = "infisical/infisical"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.0.0"
     }
   }
 }

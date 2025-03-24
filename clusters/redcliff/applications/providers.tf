@@ -1,4 +1,5 @@
 terraform {
+    required_version = ">= 1.11.1"
     backend "s3" {
     bucket = "terraform"
     key    = "clusters/redcliff/applications/terraform.tfstate"
@@ -29,6 +30,10 @@ terraform {
     random = {
       source  = "hashicorp/random"
       version = "3.6.3"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.0.0"
     }
   }
 }

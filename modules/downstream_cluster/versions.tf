@@ -1,11 +1,5 @@
 terraform {
-  # cloud {
-  #   organization = "Homelab"
-  #   workspaces {
-  #     name = "Rancher_Cluster"
-  #   }
-  # }
-
+  required_version = ">= 1.11.1"
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"

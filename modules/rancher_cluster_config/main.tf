@@ -1,4 +1,5 @@
 terraform {
+  required_version = ">= 1.11.1"
   required_providers {
     rancher2 = {
       source  = "rancher/rancher2"
@@ -9,11 +10,13 @@ terraform {
 
 variable "cluster_name" {
   description = "The name of the cluster"
+  type = string
 }
 
 variable "fleet_namespace" {
   description = "The namespace where the Fleet components are installed"
   default = "fleet-default"
+  type = string
 }
 data "rancher2_cluster_v2" "cluster" {
   name            = var.cluster_name

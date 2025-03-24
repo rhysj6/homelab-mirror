@@ -1,4 +1,5 @@
 terraform {
+  required_version = ">= 1.11.1"
     backend "s3" {
     bucket = "terraform"
     key    = "authentik/terraform.tfstate"
