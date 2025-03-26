@@ -4,7 +4,7 @@ resource "kubernetes_namespace" "monitoring" {
   }
 }
 
-resource "helm_release" "kube_prometheus_grafana" { ## TODO: rename to kube-prometheus-stack
+resource "helm_release" "kube_prometheus_stack" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   name       = "kube-prometheus-stack"
