@@ -1,14 +1,14 @@
 terraform {
-    required_version = ">= 1.11.1"
-    backend "s3" {
-    bucket = "terraform"
-    key    = "clusters/redcliff/applications/terraform.tfstate"
+  required_version = ">= 1.11.1"
+  backend "s3" {
+    bucket                      = "terraform"
+    key                         = "clusters/redcliff/applications/terraform.tfstate"
     region                      = "main"
     skip_region_validation      = true
-    skip_requesting_account_id = true
+    skip_requesting_account_id  = true
     skip_credentials_validation = true
-    skip_metadata_api_check = true
-    use_path_style = true
+    skip_metadata_api_check     = true
+    use_path_style              = true
   }
   required_providers {
     kubernetes = {
@@ -35,12 +35,16 @@ terraform {
       source  = "hashicorp/helm"
       version = ">= 2.0.0"
     }
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "2024.12.1"
+    }
   }
 }
 
 module "cluster_config" {
-  source  = "rhysj6/kubeconfig/rancher"
-  version = "1.0.0"
+  source       = "rhysj6/kubeconfig/rancher"
+  version      = "1.0.0"
   cluster_name = "test" # TODO: Change this to the cluster name when we have a real one.
 }
 

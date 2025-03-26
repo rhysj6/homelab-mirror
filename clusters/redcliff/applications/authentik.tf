@@ -1,3 +1,7 @@
+locals {
+  authentik_url = "hl.${data.infisical_secrets.bootstrap.secrets["domain"].value}"
+}
+
 resource "kubernetes_namespace" "authentik" {
   metadata {
     name = "authentik"
@@ -76,12 +80,12 @@ resource "helm_release" "authentik" {
       ingress = {
         enabled = true,
         hosts = [
-          "hl.${data.infisical_secrets.bootstrap.secrets["domain"].value}"
+          local.authentik_url,
         ],
         tls = [
           {
             hosts = [
-              "hl.${data.infisical_secrets.bootstrap.secrets["domain"].value}"
+              local.authentik_url,
             ],
             secretName = "authentik-server-tls",
           }

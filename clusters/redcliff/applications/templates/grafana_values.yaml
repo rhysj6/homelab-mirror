@@ -1,0 +1,43 @@
+persistence:
+  type: pvc
+  enabled: true
+fullnameOverride: grafana
+forceDeployDatasources: false
+forceDeployDashboards: false
+defaultDashboardsEnabled: true
+defaultDashboardsTimezone: utc
+extraSecretMounts:
+  - name: auth-generic-oauth-secret-mount
+    secretName: grafana-oauth
+    defaultMode: 0440
+    mountPath: /etc/secrets/auth_generic_oauth
+    readOnly: true
+serviceMonitor:
+  enabled: true
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: cert-manager
+  hosts:
+    - ${domain}
+  tls:
+    - secretName: grafana-tls
+      hosts:
+        - ${domain}
+grafana.ini:
+  server:
+    root_url: https://${domain}/
+  auth:
+      signout_redirect_url: "https://${authentik}/application/o/grafana/end-session/"
+      oauth_auto_login: true
+  auth.generic_oauth:
+      name: authentik
+      enabled: true
+      client_id: "$__file{/etc/secrets/auth_generic_oauth/client_id}"
+      client_secret: "$__file{/etc/secrets/auth_generic_oauth/client_secret}"
+      scopes: "openid profile email"
+      auth_url: "https://${authentik}/application/o/authorize/"
+      token_url: "https://${authentik}/application/o/token/"
+      api_url: "https://${authentik}/application/o/userinfo/"
+      # Optionally map user groups to Grafana roles
+      role_attribute_path: contains(groups, 'Infrastructure Admin') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor'
