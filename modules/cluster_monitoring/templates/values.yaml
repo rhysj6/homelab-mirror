@@ -1,0 +1,208 @@
+fullnameOverride: prometheus
+
+defaultRules:
+  create: true
+  rules:
+    alertmanager: true
+    etcd: true
+    configReloaders: true
+    general: true
+    k8s: true
+    kubeApiserverAvailability: true
+    kubeApiserverBurnrate: true
+    kubeApiserverHistogram: true
+    kubeApiserverSlos: true
+    kubelet: true
+    kubeProxy: false
+    kubePrometheusGeneral: true
+    kubePrometheusNodeRecording: true
+    kubernetesApps: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: true
+    kubeScheduler: true
+    kubeStateMetrics: true
+    network: true
+    node: true
+    nodeExporterAlerting: true
+    nodeExporterRecording: true
+    prometheus: true
+    prometheusOperator: true
+
+alertmanager:
+  fullnameOverride: alertmanager
+  enabled: true
+  ingress:
+    enabled: false
+
+grafana:
+  enabled: true
+  persistence:
+    type: pvc
+    enabled: true
+  fullnameOverride: grafana
+  forceDeployDatasources: false
+  forceDeployDashboards: false
+  defaultDashboardsEnabled: true
+  defaultDashboardsTimezone: utc
+  extraSecretMounts:
+    - name: auth-generic-oauth-secret-mount
+      secretName: grafana-oauth
+      defaultMode: 0440
+      mountPath: /etc/secrets/auth_generic_oauth
+      readOnly: true
+  serviceMonitor:
+    enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: cert-manager
+    hosts:
+      - ${domain}
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - ${domain}
+  grafana.ini:
+    server:
+      root_url: https://${domain}/
+    auth:
+        signout_redirect_url: "https://${authentik}/application/o/${authentik_slug}/end-session/"
+        oauth_auto_login: true
+    auth.generic_oauth:
+        name: authentik
+        enabled: true
+        client_id: "$__file{/etc/secrets/auth_generic_oauth/client_id}"
+        client_secret: "$__file{/etc/secrets/auth_generic_oauth/client_secret}"
+        scopes: "openid profile email"
+        auth_url: "https://${authentik}/application/o/authorize/"
+        token_url: "https://${authentik}/application/o/token/"
+        api_url: "https://${authentik}/application/o/userinfo/"
+        # Optionally map user groups to Grafana roles
+        role_attribute_path: contains(groups, 'Infrastructure Admin') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor'
+
+kubeApiServer:
+  enabled: true
+
+kubelet:
+  enabled: true
+  serviceMonitor:
+    metricRelabelings:
+      - action: replace
+        sourceLabels:
+          - node
+        targetLabel: instance
+
+kubeControllerManager:
+  enabled: true
+  endpoints: 
+  %{ for addr in ip_addrs ~}
+  - ${addr}
+  %{ endfor ~}
+
+coreDns:
+  enabled: true
+
+kubeDns:
+  enabled: false
+
+kubeEtcd:
+  enabled: true
+  service:
+    enabled: true
+    port: 2381
+    targetPort: 2381
+  endpoints: 
+  %{ for addr in ip_addrs ~}
+  - ${addr}
+  %{ endfor ~}
+
+kubeScheduler:
+  enabled: true
+  endpoints: 
+  %{ for addr in ip_addrs ~}
+  - ${addr}
+  %{ endfor ~}
+
+kubeStateMetrics:
+  enabled: true
+
+kube-state-metrics:
+  fullnameOverride: kube-state-metrics
+  selfMonitor:
+    enabled: true
+  prometheus:
+    monitor:
+      enabled: true
+      relabelings:
+        - action: replace
+          regex: (.*)
+          replacement: $1
+          sourceLabels:
+            - __meta_kubernetes_pod_node_name
+          targetLabel: kubernetes_node
+
+nodeExporter:
+  enabled: true
+  serviceMonitor:
+    relabelings:
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+          - __meta_kubernetes_pod_node_name
+        targetLabel: kubernetes_node
+
+prometheus-node-exporter:
+  fullnameOverride: node-exporter
+  podLabels:
+    jobLabel: node-exporter
+  extraArgs:
+    - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+    - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+  service:
+    portName: http-metrics
+  prometheus:
+    monitor:
+      enabled: true
+      relabelings:
+        - action: replace
+          regex: (.*)
+          replacement: $1
+          sourceLabels:
+            - __meta_kubernetes_pod_node_name
+          targetLabel: kubernetes_node
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 2048Mi
+
+prometheusOperator:
+  enabled: true
+  prometheusConfigReloader:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 50Mi
+      limits:
+        memory: 100Mi
+
+prometheus:
+  enabled: true
+  prometheusSpec:
+    replicas: 1
+    replicaExternalLabelName: "replica"
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    retention: 6h
+    enableAdminAPI: true
+    walCompression: true
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+
+thanosRuler:
+  enabled: false
