@@ -38,14 +38,15 @@ terraform {
   }
 }
 
-module "test_cluster_config" {
-  source       = "../../../modules/rancher_cluster_config"
-  cluster_name = "test"
+module "cluster_config" {
+  source  = "rhysj6/kubeconfig/rancher"
+  version = "1.0.0"
+  cluster_name = "test" # TODO: Change this to the cluster name when we have a real one.
 }
 
 provider "kubernetes" {
-  host  = module.test_cluster_config.host
-  token = module.test_cluster_config.token
+  host  = module.cluster_config.host
+  token = module.cluster_config.token
   ignore_annotations = [
     ".*cattle\\.io.*"
   ]
@@ -55,8 +56,8 @@ provider "kubernetes" {
 }
 provider "helm" {
   kubernetes {
-    host  = module.test_cluster_config.host
-    token = module.test_cluster_config.token
+    host  = module.cluster_config.host
+    token = module.cluster_config.token
   }
 }
 

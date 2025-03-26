@@ -35,9 +35,10 @@ terraform {
 }
 
 module "management_cluster_config" {
-  source          = "../../../modules/rancher_cluster_config"
+  source  = "rhysj6/kubeconfig/rancher"
+  version = "1.0.0"
   cluster_name    = "local"
-  fleet_namespace = "fleet-local"
+  cluster_namespace =  "fleet-local"
 }
 
 provider "kubernetes" {
@@ -53,7 +54,8 @@ provider "kubernetes" {
 }
 
 module "test_cluster_config" {
-  source       = "../../../modules/rancher_cluster_config"
+  source  = "rhysj6/kubeconfig/rancher"
+  version = "1.0.0"
   cluster_name = "test"
 }
 

@@ -39,7 +39,8 @@ terraform {
 }
 
 module "test_cluster_config" {
-  source       = "../../../modules/rancher_cluster_config"
+  source  = "rhysj6/kubeconfig/rancher"
+  version = "1.0.0"
   cluster_name = "test"
 }
 
