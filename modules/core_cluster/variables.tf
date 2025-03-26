@@ -18,3 +18,8 @@ variable "number_of_nodes" {
   type        = number
   default = 3
 }
+
+variable "cluster_node_ips" {
+  description = "List of cluster node IPs"
+  type        = list(string)
+}

@@ -11,7 +11,7 @@ resource "helm_release" "kube_prometheus_stack" {
   namespace  = kubernetes_namespace.monitoring.metadata[0].name
   version    = "70.3.0"
   values = [
-    templatefile("${path.module}/templates/values.yaml", {
+    templatefile("${path.module}/templates/monitoring_values.yaml", {
       ip_addrs = var.cluster_node_ips,
     })
   ]

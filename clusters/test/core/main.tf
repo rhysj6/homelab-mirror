@@ -18,4 +18,9 @@ module "core" {
   cluster_name                     = "test"
   cilium_loadbalancer_ip_pool_cidr = "10.20.31.1/24"
   ingress_controller_ip            = "10.20.31.11"
+  cluster_node_ips = [
+    "10.20.30.11",
+    "10.20.30.12",
+    "10.20.30.13"
+  ]
 }
