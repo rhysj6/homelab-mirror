@@ -15,6 +15,14 @@ resource "helm_release" "cert_manager" {
     name  = "crds.enabled"
     value = "true"
   }
+  set {
+    name = "prometheus.enabled"
+    value = true
+  }
+  set {
+    name  = "prometheus.podmonitor.enabled"
+    value = true
+  }
 }
 
 resource "kubernetes_secret" "cluster_issuer" {
