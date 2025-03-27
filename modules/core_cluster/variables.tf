@@ -13,10 +13,15 @@ variable "ingress_controller_ip" {
   type        = string
 }
 
+variable "monitoring_ip" {
+  description = "The IP address of the monitoring service"
+  type        = string
+}
+
 variable "number_of_nodes" {
   description = "The number of nodes in the cluster"
   type        = number
-  default = 3
+  default     = 3
 }
 
 variable "cluster_node_ips" {

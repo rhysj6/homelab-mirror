@@ -34,6 +34,12 @@ alertmanager:
   enabled: true
   ingress:
     enabled: false
+  service:
+    type: LoadBalancer
+    annotations:
+      "lbipam.cilium.io/sharing-key": "MonitoringServices"
+      "lbipam.cilium.io/ips": "${service_ip}"
+
 
 grafana:
   enabled: false
@@ -160,6 +166,12 @@ prometheus:
     walCompression: true
     scrapeInterval: 30s
     evaluationInterval: 30s
+  service:
+    reloaderWebPort: 8081
+    type: LoadBalancer
+    annotations:
+      "lbipam.cilium.io/sharing-key": "MonitoringServices"
+      "lbipam.cilium.io/ips": "${service_ip}"
 
 thanosRuler:
   enabled: false
