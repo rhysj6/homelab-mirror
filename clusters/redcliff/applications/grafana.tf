@@ -4,6 +4,9 @@ locals {
 module "grafana_dashboards" {
   source = "../modules/grafana/dashboards"
 }
+module "grafana_data_sources" {
+  source = "../modules/grafana/data_sources"
+}
 
 resource "helm_release" "grafana" {
   repository = "https://grafana.github.io/helm-charts"

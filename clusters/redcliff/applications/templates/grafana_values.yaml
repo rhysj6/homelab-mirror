@@ -41,3 +41,16 @@ grafana.ini:
       api_url: "https://${authentik}/application/o/userinfo/"
       # Optionally map user groups to Grafana roles
       role_attribute_path: contains(groups, 'Infrastructure Admin') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor'
+sidecar:
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    labelValue: "1"
+    # Allow discovery in all namespaces for dashboards
+    searchNamespace: ALL
+    # Support for new table panels, when enabled grafana auto migrates the old table panels to newer table panels
+    enableNewTablePanelSyntax: false
+  datasources:
+    enabled: true
+    label: grafana_datasource
+    labelValue: "1"
