@@ -2,7 +2,7 @@ locals {
   grafana_url = "grafana.hl.${data.infisical_secrets.bootstrap.secrets["domain"].value}"
 }
 module "grafana_dashboards" {
-  source = "../modules/grafana_dashboards"
+  source = "../modules/grafana/dashboards"
 }
 
 resource "helm_release" "grafana" {
