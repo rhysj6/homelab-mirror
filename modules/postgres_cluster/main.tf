@@ -44,6 +44,9 @@ resource "kubernetes_manifest" "cluster" {
           }
         }
       }
+      monitoring = {
+        enablePodMonitor = true
+      }
       backup = {
         barmanObjectStore = {
           endpointURL     = "https://${data.infisical_secrets.bootstrap.secrets["minio_endpoint"].value}/"
