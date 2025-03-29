@@ -8,7 +8,7 @@ resource "kubernetes_namespace" "authentik" {
   }
 }
 
-resource "random_password" "authentik_secret" {
+resource "random_password" "secret" {
   length  = 64
   special = false
 }
@@ -31,7 +31,7 @@ resource "helm_release" "authentik" {
   depends_on  = [kubernetes_namespace.authentik]
   values = [yamlencode({
     authentik = {
-      secret_key = random_password.authentik_secret.result,
+      secret_key = random_password.secret.result,
       postgresql = {
         host     = module.postgresql.service_name
         user     = "file:///postgres-creds/username"
