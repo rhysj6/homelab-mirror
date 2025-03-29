@@ -1,5 +1,5 @@
 locals {
-  authentik_url = "hl.${var.domain}"
+  url = "hl.${var.domain}"
 }
 
 resource "kubernetes_namespace" "authentik" {
@@ -80,12 +80,12 @@ resource "helm_release" "authentik" {
       ingress = {
         enabled = true,
         hosts = [
-          local.authentik_url,
+          local.url,
         ],
         tls = [
           {
             hosts = [
-              local.authentik_url,
+              local.url,
             ],
             secretName = "authentik-server-tls",
           }
