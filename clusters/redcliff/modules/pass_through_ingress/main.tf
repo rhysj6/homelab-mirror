@@ -9,6 +9,7 @@ resource "kubernetes_service_v1" "service" {
     port {
       port        = var.port
       target_port = var.port
+      name        = var.portname
     }
   }
 }

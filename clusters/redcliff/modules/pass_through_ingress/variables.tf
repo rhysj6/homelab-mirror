@@ -17,3 +17,9 @@ variable "port" {
   description = "The port for the ingress resource."
   type        = number
 }
+
+variable "portname" {
+  description = "The name of the port for the ingress resource."
+  type        = string
+  default     = "http"
+}
