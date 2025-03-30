@@ -4,6 +4,12 @@ variable "firstrun" {
   default     = false
 }
 
+variable "secondrun" {
+  description = "Whether this is the second run of the module"
+  type        = bool
+  default     = false
+}
+
 module "cluster" {
   source       = "../../../modules/downstream_cluster"
   cluster_name = "redcliff"
@@ -24,7 +30,7 @@ module "core" {
 }
 
 module "authentik" {
-  count        = var.firstrun ? 0 : 1
+  count        = var.secondrun || var.firstrun ? 0 : 1
   source       = "../modules/authentik"
   domain = data.infisical_secrets.bootstrap.secrets["domain"].value
   depends_on   = [module.core]
