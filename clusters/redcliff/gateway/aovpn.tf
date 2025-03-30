@@ -28,7 +28,7 @@ resource "kubernetes_manifest" "aovpn_ingress_route" {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "HostSNI(`aovpn.paroxity.org`)"
+          match = "HostSNI(`aovpn.${data.infisical_secrets.bootstrap.secrets["windows_domain"].value}`)"
           services = [
             {
               name = "aovpn"
