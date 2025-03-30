@@ -25,6 +25,19 @@ resource "kubernetes_secret_v1" "password" {
   type = "Opaque"
 }
 
+// Config map for dnsmasq
+resource "kubernetes_config_map" "windows_domain_conditional_forwarding" {
+  metadata {
+    name      = "windows-domain-conditional-forwarding"
+    namespace = kubernetes_namespace.dns.metadata[0].name
+  }
+  data = {
+    "02-windows-domain-conditional-forwarding.conf" = templatefile("${path.module}/dnsmasq.conf", {
+      windows_domain = var.windows_domain
+    })
+  }
+}
+
 resource "kubernetes_persistent_volume_claim" "pihole" {
   metadata {
     name      = "pihole"
@@ -82,6 +95,11 @@ resource "kubernetes_deployment" "pihole" {
             name       = "pihole-storage"
             mount_path = "/etc/pihole"
           }
+          volume_mount {
+            name       = "windows-domain-conditional-forwarding"
+            mount_path = "/etc/dnsmasq.d/02-windows-domain-conditional-forwarding.conf"
+            sub_path   = "02-windows-domain-conditional-forwarding.conf"
+          }
           port {
             container_port = 80
             name           = "http"
@@ -96,6 +114,12 @@ resource "kubernetes_deployment" "pihole" {
           name = "pihole-storage"
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.pihole.metadata[0].name
+          }
+        }
+        volume {
+          name = "windows-domain-conditional-forwarding"
+          config_map {
+            name = kubernetes_config_map.windows_domain_conditional_forwarding.metadata[0].name
           }
         }
       }
