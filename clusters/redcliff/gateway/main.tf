@@ -10,6 +10,7 @@ module "clifton" {
   hostname   = "clifton.hl.${local.domain}"
   ip_address = "10.0.0.20"
   port       = 8006
+  portname = "https"
 }
 
 module "pbs" {
