@@ -5,7 +5,7 @@ resource "kubernetes_service_v1" "service" {
   }
   spec {
     type          = "ExternalName"
-    external_name = var.hostname
+    external_name = var.ip_address
     port {
       port        = var.port
       target_port = var.port

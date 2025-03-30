@@ -9,6 +9,7 @@ resource "kubernetes_service_v1" "management" {
     port {
       port        = 443
       target_port = 443
+      name = "https"
     }
   }
 }
