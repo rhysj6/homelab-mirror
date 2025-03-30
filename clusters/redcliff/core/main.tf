@@ -29,6 +29,14 @@ module "core" {
   ]
 }
 
+module "dns" {
+  count        = var.firstrun ? 0 : 1
+  source = "../modules/pihole"
+  domain = data.infisical_secrets.bootstrap.secrets["domain"].value
+  windows_domain = data.infisical_secrets.bootstrap.secrets["windows_domain"].value
+  load_balancer_ip = "10.20.1.53"
+}
+
 module "authentik" {
   count        = var.secondrun || var.firstrun ? 0 : 1
   source       = "../modules/authentik"
