@@ -20,9 +20,6 @@ resource "kubernetes_manifest" "aovpn_ingress_route" {
     metadata = {
       name      = "aovpn-ingress"
       namespace = kubernetes_namespace.external_hosts.metadata[0].name
-      annotations = {
-        "cert-manager.io/cluster-issuer" = "cert-manager"
-      }
     }
     spec = {
       entryPoints = ["websecure"]
@@ -39,6 +36,27 @@ resource "kubernetes_manifest" "aovpn_ingress_route" {
       ]
       tls = {
         secretName = "aovpn-tls"
+      }
+    }
+  }
+}
+
+resource "kubernetes_manifest" "aovpn_cert" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "Certificate"
+    metadata = {
+      name      = "aovpn-tls"
+      namespace = kubernetes_namespace.external_hosts.metadata[0].name
+    }
+    spec = {
+      dnsNames = [
+        "aovpn.${data.infisical_secrets.bootstrap.secrets["windows_domain"].value}"
+      ]
+      secretName = "aovpn-tls"
+      issuerRef = {
+        name = "cert-manager"
+        kind = "ClusterIssuer"
       }
     }
   }
