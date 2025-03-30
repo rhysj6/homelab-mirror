@@ -45,7 +45,7 @@ terraform {
 module "cluster_config" {
   source       = "rhysj6/kubeconfig/rancher"
   version      = "1.0.0"
-  cluster_name = "test" # TODO: Change this to the cluster name when we have a real one.
+  cluster_name = "redcliff" # TODO: Change this to the cluster name when we have a real one.
 }
 
 provider "kubernetes" {
