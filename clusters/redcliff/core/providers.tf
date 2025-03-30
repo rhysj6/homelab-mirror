@@ -42,13 +42,6 @@ terraform {
   }
 }
 
-module "management_cluster_config" {
-  source  = "rhysj6/kubeconfig/rancher"
-  version = "1.0.0"
-  cluster_name    = "local"
-  cluster_namespace =  "fleet-local"
-}
-
 provider "kubernetes" {
   alias = "management"
   host  = module.management_cluster_config.host
