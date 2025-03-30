@@ -1,0 +1,18 @@
+apiVersion: 1
+datasources:
+    - name: "Redcliff Prometheus"
+      type: prometheus
+      uid: redcliff-prometheus
+      url: http://prometheus-prometheus.monitoring.svc.cluster.local:9090/
+      access: proxy
+      jsonData:
+        httpMethod: POST
+        timeInterval: 30s
+    - name: "Redcliff Alertmanager"
+      type: alertmanager
+      uid: redcliff-alertmanager
+      url: http://prometheus-alertmanager.monitoring.svc.cluster.local:9093/
+      access: proxy
+      jsonData:
+        handleGrafanaManagedAlerts: false
+        implementation: "prometheus"
