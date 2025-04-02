@@ -1,18 +1,13 @@
 locals {
   grafana_url = "grafana.hl.${data.infisical_secrets.bootstrap.secrets["domain"].value}"
 }
-module "grafana_dashboards" {
-  source = "../modules/grafana/dashboards"
-}
-module "grafana_data_sources" {
-  source = "../modules/grafana/data_sources"
-}
 
 resource "helm_release" "grafana" {
   repository = "https://grafana.github.io/helm-charts"
   chart      = "grafana"
   name       = "grafana"
   namespace  = "monitoring"
+  version = "8.11.1"
   values = [
     templatefile("${path.module}/templates/grafana_values.yaml", {
       domain    = local.grafana_url,
@@ -56,5 +51,34 @@ resource "kubernetes_secret_v1" "grafana_oauth" {
   data = {
     "client_id"     = authentik_provider_oauth2.grafana.client_id
     "client_secret" = authentik_provider_oauth2.grafana.client_secret
+  }
+}
+
+resource "kubernetes_config_map" "grafana_data_sources" {
+  for_each = fileset("${path.module}/grafana_configs/sources/", "*.yaml")
+  metadata {
+    name      = "${trimsuffix(each.key, ".yaml")}-grafana-datasource"
+    namespace = "monitoring"
+    labels = {
+      grafana_datasource = "1"
+    }
+  }
+  data = {
+    (each.key) = file("${path.module}/grafana_configs/sources/${each.key}")
+  }
+}
+
+resource "kubernetes_config_map" "grafana_dashboards" {
+  for_each = fileset("${path.module}/grafana_configs/dashboards/", "*.json")
+  metadata {
+    name      = trimsuffix(each.key, ".json")
+    namespace = "monitoring"
+    labels = {
+      grafana_dashboard = "1"
+    }
+  }
+
+  data = {
+    (each.key) = file("${path.module}/grafana_configs/dashboards/${each.key}")
   }
 }
