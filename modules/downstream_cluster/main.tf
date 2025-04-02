@@ -36,7 +36,7 @@ resource "rancher2_cluster_v2" "cluster" {
         },
         encryption = {
           enabled = true,
-          type = "wireguard"
+          type    = "wireguard"
         }
       }
     })
@@ -89,6 +89,17 @@ resource "minio_iam_service_account" "etcd" {
   target_user = minio_iam_user.etcd.name
 }
 
+resource "minio_ilm_policy" "bucket-lifecycle-rules" {
+  bucket = minio_s3_bucket.etcd.bucket
+
+  rule {
+    id     = "versioning"
+    noncurrent_expiration {
+      days           = "45d"
+    }
+    expiration = "DeleteMarker"
+  }
+}
 resource "rancher2_cloud_credential" "minio_etc_bucket" {
   name = "${var.cluster_name}-minio-etc-bucket"
   s3_credential_config {
