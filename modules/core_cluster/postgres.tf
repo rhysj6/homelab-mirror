@@ -50,6 +50,17 @@ resource "minio_iam_policy" "postgres_backup" {
   })
 }
 
+resource "minio_ilm_policy" "postgres_backup" {
+  bucket = minio_s3_bucket.postgres_backup.bucket
+
+  rule {
+    id     = "versioning"
+    noncurrent_expiration {
+      days           = "45d"
+    }
+    expiration = "DeleteMarker"
+  }
+}
 resource "minio_iam_user" "postgres_backup" {
   name = "${var.cluster_name}-postgres-backup"
 }

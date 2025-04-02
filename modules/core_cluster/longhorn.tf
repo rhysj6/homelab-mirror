@@ -48,6 +48,19 @@ resource "minio_s3_bucket" "longhorn_backup" {
   acl    = "private"
 }
 
+
+resource "minio_ilm_policy" "longhorn_backup" {
+  bucket = minio_s3_bucket.longhorn_backup.bucket
+
+  rule {
+    id     = "versioning"
+    noncurrent_expiration {
+      days           = "15d" ## 15 days since chances of data loss that isn't found in 15 days is very low
+    }
+    expiration = "DeleteMarker"
+  }
+}
+
 resource "minio_iam_policy" "longhorn_backup" {
   name = "${var.cluster_name}-longhorn-backup-full-access-policy"
   policy = jsonencode({
