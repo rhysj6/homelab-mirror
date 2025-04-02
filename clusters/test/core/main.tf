@@ -7,9 +7,6 @@ variable "firstrun" {
 module "cluster" {
   source       = "../../../modules/downstream_cluster"
   cluster_name = "test"
-  providers = {
-    kubernetes = kubernetes.management
-  }
 }
 
 module "core" {
