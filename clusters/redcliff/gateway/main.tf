@@ -67,3 +67,12 @@ module "static" {
   ip_address = "10.10.0.50"
   port       = 8000
 }
+
+module "vcenter" {
+  source     = "../modules/pass_through_ingress"
+  name       = "vcenter"
+  hostname   = "vcenter.${local.other_domain}"
+  ip_address = "ddns.${local.other_domain}"
+  port       = 443
+  portname = "https"
+}
