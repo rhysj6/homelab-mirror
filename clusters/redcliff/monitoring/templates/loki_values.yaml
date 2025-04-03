@@ -43,6 +43,11 @@ loki:
 
 deploymentMode: SingleBinary
 
+test:
+  enabled: false
+lokiCanary:
+  enabled: false
+
 gateway:
   ingress:
     enabled: true
