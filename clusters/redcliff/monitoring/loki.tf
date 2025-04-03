@@ -8,11 +8,6 @@ locals {
   loki_bucket_prefix = "loki"
 }
 
-resource "random_password" "loki_username" {
-  length  = 16
-  special = false
-}
-
 resource "random_integer" "loki_password_length" {
   min = 16
   max = 64
@@ -32,19 +27,18 @@ resource "helm_release" "loki" {
     templatefile("${path.module}/templates/loki_values.yaml", {
       BUCKET_PREFIX        = local.loki_bucket_prefix
       S3_ENDPOINT          = "s3.hl.${data.infisical_secrets.bootstrap.secrets["domain"].value}"
-      S3_SECRET_ACCESS_KEY = minio_iam_service_account.loki.access_key
-      S3_ACCESS_KEY_ID     = minio_iam_service_account.loki.secret_key
+      S3_SECRET_ACCESS_KEY = minio_iam_service_account.loki.secret_key
+      S3_ACCESS_KEY_ID     = minio_iam_service_account.loki.access_key
       INGRESS_HOST         = local.loki_url
-      BASIC_AUTH_USERNAME       = random_password.loki_username.result
-      BASIC_AUTH_PASSWORD       = random_password.loki_password.result
+      BASIC_AUTH_PASSWORD  = random_password.loki_password.result
     })
   ]
-  depends_on = [ 
+  depends_on = [
     minio_iam_service_account.loki,
     minio_iam_user_policy_attachment.loki,
     minio_iam_user.loki,
     minio_s3_bucket.loki
-   ]
+  ]
 }
 
 # Loki minio Buckets

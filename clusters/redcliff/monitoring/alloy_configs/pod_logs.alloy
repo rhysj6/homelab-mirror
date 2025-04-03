@@ -60,10 +60,13 @@ loki.process "pod_logs" {
 loki.write "default" {
   endpoint {
     url = "https://${LOKI_URL}/loki/api/v1/push"
+    tenant_id = "${TENANT}"
 
     basic_auth {
-      username = "${BASIC_AUTH_USERNAME}"
+      username = "${TENANT}"
       password = "${BASIC_AUTH_PASSWORD}"
     }
+
+    
   }
 }

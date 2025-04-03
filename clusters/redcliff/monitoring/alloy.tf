@@ -22,8 +22,8 @@ locals {
   alloy_files = { for file in fileset("${path.module}/alloy_configs", "*.alloy") :
     file => templatefile("${path.module}/alloy_configs/${file}", {
         LOKI_URL = local.loki_url
-        BASIC_AUTH_USERNAME = random_password.loki_username.result
         BASIC_AUTH_PASSWORD = random_password.loki_password.result
+        TENANT = "onsite-production"
     })
   }
 }
