@@ -4,26 +4,17 @@ resource "helm_release" "alloy" {
   name       = "alloy"
   namespace  = "monitoring"
   version    = "0.12.5"
-  set {
-    name  = "alloy.configMap.create"
-    value = false
-  }
-  set {
-    name = "alloy.configMap.name"
-    value = "alloy-config"
-  }
-    set {
-    name  = "alloy.configMap.key"
-    value = "."
-  }
+  values = [
+    file("${path.module}/templates/alloy_values.yaml")
+  ]
 }
 
 locals {
   alloy_files = { for file in fileset("${path.module}/alloy_configs", "*.alloy") :
     file => templatefile("${path.module}/alloy_configs/${file}", {
-        LOKI_URL = local.loki_url
-        BASIC_AUTH_PASSWORD = random_password.loki_password.result
-        TENANT = "onsite-production"
+      LOKI_URL            = local.loki_url
+      BASIC_AUTH_PASSWORD = random_password.loki_password.result
+      TENANT              = "onsite-production"
     })
   }
 }
