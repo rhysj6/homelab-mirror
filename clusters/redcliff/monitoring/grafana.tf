@@ -7,7 +7,7 @@ resource "helm_release" "grafana" {
   chart      = "grafana"
   name       = "grafana"
   namespace  = "monitoring"
-  version = "8.11.1"
+  version    = "8.11.1"
   values = [
     templatefile("${path.module}/templates/grafana_values.yaml", {
       domain    = local.grafana_url,
@@ -54,24 +54,21 @@ resource "kubernetes_secret_v1" "grafana_oauth" {
   }
 }
 
-resource "kubernetes_config_map" "grafana_data_sources" {
-  for_each = fileset("${path.module}/grafana_configs/sources/", "*.yaml")
+resource "kubernetes_config_map_v1" "grafana_data_sources" {
   metadata {
-    name      = "${trimsuffix(each.key, ".yaml")}-grafana-datasource"
+    name      = "grafana-datasources"
     namespace = "monitoring"
-    labels = {
-      grafana_datasource = "1"
-    }
   }
+
   data = {
-    (each.key) = file("${path.module}/grafana_configs/sources/${each.key}")
+    for file in fileset("${path.module}/grafana_configs/sources/", "*.yaml") :
+    trimsuffix(file, ".yaml") => file("${path.module}/grafana_configs/sources/${file}")
   }
 }
 
 resource "kubernetes_config_map" "grafana_dashboards" {
-  for_each = fileset("${path.module}/grafana_configs/dashboards/", "*.json")
   metadata {
-    name      = trimsuffix(each.key, ".json")
+    name      = "grafana-dashboards"
     namespace = "monitoring"
     labels = {
       grafana_dashboard = "1"
@@ -79,6 +76,8 @@ resource "kubernetes_config_map" "grafana_dashboards" {
   }
 
   data = {
-    (each.key) = file("${path.module}/grafana_configs/dashboards/${each.key}")
+    for file in fileset("${path.module}/grafana_configs/dashboards/", "*.json") :
+    file => file("${path.module}/grafana_configs/dashboards/${file}")
   }
 }
+
