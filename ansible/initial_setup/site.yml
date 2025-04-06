@@ -30,6 +30,19 @@
         content: "rhysj6 ALL=(ALL) NOPASSWD:ALL\n"
         mode: "0440"
 
+    - name: Copy Alloy config file
+      ansible.builtin.template:
+        src: config.alloy
+        dest: /etc/alloy/config.alloy
+        mode: "0644"
+    - name: Install Alloy
+      ansible.builtin.include_role:
+        name: grafana.grafana.alloy
+      vars:
+        alloy_env_file_vars:
+          CONFIG_FILE: /etc/alloy/config.alloy
+
+
 - name: Install QEMU guest agent on all VMs
   hosts: vm_servers
   become: true

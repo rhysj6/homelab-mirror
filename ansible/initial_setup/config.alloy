@@ -1,0 +1,62 @@
+prometheus.remote_write "local" {
+  endpoint {
+    url = "http://{{ PROMETHEUS_IP }}:9009/api/v1/push"
+  }
+}
+
+loki.write "local" {
+  endpoint {
+    url = "https://{{ LOKI_URL }}/loki/api/v1/push"
+    tenant_id = "{{ LOKI_TENANT }}"
+
+    basic_auth {
+      username = "{{ TENANT }}"
+      password = "{{ LOKI_PASSWORD }}"
+    }
+  }
+}
+
+prometheus.scrape "linux_node" {
+  targets = prometheus.exporter.unix.node.targets
+  forward_to = [
+    prometheus.remote_write.local.receiver,
+  ]
+}
+
+prometheus.exporter.unix "node" {
+}
+
+loki.relabel "journal" {
+  forward_to = []
+
+  rule {
+    source_labels = ["__journal__systemd_unit"]
+    target_label  = "unit"
+  }
+  rule {
+    source_labels = ["__journal__boot_id"]
+    target_label  = "boot_id"
+  }
+  rule {
+    source_labels = ["__journal__transport"]
+    target_label  = "transport"
+  }
+  rule {
+    source_labels = ["__journal_priority_keyword"]
+    target_label  = "level"
+  }
+  rule {
+    source_labels = ["__journal__hostname"]
+    target_label  = "host"
+  }
+}
+
+loki.source.journal "read" {
+  forward_to = [
+    loki.write.local.receiver,
+  ]
+  relabel_rules = loki.relabel.journal.rules
+  labels = {
+    "job" = "linux_logs",
+  }
+}
