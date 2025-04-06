@@ -10,7 +10,7 @@ loki.write "local" {
     tenant_id = "{{ LOKI_TENANT }}"
 
     basic_auth {
-      username = "{{ TENANT }}"
+      username = "{{ LOKI_TENANT }}"
       password = "{{ LOKI_PASSWORD }}"
     }
   }
