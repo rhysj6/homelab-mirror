@@ -30,6 +30,11 @@
         content: "rhysj6 ALL=(ALL) NOPASSWD:ALL\n"
         mode: "0440"
 
+    - name: Ensure /etc/alloy directory exists
+      file:
+        path: /etc/alloy
+        state: directory
+        mode: "0755"
     - name: Copy Alloy config file
       ansible.builtin.template:
         src: config.alloy
