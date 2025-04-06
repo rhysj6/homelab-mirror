@@ -75,6 +75,9 @@ resource "kubernetes_config_map" "semaphore" {
         }
       }
     })
+    "requirements.txt" = <<EOF
+      passlib
+      EOF
   }
 }
 
@@ -176,6 +179,11 @@ resource "kubernetes_deployment" "semaphore" {
             name       = "config"
             mount_path = "/etc/semaphore/config.json"
             sub_path   = "config.json"
+          }
+          volume_mount {
+            name       = "config"
+            mount_path = "/etc/semaphore/requirements.txt"
+            sub_path   = "requirements.txt"
           }
         }
         volume {
