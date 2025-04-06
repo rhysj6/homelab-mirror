@@ -1,0 +1,42 @@
+---
+- name: Create ansible user and configure sudo and SSH access if it doesn't exist
+  hosts: "*"
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: Create a login user
+      user:
+        name: ansible
+        password: "{{ lookup('env', 'ANSIBLE_USER_PASSWORD') | password_hash('sha512') }}"
+        groups:
+          - sudo
+        state: present
+
+    - name: Add SSH key to ansible user
+      authorized_key:
+        user: ansible
+        key: "{{ lookup ('env', 'pub_key') }}"
+        state: present
+
+    - name: Enable passwordless sudo for ansible user
+      copy:
+        dest: /etc/sudoers.d/ansible
+        content: "ansible ALL=(ALL) NOPASSWD:ALL\n"
+        mode: "0440"
+    - name: Enable passwordless sudo for rhysj6 user
+      copy:
+        dest: /etc/sudoers.d/rhysj6
+        content: "rhysj6 ALL=(ALL) NOPASSWD:ALL\n"
+        mode: "0440"
+
+- name: Install QEMU guest agent on all VMs
+  hosts: vm_servers
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: Install qemu-guest-agent
+      apt:
+        name: qemu-guest-agent
+        state: present
