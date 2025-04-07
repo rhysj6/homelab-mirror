@@ -166,6 +166,7 @@ prometheus:
     walCompression: true
     scrapeInterval: 30s
     evaluationInterval: 30s
+    enableRemoteWriteReceiver: true
   service:
     reloaderWebPort: 8081
     type: LoadBalancer
