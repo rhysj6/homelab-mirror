@@ -1,6 +1,6 @@
 prometheus.remote_write "local" {
   endpoint {
-    url = "http://{{ PROMETHEUS_IP }}:9090/api/v1/push"
+    url = "http://{{ PROMETHEUS_IP }}:9090/api/v1/write"
   }
 }
 
