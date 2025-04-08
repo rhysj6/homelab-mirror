@@ -65,7 +65,9 @@ resource "kubernetes_config_map_v1" "grafana_data_sources" {
 
   data = {
     for file in fileset("${path.module}/grafana_configs/sources/", "*.yaml") :
-    trimsuffix(file, ".yaml") => file("${path.module}/grafana_configs/sources/${file}")
+    trimsuffix(file, ".yaml") => templatefile("${path.module}/grafana_configs/sources/${file}", {
+      LOKI_URL = local.loki_url
+    })
   }
 }
 
