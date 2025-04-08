@@ -58,6 +58,9 @@ resource "kubernetes_config_map_v1" "grafana_data_sources" {
   metadata {
     name      = "grafana-datasources"
     namespace = "monitoring"
+    labels = {
+      grafana_datasource = "1"
+    }
   }
 
   data = {
