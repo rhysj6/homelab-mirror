@@ -1082,7 +1082,7 @@
         {
           "direction": "backward",
           "editorMode": "builder",
-          "expr": "{host=\"$node\"} |= ``",
+          "expr": "{host=\"$node\"} |= `` | logfmt",
           "queryType": "range",
           "refId": "A"
         }
@@ -23536,5 +23536,5 @@
   "timezone": "browser",
   "title": "Linux machines",
   "uid": "rYdddlPWk",
-  "version": 1
+  "version": 2
 }
