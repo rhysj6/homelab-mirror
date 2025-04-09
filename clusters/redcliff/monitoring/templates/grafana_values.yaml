@@ -1,6 +1,3 @@
-persistence:
-  type: pvc
-  enabled: true
 fullnameOverride: grafana
 forceDeployDatasources: false
 forceDeployDashboards: false
