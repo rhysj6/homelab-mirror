@@ -3,7 +3,6 @@ datasources:
     - name: "Prometheus"
       type: prometheus
       uid: prometheus
-      isDefault: true
       url: http://prometheus-prometheus.monitoring.svc.cluster.local:9090/
       access: proxy
       jsonData:
@@ -12,7 +11,6 @@ datasources:
     - name: "Alertmanager"
       type: alertmanager
       uid: alertmanager
-      isDefault: true
       url: http://prometheus-alertmanager.monitoring.svc.cluster.local:9093/
       access: proxy
       jsonData:
