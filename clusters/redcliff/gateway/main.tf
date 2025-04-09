@@ -19,6 +19,7 @@ module "pbs" {
   hostname   = "pbs.hl.${local.domain}"
   ip_address = "10.10.0.25"
   port       = 8007
+  portname = "https"
 }
 
 module "home_assistant" {
