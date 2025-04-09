@@ -6,6 +6,12 @@ datasources:
       isDefault: true
       url: https://${LOKI_URL}
       access: proxy
+      basicAuth: true
+      basicAuthUser: onsite-production
       jsonData:
         timeout: 60
         maxLines: 1000
+        httpHeaderName1: "X-Scope-OrgID"
+      secureJsonData:
+        basicAuthPassword: ${LOKI_PASSWORD}
+        httpHeaderValue1: "onsite-production"
