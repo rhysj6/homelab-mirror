@@ -1,5 +1,5 @@
 locals {
-  semaphore_hostname     = "iac.hl.${local.domain}"
+  semaphore_hostname     = "iac.hl.${var.domain}"
   semaphore_redirect_url = "https://${local.semaphore_hostname}/api/auth/oidc/authentik/redirect/"
 }
 
@@ -45,6 +45,7 @@ module "postgresql" {
   cluster_name               = "management"
   is_superuser_password_same = true
   volume_size                = 10
+  domain = var.domain
 }
 
 ## Create the semaphore application

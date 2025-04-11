@@ -19,6 +19,7 @@ module "postgresql" {
   name                       = "authentik"
   cluster_name               = "redcliff"
   is_superuser_password_same = true
+  domain = var.domain
 }
 
 resource "helm_release" "authentik" {

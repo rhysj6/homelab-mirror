@@ -15,10 +15,6 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
-    infisical = {
-      version = ">= 0.13.0"
-      source  = "infisical/infisical"
-    }
   }
 }
 

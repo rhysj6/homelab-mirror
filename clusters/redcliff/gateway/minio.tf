@@ -51,7 +51,7 @@ resource "kubernetes_ingress_v1" "minio_main_ingress" { # Going to have some ins
   }
   spec {
     rule {
-      host = "minio.hl.${local.domain}"
+      host = "minio.hl.${var.domain}"
       http {
         path {
           backend {
@@ -66,7 +66,7 @@ resource "kubernetes_ingress_v1" "minio_main_ingress" { # Going to have some ins
       }
     }
     rule {
-      host = "s3.hl.${local.domain}"
+      host = "s3.hl.${var.domain}"
       http {
         path {
           backend {
@@ -83,8 +83,8 @@ resource "kubernetes_ingress_v1" "minio_main_ingress" { # Going to have some ins
     tls {
       secret_name = "minio-main-tls"
       hosts = [
-        "minio.hl.${local.domain}",
-        "s3.hl.${local.domain}"
+        "minio.hl.${var.domain}",
+        "s3.hl.${var.domain}"
       ]
     }
   }
@@ -101,7 +101,7 @@ resource "kubernetes_ingress_v1" "minio_clifton_ingress" { # Clifton specific in
   }
   spec {
     rule {
-      host = "minio.clifton.hl.${local.domain}"
+      host = "minio.clifton.hl.${var.domain}"
       http {
         path {
           backend {
@@ -116,7 +116,7 @@ resource "kubernetes_ingress_v1" "minio_clifton_ingress" { # Clifton specific in
       }
     }
     rule {
-      host = "s3.clifton.hl.${local.domain}"
+      host = "s3.clifton.hl.${var.domain}"
       http {
         path {
           backend {
@@ -133,8 +133,8 @@ resource "kubernetes_ingress_v1" "minio_clifton_ingress" { # Clifton specific in
     tls {
       secret_name = "minio-clifton-tls"
       hosts = [
-        "minio.clifton.hl.${local.domain}",
-        "s3.clifton.hl.${local.domain}"
+        "minio.clifton.hl.${var.domain}",
+        "s3.clifton.hl.${var.domain}"
       ]
     }
   }
@@ -151,7 +151,7 @@ resource "kubernetes_ingress_v1" "minio_filton_ingress" { # filton specific ingr
   }
   spec {
     rule {
-      host = "minio.filton.hl.${local.domain}"
+      host = "minio.filton.hl.${var.domain}"
       http {
         path {
           backend {
@@ -166,7 +166,7 @@ resource "kubernetes_ingress_v1" "minio_filton_ingress" { # filton specific ingr
       }
     }
     rule {
-      host = "s3.filton.hl.${local.domain}"
+      host = "s3.filton.hl.${var.domain}"
       http {
         path {
           backend {
@@ -183,8 +183,8 @@ resource "kubernetes_ingress_v1" "minio_filton_ingress" { # filton specific ingr
     tls {
       secret_name = "minio-filton-tls"
       hosts = [
-        "minio.filton.hl.${local.domain}",
-        "s3.filton.hl.${local.domain}"
+        "minio.filton.hl.${var.domain}",
+        "s3.filton.hl.${var.domain}"
       ]
     }
   }

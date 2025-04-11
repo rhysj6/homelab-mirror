@@ -25,7 +25,7 @@ resource "kubernetes_manifest" "aovpn_ingress_route" {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "HostSNI(`aovpn.${data.infisical_secrets.bootstrap.secrets["windows_domain"].value}`)"
+          match = "HostSNI(`aovpn.${var.windows_domain}`)"
           services = [
             {
               name = "aovpn"
@@ -51,7 +51,7 @@ resource "kubernetes_manifest" "aovpn_cert" {
     }
     spec = {
       dnsNames = [
-        "aovpn.${data.infisical_secrets.bootstrap.secrets["windows_domain"].value}"
+        "aovpn.${var.windows_domain}",
       ]
       secretName = "aovpn-tls"
       issuerRef = {

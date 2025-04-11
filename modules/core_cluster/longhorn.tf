@@ -38,7 +38,7 @@ resource "kubernetes_secret" "longhorn_backup" {
   data = {
     "AWS_ACCESS_KEY_ID"     = minio_iam_service_account.longhorn_backup.access_key
     "AWS_SECRET_ACCESS_KEY" = minio_iam_service_account.longhorn_backup.secret_key
-    "AWS_ENDPOINTS"         = "https://${data.infisical_secrets.bootstrap.secrets["minio_endpoint"].value}/"
+    "AWS_ENDPOINTS"         = "https://s3.hl.${var.domain}/"
   }
   type = "Opaque"
 }

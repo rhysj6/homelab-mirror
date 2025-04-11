@@ -9,9 +9,5 @@ terraform {
       source  = "aminueza/minio"
       version = "3.2.3"
     }
-    infisical = {
-      version = ">= 0.13.0"
-      source  = "infisical/infisical"
-    }
   }
 }

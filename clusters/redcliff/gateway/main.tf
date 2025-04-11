@@ -7,7 +7,7 @@ resource "kubernetes_namespace" "external_hosts" {
 module "clifton" {
   source     = "../modules/pass_through_ingress"
   name       = "clifton"
-  hostname   = "clifton.hl.${local.domain}"
+  hostname   = "clifton.hl.${var.domain}"
   ip_address = "10.0.0.20"
   port       = 8006
   portname = "https"
@@ -16,7 +16,7 @@ module "clifton" {
 module "pbs" {
   source     = "../modules/pass_through_ingress"
   name       = "pbs"
-  hostname   = "pbs.hl.${local.domain}"
+  hostname   = "pbs.hl.${var.domain}"
   ip_address = "10.10.0.25"
   port       = 8007
   portname = "https"
@@ -25,7 +25,7 @@ module "pbs" {
 module "home_assistant" {
   source     = "../modules/pass_through_ingress"
   name       = "home-assistant"
-  hostname   = "ha.${local.domain}"
+  hostname   = "ha.${var.domain}"
   ip_address = "10.10.0.4"
   port       = 8123
 }
@@ -33,7 +33,7 @@ module "home_assistant" {
 module "paperless" {
   source     = "../modules/pass_through_ingress"
   name       = "paperless"
-  hostname   = "paperless.${local.domain}"
+  hostname   = "paperless.${var.domain}"
   ip_address = "10.10.1.4"
   port       = 8000
 }
@@ -41,7 +41,7 @@ module "paperless" {
 module "portainer" {
   source     = "../modules/pass_through_ingress"
   name       = "portainer"
-  hostname   = "portainer.hl.${local.domain}"
+  hostname   = "portainer.hl.${var.domain}"
   ip_address = "10.10.1.10"
   port       = 9000
 }
@@ -49,14 +49,14 @@ module "portainer" {
 module "secrets" {
   source     = "../modules/pass_through_ingress"
   name       = "infisical"
-  hostname   = "secrets.hl.${local.domain}"
+  hostname   = "secrets.hl.${var.domain}"
   ip_address = "10.10.1.10"
   port       = 80
 }
 module "semaphore" {
   source     = "../modules/pass_through_ingress"
   name       = "semaphore"
-  hostname   = "semaphore.hl.${local.domain}"
+  hostname   = "semaphore.hl.${var.domain}"
   ip_address = "10.10.1.10"
   port       = 3000
 }
@@ -64,7 +64,7 @@ module "semaphore" {
 module "static" {
   source     = "../modules/pass_through_ingress"
   name       = "vmwinwebsrv"
-  hostname   = "static.hl.${local.domain}"
+  hostname   = "static.hl.${var.domain}"
   ip_address = "10.10.0.50"
   port       = 8000
 }
@@ -72,8 +72,8 @@ module "static" {
 module "vcenter" {
   source     = "../modules/pass_through_ingress"
   name       = "vcenter"
-  hostname   = "vcenter.${local.other_domain}"
-  ip_address = "ddns.${local.other_domain}"
+  hostname   = "vcenter.${var.secondary_domain}"
+  ip_address = "ddns.${var.secondary_domain}"
   port       = 443
   portname = "https"
 }

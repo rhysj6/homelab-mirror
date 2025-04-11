@@ -12,7 +12,7 @@ resource "rancher2_etcd_backup" "backup" {
     s3_backup_config {
       access_key = minio_iam_service_account.management-etcd.access_key
       bucket_name = minio_s3_bucket.management-etcd.bucket
-      endpoint = "https://${data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value}"
+      endpoint = "https://s3.hl.${var.domain}"
       secret_key = minio_iam_service_account.management-etcd.secret_key
     }
   }

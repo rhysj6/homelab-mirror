@@ -49,7 +49,7 @@ resource "kubernetes_manifest" "cluster" {
       }
       backup = {
         barmanObjectStore = {
-          endpointURL     = "https://${data.infisical_secrets.bootstrap.secrets["minio_endpoint"].value}/"
+          endpointURL     = "https://s3.hl.${var.domain}/"
           destinationPath = "s3://${var.cluster_name}-postgres-backup/${var.namespace}/${var.name}"
           s3Credentials = {
             accessKeyId = {

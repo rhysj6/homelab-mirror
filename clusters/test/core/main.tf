@@ -7,6 +7,7 @@ variable "firstrun" {
 module "cluster" {
   source       = "../../../modules/downstream_cluster"
   cluster_name = "test"
+  domain = var.domain
 }
 
 module "core" {
@@ -21,4 +22,23 @@ module "core" {
     "10.20.30.12",
     "10.20.30.13"
   ]
+  domain = var.domain
+  cloudflare_email = var.cloudflare_email
+  cloudflare_api_key  = var.cloudflare_api_key
+}
+
+variable "domain" {
+  description = "The domain name that most resources will be created under."
+  type        = string
+}
+
+variable "cloudflare_email" {
+  description = "The email address for Cloudflare"
+  type        = string
+}
+
+variable "cloudflare_api_key" {
+  description = "The API key for Cloudflare"
+  type        = string
+  sensitive   = true
 }

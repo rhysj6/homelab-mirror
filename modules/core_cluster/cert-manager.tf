@@ -31,7 +31,7 @@ resource "kubernetes_secret" "cluster_issuer" {
     namespace = kubernetes_namespace.cert_manager.metadata[0].name
   }
   data = {
-    "cloudflare-api-token" = data.infisical_secrets.kubernetes.secrets["cloudflare_api_key"].value
+    "cloudflare-api-token" = var.cloudflare_api_key
   }
 }
 
@@ -57,7 +57,7 @@ resource "kubernetes_manifest" "cluster_issuer" {
         # The ACME server URL
         server = "https://acme-v02.api.letsencrypt.org/directory"
         # Email address used for ACME registration
-        email = data.infisical_secrets.bootstrap.secrets["cloudflare_email"].value
+        email = var.cloudflare_email
         # Name of a secret used to store the ACME account private key
         privateKeySecretRef = {
           name = "cert-manager-private-key"
@@ -67,7 +67,7 @@ resource "kubernetes_manifest" "cluster_issuer" {
           {
             dns01 = {
               cloudflare = {
-                email = data.infisical_secrets.bootstrap.secrets["cloudflare_email"].value
+                email = var.cloudflare_email
                 apiTokenSecretRef = {
                   name = "cluster-issuer"
                   key  = "cloudflare-api-token"

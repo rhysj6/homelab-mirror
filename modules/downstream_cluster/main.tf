@@ -7,7 +7,7 @@ resource "rancher2_cluster_v2" "cluster" {
       snapshot_schedule_cron = "0 */5 * * *"
       snapshot_retention     = 5
       s3_config {
-        endpoint              = data.infisical_secrets.bootstrap_secrets.secrets["minio_endpoint"].value
+        endpoint              = "https://s3.hl.${var.domain}"
         bucket                = minio_s3_bucket.etcd.bucket
         cloud_credential_name = rancher2_cloud_credential.minio_etc_bucket.id
       }

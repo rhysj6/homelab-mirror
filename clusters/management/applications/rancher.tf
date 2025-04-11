@@ -16,7 +16,7 @@ resource "helm_release" "rancher" {
   namespace  = kubernetes_namespace.rancher.id
   set {
     name  = "hostname"
-    value = "rancher.hl.${local.domain}"
+    value = "rancher.hl.${var.domain}"
   }
   set {
     name  = "ingress.extraAnnotations.cert-manager\\.io/cluster-issuer"

@@ -13,6 +13,7 @@ variable "secondrun" {
 module "cluster" {
   source       = "../../../modules/downstream_cluster"
   cluster_name = "redcliff"
+  domain       = var.domain
 }
 
 module "core" {
@@ -27,19 +28,22 @@ module "core" {
     "10.20.0.12",
     "10.20.0.13"
   ]
+  domain = var.domain
+  cloudflare_email = var.cloudflare_email
+  cloudflare_api_key = var.cloudflare_api_key
 }
 
 module "dns" {
   count        = var.firstrun ? 0 : 1
   source = "../modules/pihole"
-  domain = data.infisical_secrets.bootstrap.secrets["domain"].value
-  windows_domain = data.infisical_secrets.bootstrap.secrets["windows_domain"].value
+  domain = var.domain
+  windows_domain = var.windows_domain
   load_balancer_ip = "10.20.1.53"
 }
 
 module "authentik" {
   count        = var.secondrun || var.firstrun ? 0 : 1
   source       = "../modules/authentik"
-  domain = data.infisical_secrets.bootstrap.secrets["domain"].value
+  domain = var.domain
   depends_on   = [module.core]
 }

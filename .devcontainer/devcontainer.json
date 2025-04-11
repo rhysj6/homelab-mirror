@@ -21,7 +21,6 @@
 		"ghcr.io/gickis/devcontainer-features/kubeseal:1": {
 			"version": "latest"
 		},
-		"ghcr.io/skriptfabrik/devcontainer-features/infisical-cli:1": {},
 		"ghcr.io/devcontainers-extra/features/ansible:2": {
 			"version": "latest"
 		},
