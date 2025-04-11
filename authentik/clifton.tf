@@ -10,7 +10,7 @@ resource "authentik_provider_oauth2" "clifton" {
   signing_key        = data.authentik_certificate_key_pair.domain.id
   allowed_redirect_uris = [
     {
-      url           = "https://clifton.hl.${local.domain}"
+      url           = "https://clifton.hl.${var.domain}"
       matching_mode = "strict"
     }
   ]
@@ -27,7 +27,7 @@ resource "authentik_application" "clifton" {
   name              = "Clifton"
   slug              = "clifton"
   group             = "Infrastructure"
-  meta_launch_url   = "https://clifton.hl.${local.domain}"
+  meta_launch_url   = "https://clifton.hl.${var.domain}"
   open_in_new_tab   = true
   protocol_provider = authentik_provider_oauth2.clifton.id
 }

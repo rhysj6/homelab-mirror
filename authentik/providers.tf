@@ -11,10 +11,6 @@ terraform {
     use_path_style = true
   }
   required_providers {
-    infisical = {
-      version = ">= 0.13.0"
-      source  = "infisical/infisical"
-    }
     authentik = {
       source  = "goauthentik/authentik"
       version = "2024.12.1"
@@ -28,12 +24,6 @@ terraform {
       version = "3.6.3"
     }
   }
-}
-provider "infisical" {
-  // Handled in the environment variables.
-  // INFISICAL_HOST
-  // INFISICAL_UNIVERSAL_AUTH_CLIENT_ID
-  // INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET
 }
 
 provider "authentik" {

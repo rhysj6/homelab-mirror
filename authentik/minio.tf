@@ -10,7 +10,7 @@ resource "authentik_provider_oauth2" "minio" {
   signing_key        = data.authentik_certificate_key_pair.domain.id
   allowed_redirect_uris = [
     {
-      url           = "https://minio.hl.${local.domain}/oauth_callback"
+      url           = "https://minio.hl.${var.domain}/oauth_callback"
       matching_mode = "strict"
     }
   ]
@@ -27,7 +27,7 @@ resource "authentik_application" "minio" {
   name              = "Minio"
   slug              = "minio"
   group             = "Infrastructure"
-  meta_launch_url   = "https://minio.hl${local.domain}"
+  meta_launch_url   = "https://minio.hl${var.domain}"
   open_in_new_tab   = true
   protocol_provider = authentik_provider_oauth2.minio.id
 }
