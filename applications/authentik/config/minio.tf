@@ -27,7 +27,7 @@ resource "authentik_application" "minio" {
   name              = "Minio"
   slug              = "minio"
   group             = "Infrastructure"
-  meta_launch_url   = "https://minio.hl${var.domain}"
+  meta_launch_url   = "https://minio.hl.${var.domain}"
   open_in_new_tab   = true
   protocol_provider = authentik_provider_oauth2.minio.id
 }
