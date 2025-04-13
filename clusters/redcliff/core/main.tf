@@ -4,12 +4,6 @@ variable "firstrun" {
   default     = false
 }
 
-variable "secondrun" {
-  description = "Whether this is the second run of the module"
-  type        = bool
-  default     = false
-}
-
 module "cluster" {
   source       = "../../../modules/downstream_cluster"
   cluster_name = "redcliff"
