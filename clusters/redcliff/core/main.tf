@@ -40,10 +40,3 @@ module "dns" {
   windows_domain = var.windows_domain
   load_balancer_ip = "10.20.1.53"
 }
-
-module "authentik" {
-  count        = var.secondrun || var.firstrun ? 0 : 1
-  source       = "../modules/authentik"
-  domain = var.domain
-  depends_on   = [module.core]
-}

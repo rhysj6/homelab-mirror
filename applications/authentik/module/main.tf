@@ -14,7 +14,7 @@ resource "random_password" "secret" {
 }
 
 module "postgresql" {
-  source                     = "../../../../modules/postgres_cluster"
+  source                     = "../../../modules/postgres_cluster"
   namespace                  = kubernetes_namespace.authentik.id
   name                       = "authentik"
   cluster_name               = "redcliff"
