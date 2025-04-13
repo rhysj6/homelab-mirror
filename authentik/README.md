@@ -1,1 +1,0 @@
-This folder contains any generic authentik config such as SSO setups for manually setup applications
