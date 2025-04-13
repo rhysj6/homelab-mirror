@@ -5,7 +5,7 @@ resource "kubernetes_namespace" "external_hosts" {
 }
 
 module "clifton" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "clifton"
   hostname   = "clifton.hl.${var.domain}"
   ip_address = "10.0.0.20"
@@ -14,7 +14,7 @@ module "clifton" {
 }
 
 module "pbs" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "pbs"
   hostname   = "pbs.hl.${var.domain}"
   ip_address = "10.10.0.25"
@@ -23,7 +23,7 @@ module "pbs" {
 }
 
 module "home_assistant" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "home-assistant"
   hostname   = "ha.${var.domain}"
   ip_address = "10.10.0.4"
@@ -31,7 +31,7 @@ module "home_assistant" {
 }
 
 module "paperless" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "paperless"
   hostname   = "paperless.${var.domain}"
   ip_address = "10.10.1.4"
@@ -39,7 +39,7 @@ module "paperless" {
 }
 
 module "portainer" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "portainer"
   hostname   = "portainer.hl.${var.domain}"
   ip_address = "10.10.1.10"
@@ -47,14 +47,14 @@ module "portainer" {
 }
 
 module "secrets" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "infisical"
   hostname   = "secrets.hl.${var.domain}"
   ip_address = "10.10.1.10"
   port       = 80
 }
 module "semaphore" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "semaphore"
   hostname   = "semaphore.hl.${var.domain}"
   ip_address = "10.10.1.10"
@@ -62,7 +62,7 @@ module "semaphore" {
 }
 
 module "static" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "vmwinwebsrv"
   hostname   = "static.hl.${var.domain}"
   ip_address = "10.10.0.50"
@@ -70,7 +70,7 @@ module "static" {
 }
 
 module "vcenter" {
-  source     = "../modules/pass_through_ingress"
+  source     = "./pass_through_ingress"
   name       = "vcenter"
   hostname   = "vcenter.${var.secondary_domain}"
   ip_address = "ddns.${var.secondary_domain}"

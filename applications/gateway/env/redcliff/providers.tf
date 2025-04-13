@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.11.1"
   backend "s3" {
     bucket                      = "terraform"
-    key                         = "clusters/redcliff/gateway/terraform.tfstate"
+    key                         = "applications/gateway/env/redcliff.tfstate"
     region                      = "main"
     skip_region_validation      = true
     skip_requesting_account_id  = true
