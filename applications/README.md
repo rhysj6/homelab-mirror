@@ -31,6 +31,20 @@ applications/
     providers.tf  # Provider configurations
 ```
 
+## Default State Key for Environments
+
+The default state key for environments should follow the pattern:
+
+```
+applications/<application_name>/env/<environment_name>.tfstate
+```
+
+For example, for the `authentik` application in the `redcliff` environment, the state key would be:
+
+```
+applications/authentik/env/redcliff.tfstate
+```
+
 ## Guidelines
 - Use the `module` folder for reusable logic that can be shared across environments.
 - Place environment-specific overrides in the `env` folder.
