@@ -8,7 +8,7 @@ resource "kubernetes_service_v1" "aovpn" {
     external_name = "192.1.0.21"
     port {
       port        = 80
-      target_port = 80
+      name = "http"
     }
   }
 }
@@ -22,14 +22,13 @@ resource "kubernetes_manifest" "aovpn_ingress_route" {
       namespace = kubernetes_namespace.external_hosts.metadata[0].name
     }
     spec = {
-      entryPoints = ["websecure"]
       routes = [
         {
           match = "HostSNI(`aovpn.${var.windows_domain}`)"
           services = [
             {
               name = "aovpn"
-              port = 80
+              port = "http"
             }
           ]
         }
@@ -50,14 +49,21 @@ resource "kubernetes_manifest" "aovpn_cert" {
       namespace = kubernetes_namespace.external_hosts.metadata[0].name
     }
     spec = {
+      commonName = "aovpn.${var.windows_domain}"
       dnsNames = [
-        "aovpn.${var.windows_domain}",
+        "aovpn.${var.windows_domain}"
       ]
       secretName = "aovpn-tls"
       issuerRef = {
         name = "cert-manager"
         kind = "ClusterIssuer"
       }
+      additionalOutputFormats = [
+        {
+          type = "CombinedPEM"
+        }
+      ]
+
     }
   }
 }
