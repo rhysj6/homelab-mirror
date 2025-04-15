@@ -1,0 +1,1 @@
+This folder contains modules for global config such as minio buckets.
