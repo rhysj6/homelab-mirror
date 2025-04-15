@@ -31,7 +31,7 @@ resource "helm_release" "traefik" {
     value = true
   }
   set {
-    name  = "port.swebsecure.tls.enabled"
+    name  = "ports.websecure.tls.enabled"
     value = true
   }
   set {
@@ -45,9 +45,5 @@ resource "helm_release" "traefik" {
   set {
     name  = "service.annotations.lbipam\\.cilium\\.io/ips"
     value = var.ingress_controller_ip
-  }
-  set {
-    name = "ingressRoute.dashboard.enabled"
-    value = true
   }
 }
