@@ -1,1 +1,0 @@
-This folder contains any redcliff specific modules for organisation
