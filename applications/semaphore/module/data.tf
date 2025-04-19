@@ -1,4 +1,3 @@
-
 data "authentik_flow" "authorization-flow" {
   slug = "default-provider-authorization-implicit-consent"
 }

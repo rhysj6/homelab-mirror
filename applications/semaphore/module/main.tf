@@ -66,7 +66,7 @@ resource "kubernetes_config_map" "semaphore" {
       oidc_providers = {
         authentik = {
           display_name   = "Sign in with Authentik"
-          provider_url   = "https://${local.authentik_host}/application/o/${authentik_application.semaphore.id}/"
+          provider_url   = "https://hl.${var.domain}/application/o/${authentik_application.semaphore.id}/"
           client_id      = authentik_provider_oauth2.semaphore.client_id
           client_secret  = authentik_provider_oauth2.semaphore.client_secret
           redirect_url   = local.semaphore_redirect_url
