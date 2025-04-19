@@ -1,17 +1,4 @@
-variable "firstrun" {
-  description = "Whether this is the first run of the module"
-  type        = bool
-  default     = false
-}
-
-module "cluster" {
-  source       = "../../../modules/downstream_cluster"
-  cluster_name = "redcliff"
-  domain       = var.domain
-}
-
 module "core" {
-  count                            = var.firstrun ? 0 : 1
   source                           = "../../../modules/core_cluster"
   cluster_name                     = "redcliff"
   cilium_loadbalancer_ip_pool_cidr = "10.20.1.1/24"
