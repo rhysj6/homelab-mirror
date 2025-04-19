@@ -1,4 +1,4 @@
-module "authentik" {
+module "rancher" {
   source       = "../../module"
   domain       = var.domain  
 }
