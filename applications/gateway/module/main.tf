@@ -61,14 +61,6 @@ module "semaphore" {
   port       = 3000
 }
 
-module "static" {
-  source     = "./pass_through_ingress"
-  name       = "vmwinwebsrv"
-  hostname   = "static.hl.${var.domain}"
-  ip_address = "10.10.0.50"
-  port       = 8000
-}
-
 module "vcenter" {
   source     = "./pass_through_ingress"
   name       = "vcenter"
