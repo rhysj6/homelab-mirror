@@ -5,7 +5,7 @@ resource "kubernetes_service_v1" "management" {
   }
   spec {
     type          = "ExternalName"
-    external_name = "10.20.11.11"
+    external_name = "10.21.10.11"
     port {
       port        = 443
       target_port = 443
