@@ -20,12 +20,8 @@ resource "rancher2_cluster_v2" "cluster" {
         externalIPs = {
           enabled = true
         }
-        l2announcements = {
+        bgpControlPlane = {
           enabled = true
-        }
-        k8sClientRateLimit = {
-          burst = 128
-          qps   = 64
         }
         ipam = {
           operator = {
@@ -93,9 +89,9 @@ resource "minio_ilm_policy" "bucket-lifecycle-rules" {
   bucket = minio_s3_bucket.etcd.bucket
 
   rule {
-    id     = "versioning"
+    id = "versioning"
     noncurrent_expiration {
-      days           = "45d"
+      days = "45d"
     }
     expiration = "DeleteMarker"
   }
