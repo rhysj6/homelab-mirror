@@ -8,6 +8,18 @@ variable "cilium_loadbalancer_ip_pool_cidr" {
   type        = string
 }
 
+variable "cilium_use_bgp" {
+  description = "Whether to use BGP for Cilium"
+  type        = bool
+  default     = true
+}
+
+variable "cilium_bgp_asn" {
+  description = "The ASN for the Cilium BGP configuration"
+  type        = number
+  default     = 65555
+}
+
 variable "ingress_controller_ip" {
   description = "The IP address of the Ingress Controller"
   type        = string
@@ -41,5 +53,5 @@ variable "cloudflare_email" {
 variable "cloudflare_api_key" {
   description = "The API key for Cloudflare"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
