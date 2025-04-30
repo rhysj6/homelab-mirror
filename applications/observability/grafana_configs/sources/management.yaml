@@ -3,7 +3,7 @@ datasources:
     - name: "Management Prometheus"
       type: prometheus
       uid: management-prometheus
-      url: http://10.20.11.12:9090/
+      url: http://10.21.10.12:9090/
       access: proxy
       jsonData:
         httpMethod: POST
@@ -11,7 +11,7 @@ datasources:
     - name: "Management Alertmanager"
       type: alertmanager
       uid: management-alertmanager
-      url: http://10.20.11.12:9093/
+      url: http://10.21.10.12:9093/
       access: proxy
       jsonData:
         handleGrafanaManagedAlerts: false

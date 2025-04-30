@@ -3,7 +3,7 @@ datasources:
     - name: "Test Prometheus"
       type: prometheus
       uid: test-prometheus
-      url: http://10.20.31.12:9090/
+      url: http://10.21.30.12:9090/
       access: proxy
       jsonData:
         httpMethod: POST
@@ -11,7 +11,7 @@ datasources:
     - name: "Test Alertmanager"
       type: alertmanager
       uid: test-alertmanager
-      url: http://10.20.31.12:9093/
+      url: http://10.21.30.12:9093/
       access: proxy
       jsonData:
         handleGrafanaManagedAlerts: false
