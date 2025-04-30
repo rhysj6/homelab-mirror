@@ -46,4 +46,8 @@ resource "helm_release" "traefik" {
     name  = "service.annotations.lbipam\\.cilium\\.io/ips"
     value = var.ingress_controller_ip
   }
+  set {
+    name = "service.spec.externalTrafficPolicy"
+    value = "Local"
+  }
 }
