@@ -12,7 +12,7 @@ resource "helm_release" "rancher" {
   name       = "rancher"
   repository = "https://releases.rancher.com/server-charts/stable"
   chart      = "rancher"
-  version    = "2.10.2"
+  version    = "2.11.1"
   namespace  = kubernetes_namespace.rancher.id
   set {
     name  = "hostname"
