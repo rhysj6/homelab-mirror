@@ -150,6 +150,7 @@ resource "kubernetes_service_v1" "pihole_dns" {
       protocol    = "UDP"
       name        = "dns-udp"
     }
+    external_traffic_policy = "Local"
   }
 }
 
