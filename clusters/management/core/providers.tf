@@ -15,10 +15,6 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
-    rancher2 = {
-      source  = "rancher/rancher2"
-      version = "7.0.0"
-    }
     minio = {
       source  = "aminueza/minio"
       version = "3.2.3"
