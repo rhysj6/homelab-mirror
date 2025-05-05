@@ -48,7 +48,7 @@ provider "kubernetes" {
 
 module "cluster_config" {
   source       = "rhysj6/kubeconfig/rancher"
-  version      = "1.0.0"
+  version      = "1.0.1"
   cluster_name = "redcliff"
 }
 
