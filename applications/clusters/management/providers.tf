@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.11.1"
   backend "s3" {
     bucket                      = "terraform"
-    key                         = "applications/semaphore/env/management.tfstate"
+    key                         = "applications/clusters/management.tfstate"
     region                      = "main"
     skip_region_validation      = true
     skip_requesting_account_id  = true
@@ -28,7 +28,7 @@ terraform {
 
 module "cluster_config" {
   source       = "rhysj6/kubeconfig/rancher"
-  version      = "1.0.0"
+  version      = "1.0.1"
   cluster_name = "local"
   cluster_namespace = "fleet-local"
 }
