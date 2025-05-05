@@ -14,12 +14,13 @@ resource "random_password" "secret" {
 }
 
 module "postgresql" {
-  source                     = "../../../modules/postgres_cluster"
+  source                     = "../../../../modules/postgres_cluster"
   namespace                  = kubernetes_namespace.authentik.id
   name                       = "authentik"
   cluster_name               = "redcliff"
+  volume_size                = 4
   is_superuser_password_same = true
-  domain = var.domain
+  domain                     = var.domain
 }
 
 resource "helm_release" "authentik" {
