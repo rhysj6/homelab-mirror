@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.11.1"
   backend "s3" {
     bucket                      = "terraform"
-    key                         = "applications/authentik/config/terraform.tfstate"
+    key                         = "applications/configs/production.tfstate"
     region                      = "main"
     skip_region_validation      = true
     skip_requesting_account_id  = true
@@ -14,10 +14,6 @@ terraform {
     authentik = {
       source  = "goauthentik/authentik"
       version = "2024.12.1"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "3.6.3"
     }
   }
 }
