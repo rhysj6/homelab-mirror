@@ -7,7 +7,7 @@ resource "helm_release" "grafana" {
   chart      = "grafana"
   name       = "grafana"
   namespace  = "monitoring"
-  version    = "8.14.1"
+  version    = "8.15.0"
   values = [
     templatefile("${path.module}/templates/grafana_values.yaml", {
       domain    = local.grafana_url,
