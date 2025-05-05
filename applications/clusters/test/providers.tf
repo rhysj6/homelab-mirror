@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.11.1"
   backend "s3" {
     bucket                      = "terraform"
-    key                         = "applications/gateway/env/test.tfstate"
+    key                         = "applications/clusters/test.tfstate"
     region                      = "main"
     skip_region_validation      = true
     skip_requesting_account_id  = true
@@ -20,7 +20,7 @@ terraform {
 
 module "cluster_config" {
   source       = "rhysj6/kubeconfig/rancher"
-  version      = "1.0.0"
+  version      = "1.0.1"
   cluster_name = "test"
 }
 
