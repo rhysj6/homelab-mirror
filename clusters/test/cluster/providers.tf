@@ -11,10 +11,6 @@ terraform {
     use_path_style = true
   }
   required_providers {
-    rancher2 = {
-      source  = "rancher/rancher2"
-      version = "6.0.0"
-    }
     minio = {
       source  = "aminueza/minio"
       version = "3.2.3"
