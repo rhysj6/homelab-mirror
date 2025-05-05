@@ -15,14 +15,6 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
-    rancher2 = {
-      source  = "rancher/rancher2"
-      version = "6.0.0"
-    }
-    minio = {
-      source  = "aminueza/minio"
-      version = "3.2.3"
-    }
     helm = {
       source  = "hashicorp/helm"
       version = ">= 2.0.0"
@@ -63,12 +55,4 @@ provider "helm" {
     host  = module.test_cluster_config.host
     token = module.test_cluster_config.token
   }
-}
-
-provider "minio" {
-  // Handled in the environment variables.
-  // MINIO_ENDPOINT
-  // MINIO_USER
-  // MINIO_PASSWORD
-  minio_ssl = true
 }

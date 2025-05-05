@@ -10,18 +10,4 @@ terraform {
     skip_metadata_api_check = true
     use_path_style = true
   }
-  required_providers {
-    minio = {
-      source  = "aminueza/minio"
-      version = "3.2.3"
-    }
-  }
-}
-
-provider "minio" {
-  // Handled in the environment variables.
-  // MINIO_ENDPOINT
-  // MINIO_USER
-  // MINIO_PASSWORD
-  minio_ssl = true
 }
