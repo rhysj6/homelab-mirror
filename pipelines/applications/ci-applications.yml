@@ -40,16 +40,3 @@ steps:
     comment: 'Detected changes for test cluster.'
   condition: eq(variables['TF_PLAN_EXIT_CODE_TEST'], '2')
 
-
-- task: GitHubComment@0
-  displayName: 'Post Terraform Plan No Changes Comment'
-  inputs:
-    gitHubConnection: 'rhysj6'
-    comment: 'No changes detected for test cluster.'
-  condition: eq(variables['TF_PLAN_EXIT_CODE_TEST'], '0')
-- task: GitHubComment@0
-  displayName: 'Post Terraform Plan Error Comment'
-  inputs:
-    gitHubConnection: 'rhysj6'
-    comment: 'Error running terraform plan for test cluster.'
-  condition: eq(variables['TF_PLAN_EXIT_CODE_TEST'], '1')
