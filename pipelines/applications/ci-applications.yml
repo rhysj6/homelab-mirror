@@ -6,6 +6,7 @@ pr:
     include:
       - applications/modules/**
       - applications/clusters/**
+      - applications/observability/**
 
 pool: Self hosted
 stages:
