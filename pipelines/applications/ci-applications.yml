@@ -8,57 +8,59 @@ pr:
       - applications/clusters/**
 
 pool: Self hosted
+stages:
+- stage: PlanStage
+  displayName: 'Application cluster change detection'
+  variables:
+  - group: terraform
+  jobs:
+  - job: PlanJob
+    strategy:
+      matrix:
+        Test:
+          CLUSTER_NAME: test
+          CLUSTER_PATH: applications/clusters/test
+        Redcliff:
+          CLUSTER_NAME: redcliff
+          CLUSTER_PATH: applications/clusters/redcliff
+        Management:
+          CLUSTER_NAME: management
+          CLUSTER_PATH: applications/clusters/management
+    steps:
+    - script: |
+        set -e
+        terraform init
+      displayName: 'Terraform Init'
+      workingDirectory: $(CLUSTER_PATH)
+      env:
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
 
-variables:
-- group: terraform
+    - script: |
+        terraform plan -input=false -refresh=false -detailed-exitcode || EXIT_CODE=$?
+        if [ -z "$EXIT_CODE" ]; then EXIT_CODE=0; fi
+        if [ "$EXIT_CODE" -eq 1; then
+          echo "Terraform plan failed with error code 1. Failing the pipeline."
+          exit 1
+        fi
+        echo "##vso[task.setvariable variable=TF_PLAN_EXIT_CODE]$EXIT_CODE"
+      displayName: 'Terraform Plan (no refresh)'
+      workingDirectory: $(CLUSTER_PATH)
+      env:
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+        AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
+        MINIO_PASSWORD: $(MINIO_PASSWORD)
+        CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
+        RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
+        TF_VAR_domain: $(TF_VAR_domain)
+        TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
+        TF_VAR_windows_domain: $(TF_VAR_windows_domain)
+        TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
+        TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
 
-strategy:
-  matrix:
-    test:
-      CLUSTER_NAME: test
-      CLUSTER_PATH: applications/clusters/test
-    redcliff:
-      CLUSTER_NAME: redcliff
-      CLUSTER_PATH: applications/clusters/redcliff
-    management:
-      CLUSTER_NAME: management
-      CLUSTER_PATH: applications/clusters/management
-
-steps:
-- script: |
-    set -e
-    terraform init
-  displayName: 'Terraform Init'
-  workingDirectory: $(CLUSTER_PATH)
-  env:
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-
-- script: |
-    terraform plan -input=false -refresh=false -detailed-exitcode || EXIT_CODE=$?
-    if [ -z "$EXIT_CODE" ]; then EXIT_CODE=0; fi
-    if [ "$EXIT_CODE" -eq 1; then
-      echo "Terraform plan failed with error code 1. Failing the pipeline."
-      exit 1
-    fi
-    echo "##vso[task.setvariable variable=TF_PLAN_EXIT_CODE]$EXIT_CODE"
-  displayName: 'Terraform Plan (no refresh)'
-  workingDirectory: $(CLUSTER_PATH)
-  env:
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-    AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
-    MINIO_PASSWORD: $(MINIO_PASSWORD)
-    CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
-    RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
-    TF_VAR_domain: $(TF_VAR_domain)
-    TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
-    TF_VAR_windows_domain: $(TF_VAR_windows_domain)
-    TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
-    TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
-
-- task: GitHubComment@0
-  displayName: 'Post Terraform Plan Changes Comment'
-  inputs:
-    gitHubConnection: 'rhysj6'
-    comment: 'Detected changes for $(CLUSTER_NAME) cluster.'
-  condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
+    - task: GitHubComment@0
+      displayName: 'Post Terraform Plan Changes Comment'
+      inputs:
+        gitHubConnection: 'rhysj6'
+        comment: 'Detected changes for $(CLUSTER_NAME) cluster.'
+      condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
 
