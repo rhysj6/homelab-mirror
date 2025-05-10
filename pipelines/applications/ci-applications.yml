@@ -9,29 +9,33 @@ pr:
 
 pool: Self hosted
 stages:
-- stage: PlanStage
+- stage: ModuleChangeDetection
   displayName: 'Application cluster change detection'
   variables:
   - group: terraform
   jobs:
-  - job: PlanJob
+  - job: ModulePlan
     strategy:
       matrix:
         Test:
-          CLUSTER_NAME: test
-          CLUSTER_PATH: applications/clusters/test
+          MODULE_NAME: test
+          MODULE_PATH: applications/clusters/test
         Redcliff:
-          CLUSTER_NAME: redcliff
-          CLUSTER_PATH: applications/clusters/redcliff
+          MODULE_NAME: redcliff
+          MODULE_PATH: applications/clusters/redcliff
         Management:
-          CLUSTER_NAME: management
-          CLUSTER_PATH: applications/clusters/management
+          MODULE_NAME: management
+          MODULE_PATH: applications/clusters/management
+        Observability:
+          MODULE_NAME: observability
+          MODULE_PATH: applications/observability
+          NOTIFY: false
     steps:
     - script: |
         set -e
         terraform init
       displayName: 'Terraform Init'
-      workingDirectory: $(CLUSTER_PATH)
+      workingDirectory: $(MODULE_PATH)
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
 
@@ -44,7 +48,7 @@ stages:
         fi
         echo "##vso[task.setvariable variable=TF_PLAN_EXIT_CODE]$EXIT_CODE"
       displayName: 'Terraform Plan (no refresh)'
-      workingDirectory: $(CLUSTER_PATH)
+      workingDirectory: $(MODULE_PATH)
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
         AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
@@ -61,6 +65,6 @@ stages:
       displayName: 'Post Terraform Plan Changes Comment'
       inputs:
         gitHubConnection: 'rhysj6'
-        comment: 'Detected changes for $(CLUSTER_NAME) cluster.'
-      condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
+        comment: 'Detected changes for $(MODULE_NAME) module.'
+      condition: and(eq(variables['TF_PLAN_EXIT_CODE'], '2'), ne(variables['NOTIFY'], 'false'))
 
