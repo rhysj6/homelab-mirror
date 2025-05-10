@@ -22,15 +22,6 @@ steps:
   workingDirectory: applications/clusters/test
 
 - task: GitHubComment@0
-  displayName: 'Post Terraform Plan Success Comment'
-  inputs:
-    gitHubConnection: '$(githubServiceConnection)'
-    repositoryName: '$(Build.Repository.Name)'
-    pullRequestId: '$(System.PullRequest.PullRequestId)'
-    comment: 'Terraform plan succeeded and no changes are required.'
-  condition: eq(variables['TF_PLAN_EXIT_CODE'], '0')
-
-- task: GitHubComment@0
   displayName: 'Post Terraform Plan Changes Comment'
   inputs:
     gitHubConnection: 'rhysj6'
