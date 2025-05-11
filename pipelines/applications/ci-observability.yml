@@ -1,0 +1,21 @@
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - applications/observability/**
+
+pool: Self hosted
+stages:
+- stage: ObservabilityModuleChangeDetection
+  displayName: 'Observability module change detection'
+  variables:
+  - group: terraform
+  jobs:
+  - template: terraform-module-template.yml
+    parameters:
+      moduleName: observability
+      modulePath: applications/observability
+      notify: false
+      comment: 'Detected changes for observability module.'

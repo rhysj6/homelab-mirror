@@ -1,0 +1,22 @@
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - applications/clusters/management/**
+      - applications/modules/**
+
+pool: Self hosted
+stages:
+- stage: ManagementModuleChangeDetection
+  displayName: 'Management module change detection'
+  variables:
+  - group: terraform
+  jobs:
+  - template: terraform-module-template.yml
+    parameters:
+      moduleName: management
+      modulePath: applications/clusters/management
+      notify: true
+      comment: 'Detected changes for management cluster.'
