@@ -14,7 +14,7 @@ stages:
   variables:
   - group: terraform
   jobs:
-  - template: terraform-module-template.yml
+  - template: ../templates/module-change-detection.yml
     parameters:
       moduleName: management
       modulePath: applications/clusters/management
