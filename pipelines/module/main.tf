@@ -3,6 +3,6 @@ data "azuredevops_project" "private" {
 }
 
 data "azuredevops_serviceendpoint_github" "rhysj6" {
-  project_id          = data.azuredevops_project.private.id
-  service_endpoint_id = "service_endpoint_name"
+  project_id            = data.azuredevops_project.private.id
+  service_endpoint_name = "rhysj6"
 }
