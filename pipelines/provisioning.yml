@@ -8,6 +8,8 @@ trigger:
   batch: true
 
 pool: Self hosted
+variables:
+- group: terraform
 
 jobs:
 - job: ApplyPipelines
