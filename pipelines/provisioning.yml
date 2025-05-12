@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - pipelines/**
+  batch: true
+
+pool: Self hosted
+
+jobs:
+- job: ApplyPipelines
+  displayName: 'Provision Pipelines'
+  steps:
+    - script: |
+        set -e
+        terraform init
+      displayName: 'Terraform Init'
+      workingDirectory: pipelines/modules
+      env:
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+    - script: |
+        terraform apply -input=false -auto-approve
+      displayName: 'Terraform Apply'
+      workingDirectory: pipelines/modules
+      env:
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+        AZDO_ORG_SERVICE_URL: $(System.CollectionUri)
+        AZDO_PERSONAL_ACCESS_TOKEN: $(System.AccessToken)
