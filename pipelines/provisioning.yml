@@ -19,13 +19,13 @@ jobs:
         set -e
         terraform init
       displayName: 'Terraform Init'
-      workingDirectory: pipelines/modules
+      workingDirectory: pipelines/module
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
     - script: |
         terraform apply -input=false -auto-approve
       displayName: 'Terraform Apply'
-      workingDirectory: pipelines/modules
+      workingDirectory: pipelines/module
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
         AZDO_ORG_SERVICE_URL: $(System.CollectionUri)
