@@ -1,10 +1,10 @@
 trigger:
   branches:
     include:
-      - main
+    - main
   paths:
     include:
-      - pipelines/**
+    - pipelines
   batch: true
 
 pool: Self hosted
