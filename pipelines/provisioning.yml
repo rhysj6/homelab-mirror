@@ -29,4 +29,4 @@ jobs:
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
         AZDO_ORG_SERVICE_URL: $(System.CollectionUri)
-        AZDO_PERSONAL_ACCESS_TOKEN: $(System.AccessToken)
+        AZDO_PERSONAL_ACCESS_TOKEN: $(Azure_Devops)
