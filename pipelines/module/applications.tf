@@ -5,7 +5,7 @@ resource "azuredevops_build_folder" "applications" {
 }
 
 resource "azuredevops_build_definition" "applications" {
-  for_each   = fileset("${path.module}/pipelines/applications/", "*.yml")
+  for_each   = fileset("${path.module}/../applications/", "*.yml")
   project_id = data.azuredevops_project.private.id
   name       = "${each.key}"
   path       = "\\Applications"
