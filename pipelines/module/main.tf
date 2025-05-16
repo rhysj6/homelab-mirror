@@ -12,8 +12,9 @@ resource "azuredevops_build_definition" "pipeline_provisioner" {
   name       = "Pipeline Provisioner"
 
   repository {
-    repo_type             = "GitHub"
-    repo_id               = "rhysj6/Homelab"
+    repo_type   = "GitHub"
+    repo_id     = "rhysj6/Homelab"
+    branch_name = "main"
     yml_path              = "pipelines/provisioning.yml"
     service_connection_id = data.azuredevops_serviceendpoint_github.rhysj6.id
   }
