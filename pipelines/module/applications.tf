@@ -13,8 +13,11 @@ resource "azuredevops_build_definition" "applications" {
   repository {
     repo_type   = "GitHub"
     repo_id     = "rhysj6/Homelab"
-    branch_name = "main"
+    branch_name = "refs/heads/main"
     yml_path              = "pipelines/applications/${each.key}"
     service_connection_id = data.azuredevops_serviceendpoint_github.rhysj6.id
+  }
+  ci_trigger {
+    use_yaml = true
   }
 }
