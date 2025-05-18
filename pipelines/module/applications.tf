@@ -24,7 +24,7 @@ resource "azuredevops_build_definition" "applications" {
     use_yaml = true
     forks {
       enabled = false
-      share_secrets = null
+      share_secrets = false
     }
   }
 }
