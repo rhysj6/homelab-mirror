@@ -81,7 +81,9 @@ stages:
       - deployment: TerraformApply
         displayName: 'Terraform Apply'
         dependsOn: waitForValidation
-        environment: ${{ parameters.environment }}
+        environment:
+          name: ${{ parameters.environment }}
+          resourceType: VirtualMachine
         strategy:
           runOnce:
             deploy:
