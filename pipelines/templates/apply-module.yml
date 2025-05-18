@@ -55,7 +55,7 @@ stages:
               Contents: |
                 tfplan
                 .terraform.lock.hcl
-                .terraform
+                .terraform/**
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
           - publish: '$(Build.ArtifactStagingDirectory)'
