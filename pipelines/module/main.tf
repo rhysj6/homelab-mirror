@@ -25,6 +25,6 @@ resource "azuredevops_build_definition" "pipeline_provisioner" {
 
 resource "azuredevops_group" "approvers" {
   scope        = data.azuredevops_project.private.id
-  display_name = "Deployment Approvers"
+  display_name = "DeploymentApprovers"
   description  = "Users who can approve automated deployments"
 }
