@@ -32,7 +32,7 @@ stages:
                 echo "Terraform plan failed with error code 1. Failing the pipeline."
                 exit 1
               fi
-              echo "##vso[task.setvariable variable=TF_PLAN_EXIT_CODE]$EXIT_CODE"
+              echo "##vso[task.setvariable variable=TF_PLAN_EXIT_CODE;isOutput=true]$EXIT_CODE"
             displayName: 'Terraform Plan'
             workingDirectory: ${{ parameters.modulePath }}
             env:
@@ -66,7 +66,7 @@ stages:
   - stage: TerraformApply
     displayName: 'Terraform Apply'
     dependsOn: TerraformInitAndPlan
-    condition: eq(variables['TF_PLAN_EXIT_CODE'], 2)
+    condition: eq(stageDependencies.TerraformInitAndPlan.TerraformInitAndPlan.outputs['TF_PLAN_EXIT_CODE'], 2)
     jobs:
       - job: waitForValidation
         displayName: Wait for external validation
