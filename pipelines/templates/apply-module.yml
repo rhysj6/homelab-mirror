@@ -10,12 +10,12 @@ variables:
   - group: terraform
 
 stages:
-  - stage: TerraformInitAndPlan
+  - stage: InitAndPlan
     pool:
       name: 'Self hosted'
     displayName: 'Terraform Init and Plan'
     jobs:
-      - job: TerraformInitAndPlan
+      - job: InitAndPlan
         displayName: 'Terraform Init and Plan'
         steps:
           - script: |
@@ -67,8 +67,8 @@ stages:
 
   - stage: TerraformApply
     displayName: 'Terraform Apply'
-    dependsOn: TerraformInitAndPlan
-    condition: eq(stageDependencies.TerraformInitAndPlan.TerraformInitAndPlan.outputs['plan.exitCode'], 2)
+    dependsOn: InitAndPlan
+    condition: eq(dependencies.InitAndPlan.outputs['InitAndPlan.plan.exitCode'], 2)
     jobs:
       - job: waitForValidation
         displayName: Wait for external validation
