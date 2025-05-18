@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+    - main
+    - test
+  paths:
+    include:
+      - applications/clusters/test/**
+      - applications/modules/**
+  batch: true
+
+extends:
+  template: ../templates/apply-module.yml
+  parameters:
+    moduleName: test
+    environment: test
+    modulePath: applications/clusters/test
