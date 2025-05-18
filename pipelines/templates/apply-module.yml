@@ -84,6 +84,8 @@ stages:
         environment:
           name: ${{ parameters.environment }}
           resourceType: VirtualMachine
+        workspace:
+          clean: all
         strategy:
           runOnce:
             deploy:
