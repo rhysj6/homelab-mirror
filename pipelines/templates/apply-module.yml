@@ -91,7 +91,7 @@ stages:
                 - script: |
                     terraform apply -input=false tfplan
                   displayName: 'Terraform Apply'
-                  workingDirectory: '$(Pipeline.Workspace)'
+                  workingDirectory: '$(Pipeline.Workspace)/plan'
                   env:
                     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
                     AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
