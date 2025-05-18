@@ -51,7 +51,7 @@ stages:
 
           - task: CopyFiles@2
             displayName: 'Copy Terraform Plan and files'
-            condition: eq(plan.exitCode, 2)
+            condition: eq(variables['exitCode'], 2)
             inputs:
               SourceFolder: ${{ parameters.modulePath }}
               Contents: |
@@ -62,7 +62,7 @@ stages:
 
           - publish: '$(Build.ArtifactStagingDirectory)'
             displayName: 'Publish Terraform Plan'
-            condition: eq(plan.exitCode, 2)
+            condition: eq(variables['exitCode'], 2)
             artifact: plan
 
   - stage: TerraformApply
