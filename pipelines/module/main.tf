@@ -22,3 +22,9 @@ resource "azuredevops_build_definition" "pipeline_provisioner" {
     use_yaml = true
   }
 }
+
+resource "azuredevops_group" "approvers" {
+  scope        = data.azuredevops_project.private.id
+  display_name = "Deployment Approvers"
+  description  = "Users who can approve automated deployments"
+}
