@@ -1,0 +1,15 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - applications/observability/**
+  batch: true
+
+extends:
+  template: ../templates/apply-module.yml
+  parameters:
+    moduleName: observability
+    environment: production
+    modulePath: applications/observability
