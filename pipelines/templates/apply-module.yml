@@ -26,14 +26,14 @@ stages:
             env:
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
           - script: |
-              terraform plan -input=false -refresh=false -detailed-exitcode -out tfplan || EXIT_CODE=$?
+              terraform plan -input=false -detailed-exitcode -out tfplan || EXIT_CODE=$?
               if [ -z "$EXIT_CODE" ]; then EXIT_CODE=0; fi
               if [ "$EXIT_CODE" -eq 1 ]; then
                 echo "Terraform plan failed with error code 1. Failing the pipeline."
                 exit 1
               fi
               echo "##vso[task.setvariable variable=TF_PLAN_EXIT_CODE]$EXIT_CODE"
-            displayName: 'Terraform Plan (no refresh)'
+            displayName: 'Terraform Plan'
             workingDirectory: ${{ parameters.modulePath }}
             env:
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
@@ -46,24 +46,53 @@ stages:
               TF_VAR_windows_domain: $(TF_VAR_windows_domain)
               TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
-          - ${{ if eq(variables['TF_PLAN_EXIT_CODE'], '2') }}:
-            - task: ManualValidation@1
-              timeoutInMinutes: 1440 # 1 Day
-              inputs:
-                notifyUsers: '$(System.TeamProject)/DeploymentApprovers'
 
-            - script: |
-                terraform apply -input=false tfplan
-              displayName: 'Terraform Apply'
-              workingDirectory: ${{ parameters.modulePath }}
-              env:
-                AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-                AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
-                MINIO_PASSWORD: $(MINIO_PASSWORD)
-                CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
-                RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
-                TF_VAR_domain: $(TF_VAR_domain)
-                TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
-                TF_VAR_windows_domain: $(TF_VAR_windows_domain)
-                TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
-                TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+          - task: CopyFiles@2
+            displayName: 'Copy Terraform Plan and files'
+            condition: eq(variables['TF_PLAN_EXIT_CODE'], 2)
+            inputs:
+              SourceFolder: ${{ parameters.modulePath }}
+              Contents: |
+                tfplan
+                .terraform.lock.hcl
+                .terraform
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+          - publish: '$(Build.ArtifactStagingDirectory)'
+            displayName: 'Publish Terraform Plan'
+            condition: eq(variables['TF_PLAN_EXIT_CODE'], 2)
+            artifact: plan
+
+  - stage: TerraformApply
+    displayName: 'Terraform Apply'
+    dependsOn: TerraformInitAndPlan
+    condition: eq(variables['TF_PLAN_EXIT_CODE'], 2)
+    jobs:
+      - job: ManualValidation
+        steps:
+          - task: ManualValidation@1
+            timeoutInMinutes: 1440 # 1 Day
+            inputs:
+              notifyUsers: '$(System.TeamProject)/DeploymentApprovers'
+      - deployment: TerraformApply
+        displayName: 'Terraform Apply'
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: |
+                    terraform apply -input=false tfplan
+                  displayName: 'Terraform Apply'
+                  workingDirectory: '$(Pipeline.Workspace)\drop'
+                  env:
+                    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+                    AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
+                    MINIO_PASSWORD: $(MINIO_PASSWORD)
+                    CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
+                    RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
+                    TF_VAR_domain: $(TF_VAR_domain)
+                    TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
+                    TF_VAR_windows_domain: $(TF_VAR_windows_domain)
+                    TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
+                    TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
