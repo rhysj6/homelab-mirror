@@ -68,7 +68,8 @@ stages:
     dependsOn: TerraformInitAndPlan
     condition: eq(variables['TF_PLAN_EXIT_CODE'], 2)
     jobs:
-      - job: ManualValidation
+      - job: waitForValidation
+        displayName: Wait for external validation
         steps:
           - task: ManualValidation@1
             timeoutInMinutes: 1440 # 1 Day
