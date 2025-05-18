@@ -80,6 +80,7 @@ stages:
               notifyUsers: '$(System.TeamProject)/DeploymentApprovers'
       - deployment: TerraformApply
         displayName: 'Terraform Apply'
+        dependsOn: waitForValidation
         environment: ${{ parameters.environment }}
         strategy:
           runOnce:
