@@ -70,6 +70,7 @@ stages:
     jobs:
       - job: waitForValidation
         displayName: Wait for external validation
+        pool: server
         steps:
           - task: ManualValidation@1
             timeoutInMinutes: 1440 # 1 Day
