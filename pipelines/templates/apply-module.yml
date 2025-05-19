@@ -90,17 +90,17 @@ stages:
             displayName: 'Copy Terraform Plan and files'
             inputs:
               SourceFolder: '$(Pipeline.Workspace)/plan'
-              TargetFolder: '$(Pipeline.Workspace)/${{ parameters.modulePath }}'
+              TargetFolder: '${{ parameters.modulePath }}'
           - script: |
               terraform init -input=false
             displayName: 'Terraform Init'
-            workingDirectory: '$(Pipeline.Workspace)/${{ parameters.modulePath }}'
+            workingDirectory: '${{ parameters.modulePath }}'
             env:
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
           - script: |
               terraform apply -input=false tfplan
             displayName: 'Terraform Apply'
-            workingDirectory: '$(Pipeline.Workspace)/plan'
+            workingDirectory: '${{ parameters.modulePath }}'
             env:
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
               AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
