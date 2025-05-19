@@ -54,7 +54,9 @@ stages:
             condition: eq(variables['plan.exitCode'], 2)
             inputs:
               SourceFolder: ${{ parameters.modulePath }}
-              Contents: tfplan
+              Contents: |
+                tfplan
+                .terraform.lock.hcl
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
           - publish: '$(Build.ArtifactStagingDirectory)'
             displayName: 'Publish Terraform Plan'
@@ -89,6 +91,7 @@ stages:
             inputs:
               SourceFolder: '$(Pipeline.Workspace)/plan'
               TargetFolder: '${{ parameters.modulePath }}'
+              ReplaceExisting: true
           - script: |
               terraform init -input=false
             displayName: 'Terraform Init'
