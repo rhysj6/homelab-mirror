@@ -1,0 +1,22 @@
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - clusters/test/core/**
+      - modules/core_cluster/**
+
+pool: Self hosted
+stages:
+- stage: TestModuleChangeDetection
+  displayName: 'Test module change detection'
+  variables:
+  - group: terraform
+  jobs:
+  - template: ../templates/module-change-detection.yml
+    parameters:
+      moduleName: test
+      modulePath: clusters/test/core
+      notify: true
+      comment: 'Detected changes for test cluster.'

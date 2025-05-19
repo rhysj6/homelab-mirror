@@ -1,0 +1,22 @@
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - clusters/redcliff/core/**
+      - modules/core_cluster/**
+
+pool: Self hosted
+stages:
+- stage: RedcliffModuleChangeDetection
+  displayName: 'Redcliff module change detection'
+  variables:
+  - group: terraform
+  jobs:
+  - template: ../templates/module-change-detection.yml
+    parameters:
+      moduleName: redcliff
+      modulePath: clusters/redcliff/core
+      notify: true
+      comment: 'Detected changes for redcliff cluster.'
