@@ -91,6 +91,10 @@ stages:
             deploy:
               steps:
                 - script: |
+                    sudo chown -R $(whoami):$(whoami) .
+                  displayName: 'Chown plan directory'
+                  workingDirectory: '$(Pipeline.Workspace)/plan'
+                - script: |
                     terraform apply -input=false tfplan
                   displayName: 'Terraform Apply'
                   workingDirectory: '$(Pipeline.Workspace)/plan'
