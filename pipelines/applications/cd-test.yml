@@ -8,6 +8,7 @@ trigger:
       - applications/clusters/test/**
       - applications/modules/**
   batch: true
+pr: none
 
 extends:
   template: ../templates/apply-module.yml
