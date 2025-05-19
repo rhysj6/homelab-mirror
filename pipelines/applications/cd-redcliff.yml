@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - applications/clusters/redcliff/**
+      - applications/modules/**
+  batch: true
+pr: none
+
+extends:
+  template: ../templates/apply-module.yml
+  parameters:
+    moduleName: redcliff
+    environment: redcliff
+    modulePath: applications/clusters/redcliff
