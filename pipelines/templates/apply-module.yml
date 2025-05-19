@@ -83,26 +83,26 @@ stages:
         dependsOn: waitForValidation
         pool:
           name: 'Self hosted'
-          steps:
-            - checkout: none
-            - download: current
-              artifact: plan
-              patterns: |
-                tfplan
-                .terraform.lock.hcl
-                .terraform/**
-            - script: |
-                terraform apply -input=false tfplan
-              displayName: 'Terraform Apply'
-              workingDirectory: '$(Pipeline.Workspace)/plan'
-              env:
-                AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-                AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
-                MINIO_PASSWORD: $(MINIO_PASSWORD)
-                CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
-                RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
-                TF_VAR_domain: $(TF_VAR_domain)
-                TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
-                TF_VAR_windows_domain: $(TF_VAR_windows_domain)
-                TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
-                TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+        steps:
+          - checkout: none
+          - download: current
+            artifact: plan
+            patterns: |
+              tfplan
+              .terraform.lock.hcl
+              .terraform/**
+          - script: |
+              terraform apply -input=false tfplan
+            displayName: 'Terraform Apply'
+            workingDirectory: '$(Pipeline.Workspace)/plan'
+            env:
+              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+              AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
+              MINIO_PASSWORD: $(MINIO_PASSWORD)
+              CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
+              RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
+              TF_VAR_domain: $(TF_VAR_domain)
+              TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
+              TF_VAR_windows_domain: $(TF_VAR_windows_domain)
+              TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
+              TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
