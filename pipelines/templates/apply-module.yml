@@ -91,7 +91,7 @@ stages:
             inputs:
               SourceFolder: '$(Pipeline.Workspace)/plan'
               TargetFolder: '${{ parameters.modulePath }}'
-              ReplaceExisting: true
+              OverWrite: true
           - script: |
               terraform init -input=false
             displayName: 'Terraform Init'
