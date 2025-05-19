@@ -50,7 +50,7 @@ stages:
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
 
           - task: CopyFiles@2
-            displayName: 'Copy Terraform Plan and files'
+            displayName: 'Copy Terraform Plan and lockfile'
             condition: eq(variables['plan.exitCode'], 2)
             inputs:
               SourceFolder: ${{ parameters.modulePath }}
@@ -87,7 +87,7 @@ stages:
           - download: current
             artifact: plan
           - task: CopyFiles@2
-            displayName: 'Copy Terraform Plan'
+            displayName: 'Copy Terraform Plan and lockfile'
             inputs:
               SourceFolder: '$(Pipeline.Workspace)/plan'
               TargetFolder: '${{ parameters.modulePath }}'
