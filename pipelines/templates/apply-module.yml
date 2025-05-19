@@ -54,12 +54,8 @@ stages:
             condition: eq(variables['plan.exitCode'], 2)
             inputs:
               SourceFolder: ${{ parameters.modulePath }}
-              Contents: |
-                tfplan
-                .terraform.lock.hcl
-                .terraform/**
+              Contents: tfplan
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
           - publish: '$(Build.ArtifactStagingDirectory)'
             displayName: 'Publish Terraform Plan'
             condition: eq(variables['plan.exitCode'], 2)
