@@ -13,6 +13,5 @@ extends:
   template: ../templates/apply-module.yml
   parameters:
     moduleName: management
-    environment: management
     modulePath: clusters/management/core
     kubeConfigSecureFile: 'management-kubeconfig'
