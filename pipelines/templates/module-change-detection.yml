@@ -67,3 +67,11 @@ jobs:
         inputs:
           gitHubConnection: 'rhysj6'
           comment: ${{ parameters.comment }}
+      - template: ./discord-notification.yml
+        parameters:
+          webhookUrl: $(discord_webhook)
+          title: 'Module Change Detected: ${{ parameters.moduleName }}'
+          description: |
+            Changes detected in the module `${{ parameters.moduleName }}`.
+            Please review the changes and take necessary actions.
+          url: $(System.PullRequest.SourceRepositoryURI)
