@@ -55,8 +55,8 @@ jobs:
         TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
         ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
           KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
-        ${{ each key, value in parameters.env }}: # Include additional environment variables
-          ${{ key }}: ${{ value }}
+        ${{ parameters.env }}: # Include additional environment variables
+
     - ${{ if and(parameters.notify, eq(variables['TF_PLAN_EXIT_CODE'], '2')) }}:
       - task: GitHubComment@0
         displayName: 'Post Terraform Plan Changes Comment'

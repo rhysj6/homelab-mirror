@@ -59,8 +59,7 @@ stages:
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
               ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
                 KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
-              ${{ each key, value in parameters.env }}: # Include additional environment variables
-                ${{ key }}: ${{ value }}
+              ${{ parameters.env }}: # Include additional environment variables
           - task: CopyFiles@2
             displayName: 'Copy Terraform Plan and lockfile'
             condition: eq(variables['plan.exitCode'], 2)
@@ -133,5 +132,4 @@ stages:
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
               ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
                 KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
-              ${{ each key, value in parameters.env }}: # Include additional environment variables
-                ${{ key }}: ${{ value }}
+              ${{ parameters.env }} # Include additional environment variables
