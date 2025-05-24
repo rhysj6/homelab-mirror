@@ -1,0 +1,18 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - clusters/management/core/**
+      - modules/core_cluster/**
+  batch: true
+pr: none
+
+extends:
+  template: ../templates/apply-module.yml
+  parameters:
+    moduleName: management
+    environment: management
+    modulePath: clusters/management/core
+    kubeConfigSecureFile: 'management-kubeconfig'
