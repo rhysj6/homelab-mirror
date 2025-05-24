@@ -4,7 +4,7 @@ pr:
       - main
   paths:
     include:
-      - clusters/Management/**
+      - clusters/management/**
       - modules/core_cluster/**
 
 pool: Self hosted
@@ -17,7 +17,7 @@ stages:
   - template: ../templates/module-change-detection.yml
     parameters:
       moduleName: Management
-      modulePath: clusters/Management/core
+      modulePath: clusters/management/core
       notify: true
       comment: 'Detected changes for Management cluster.'
       kubeConfigSecureFile: 'management-kubeconfig'
