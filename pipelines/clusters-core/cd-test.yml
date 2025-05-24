@@ -15,4 +15,4 @@ extends:
   parameters:
     moduleName: test
     environment: test
-    modulePath: modules/core_cluster/test
+    modulePath: clusters/test/core
