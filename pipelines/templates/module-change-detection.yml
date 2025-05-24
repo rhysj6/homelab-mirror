@@ -8,6 +8,9 @@ parameters:
     default: true
   - name: comment
     type: string
+  - name: env
+    type: object
+    default: {}
 
 jobs:
 - job: ModuleChangeDetection
@@ -41,6 +44,8 @@ jobs:
         TF_VAR_windows_domain: $(TF_VAR_windows_domain)
         TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
         TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+        ${{ each key, value in parameters.env }}: # Include additional environment variables
+          ${{ key }}: ${{ value }}
     - ${{ if and(parameters.notify, eq(variables['TF_PLAN_EXIT_CODE'], '2')) }}:
       - task: GitHubComment@0
         displayName: 'Post Terraform Plan Changes Comment'

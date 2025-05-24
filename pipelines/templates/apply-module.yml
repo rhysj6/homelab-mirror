@@ -48,7 +48,8 @@ stages:
               TF_VAR_windows_domain: $(TF_VAR_windows_domain)
               TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
-
+              ${{ each key, value in parameters.env }}: # Include additional environment variables
+                ${{ key }}: ${{ value }}
           - task: CopyFiles@2
             displayName: 'Copy Terraform Plan and lockfile'
             condition: eq(variables['plan.exitCode'], 2)
@@ -113,3 +114,5 @@ stages:
               TF_VAR_windows_domain: $(TF_VAR_windows_domain)
               TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+              ${{ each key, value in parameters.env }}: # Include additional environment variables
+                ${{ key }}: ${{ value }}
