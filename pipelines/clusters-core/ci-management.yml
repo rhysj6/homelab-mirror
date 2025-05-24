@@ -1,0 +1,23 @@
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - clusters/Management/**
+      - modules/core_cluster/**
+
+pool: Self hosted
+stages:
+- stage: ManagementModuleChangeDetection
+  displayName: 'Management module change detection'
+  variables:
+  - group: terraform
+  jobs:
+  - template: ../templates/module-change-detection.yml
+    parameters:
+      moduleName: Management
+      modulePath: clusters/Management/core
+      notify: true
+      comment: 'Detected changes for Management cluster.'
+      kubeConfigSecureFile: 'management-kubeconfig'
