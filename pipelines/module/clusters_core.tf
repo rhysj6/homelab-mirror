@@ -7,7 +7,7 @@ resource "azuredevops_build_folder" "core_cluster_software" {
 resource "azuredevops_build_definition" "core_cluster_software" {
   for_each   = fileset("${path.module}/../clusters-core/", "*.yml")
   project_id = data.azuredevops_project.private.id
-  name       = split(".", each.key)[0]
+  name       = "core-cluster-${split(".", each.key)[0]}"
   path       = "\\Core-cluster"
 
   repository {
