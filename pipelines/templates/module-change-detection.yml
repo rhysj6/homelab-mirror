@@ -60,9 +60,10 @@ jobs:
             ${{ env.key }}: ${{ env.value }}
 
 
-    - ${{ if and(parameters.notify, eq(variables['TF_PLAN_EXIT_CODE'], '2')) }}:
+    - ${{ if ne(parameters.notify, false) }}:
       - task: GitHubComment@0
         displayName: 'Post Terraform Plan Changes Comment'
+        condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
         inputs:
           gitHubConnection: 'rhysj6'
           comment: ${{ parameters.comment }}
