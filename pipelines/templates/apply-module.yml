@@ -5,6 +5,9 @@ parameters:
     type: string
   - name: environment
     type: string
+  - name: kubeConfigSecureFile
+    type: string
+    default: '' # Optional, used for pipelines that require a local kubeconfig rather than using rancher
 
 variables:
   - group: terraform
@@ -18,6 +21,12 @@ stages:
       - job: InitAndPlan
         displayName: 'Terraform Init and Plan'
         steps:
+          - ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
+            - task: DownloadSecureFile@1
+              name: kubeConfig
+              displayName: 'Download kubeconfig'
+              inputs:
+                secureFile: ${{ parameters.kubeConfigSecureFile }}
           - script: |
               set -e
               terraform init
@@ -48,6 +57,8 @@ stages:
               TF_VAR_windows_domain: $(TF_VAR_windows_domain)
               TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+              ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
+                KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
               ${{ each key, value in parameters.env }}: # Include additional environment variables
                 ${{ key }}: ${{ value }}
           - task: CopyFiles@2
@@ -93,6 +104,12 @@ stages:
               SourceFolder: '$(Pipeline.Workspace)/plan'
               TargetFolder: '${{ parameters.modulePath }}'
               OverWrite: true
+          - ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
+            - task: DownloadSecureFile@1
+              name: kubeConfig
+              displayName: 'Download kubeconfig'
+              inputs:
+                secureFile: ${{ parameters.kubeConfigSecureFile }}
           - script: |
               terraform init -input=false
             displayName: 'Terraform Init'
@@ -114,5 +131,7 @@ stages:
               TF_VAR_windows_domain: $(TF_VAR_windows_domain)
               TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
               TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+              ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
+                KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
               ${{ each key, value in parameters.env }}: # Include additional environment variables
                 ${{ key }}: ${{ value }}
