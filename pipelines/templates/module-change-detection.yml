@@ -62,7 +62,7 @@ jobs:
 
     - ${{ if ne(parameters.notify, false) }}:
       - task: GitHubComment@0
-        displayName: 'Post Terraform Plan Changes Comment'
+        displayName: 'PR Comment'
         condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
         inputs:
           gitHubConnection: 'rhysj6'
