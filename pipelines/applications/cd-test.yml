@@ -14,5 +14,4 @@ extends:
   template: ../templates/apply-module.yml
   parameters:
     moduleName: Test - Applications
-    environment: test
     modulePath: applications/clusters/test

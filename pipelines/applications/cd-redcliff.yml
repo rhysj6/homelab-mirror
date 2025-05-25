@@ -13,5 +13,4 @@ extends:
   template: ../templates/apply-module.yml
   parameters:
     moduleName: Redcliff - Applications
-    environment: redcliff
     modulePath: applications/clusters/redcliff

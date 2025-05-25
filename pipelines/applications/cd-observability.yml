@@ -11,5 +11,4 @@ extends:
   template: ../templates/apply-module.yml
   parameters:
     moduleName: Observability stack
-    environment: production
     modulePath: applications/observability
