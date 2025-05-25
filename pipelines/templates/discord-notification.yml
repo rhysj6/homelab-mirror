@@ -11,7 +11,7 @@ parameters:
 
 steps:
   - script: |
-      curl https://github.com/fieu/discord.sh/releases/download/v2.0.0/discord.sh -o discord.sh
+      curl -L https://github.com/fieu/discord.sh/releases/download/v2.0.0/discord.sh -o discord.sh
       chmod +x discord.sh
       ./discord.sh --title "${{ parameters.title }}" --description "${{ parameters.description }}" --url "$URL"
     displayName: 'Send Discord Notification'
