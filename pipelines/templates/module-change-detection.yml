@@ -68,8 +68,8 @@ jobs:
           gitHubConnection: 'rhysj6'
           comment: ${{ parameters.comment }}
       - template: ./discord-notification.yml
-        condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
         parameters:
+          condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
           webhookUrl: $(discord_webhook)
           title: 'Module Change Detected: ${{ parameters.moduleName }}'
           description: |
