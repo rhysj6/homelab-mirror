@@ -60,6 +60,12 @@ stages:
               ${{ each env in parameters.env }}: # Include additional environment variables
                 ${{ insert }}: 
                   ${{ env.key }}: ${{ env.value }}
+          - template: ./discord-notification.yml
+            parameters:
+              condition: eq(variables['plan.exitCode'], 2)
+              webhookUrl: $(discord_webhook)
+              title: 'Deployment approval required for module: ${{ parameters.moduleName }}'
+              description: Changes detected in the module ${{ parameters.moduleName }}. Please review the changes and take necessary actions.
           - task: CopyFiles@2
             displayName: 'Copy Terraform Plan and lockfile'
             condition: eq(variables['plan.exitCode'], 2)
@@ -72,7 +78,8 @@ stages:
           - publish: '$(Build.ArtifactStagingDirectory)'
             displayName: 'Publish Terraform Plan'
             condition: eq(variables['plan.exitCode'], 2)
-            artifact: plan
+            artifact: plan      
+
 
   - stage: TerraformApply
     displayName: 'Terraform Apply'
