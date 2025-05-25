@@ -16,7 +16,7 @@ stages:
   jobs:
   - template: ../templates/module-change-detection.yml
     parameters:
-      moduleName: Management
+      moduleName: Management - Core cluster
       modulePath: clusters/management/core
       notify: true
       comment: 'Detected changes for Management cluster.'

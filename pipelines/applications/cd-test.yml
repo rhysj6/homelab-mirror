@@ -13,6 +13,6 @@ pr: none
 extends:
   template: ../templates/apply-module.yml
   parameters:
-    moduleName: test
+    moduleName: Test - Applications
     environment: test
     modulePath: applications/clusters/test

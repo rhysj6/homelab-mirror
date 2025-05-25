@@ -10,6 +10,6 @@ pr: none
 extends:
   template: ../templates/apply-module.yml
   parameters:
-    moduleName: observability
+    moduleName: Observability stack
     environment: production
     modulePath: applications/observability

@@ -12,6 +12,6 @@ pr: none
 extends:
   template: ../templates/apply-module.yml
   parameters:
-    moduleName: redcliff
+    moduleName: Redcliff - Applications
     environment: redcliff
     modulePath: applications/clusters/redcliff

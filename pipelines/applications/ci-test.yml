@@ -16,7 +16,7 @@ stages:
   jobs:
   - template: ../templates/module-change-detection.yml
     parameters:
-      moduleName: test
+      moduleName: Test - Applications
       modulePath: applications/clusters/test
       notify: true
       comment: 'Detected changes for test cluster.'

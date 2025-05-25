@@ -12,6 +12,6 @@ pr: none
 extends:
   template: ../templates/apply-module.yml
   parameters:
-    moduleName: management
+    moduleName: Management - Applications
     environment: management
     modulePath: applications/clusters/management

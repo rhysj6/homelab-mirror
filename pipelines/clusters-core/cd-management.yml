@@ -12,6 +12,6 @@ pr: none
 extends:
   template: ../templates/apply-module.yml
   parameters:
-    moduleName: management
+    moduleName: Management - Core cluster
     modulePath: clusters/management/core
     kubeConfigSecureFile: 'management-kubeconfig'

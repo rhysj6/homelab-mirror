@@ -15,7 +15,7 @@ stages:
   jobs:
   - template: ../templates/module-change-detection.yml
     parameters:
-      moduleName: observability
+      moduleName: Observability stack
       modulePath: applications/observability
       notify: false
       comment: 'Detected changes for observability module.'

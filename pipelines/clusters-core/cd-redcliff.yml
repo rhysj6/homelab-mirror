@@ -12,5 +12,5 @@ pr: none
 extends:
   template: ../templates/apply-module.yml
   parameters:
-    moduleName: redcliff
+    moduleName: Redcliff - Core cluster
     modulePath: clusters/redcliff/core

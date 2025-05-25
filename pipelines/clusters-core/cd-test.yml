@@ -13,5 +13,5 @@ pr: none
 extends:
   template: ../templates/apply-module.yml
   parameters:
-    moduleName: test
+    moduleName: Test - Core cluster
     modulePath: clusters/test/core
