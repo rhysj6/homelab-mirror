@@ -13,9 +13,14 @@ steps:
   - script: |
       curl -L https://github.com/fieu/discord.sh/releases/download/v2.0.0/discord.sh -o discord.sh
       chmod +x discord.sh
-      ./discord.sh --text "@everyone" --title "${{ parameters.title }}" --description "${{ parameters.description }}" --url "$URL"
+      if [ "${PING_ENABLED}" = "true" ]; then
+        ./discord.sh --text "@everyone" --title "$TITLE" --description "$DESCRIPTION" --url "$URL"
+      else
+        ./discord.sh --title "$TITLE" --description "$DESCRIPTION" --url "$URL"
+      fi    
     displayName: 'Send Discord Notification'
     condition: ${{ parameters.condition }}
     env:
       DISCORD_WEBHOOK: ${{ parameters.webhookUrl }}
       URL: $(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)
+      PING_ENABLED: ne(Build.Reason, PullRequest)
