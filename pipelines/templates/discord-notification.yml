@@ -7,7 +7,7 @@ parameters:
     type: string
   - name: url
     type: string
-  - condition
+  - name: condition
     type: string
     default: 'always' # Default to always run unless specified otherwise
 
