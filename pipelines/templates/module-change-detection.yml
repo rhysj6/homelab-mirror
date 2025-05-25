@@ -72,6 +72,4 @@ jobs:
           condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
           webhookUrl: $(discord_webhook)
           title: 'Module Change Detected: ${{ parameters.moduleName }}'
-          description: |
-            Changes detected in the module `${{ parameters.moduleName }}`.
-            Please review the changes and take necessary actions.
+          description: Changes detected in the module ${{ parameters.moduleName }}. Please review the changes and take necessary actions.
