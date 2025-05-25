@@ -5,17 +5,18 @@ parameters:
     type: string
   - name: description
     type: string
-  - name: url
-    type: string
   - name: condition
     type: string
     default: 'always' # Default to always run unless specified otherwise
+
+variables:
+  BuildUrl: '$(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)'
 
 steps:
   - script: |
       curl https://github.com/fieu/discord.sh/releases/download/v2.0.0/discord.sh -o discord.sh
       chmod +x discord.sh
-      ./discord.sh --title "${{ parameters.title }}" --description "${{ parameters.description }}"
+      ./discord.sh --title "${{ parameters.title }}" --description "${{ parameters.description }}" --url "${{ variables.BuildUrl }}"
     displayName: 'Send Discord Notification'
     condition: ${{ parameters.condition }}
     env:

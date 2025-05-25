@@ -75,4 +75,3 @@ jobs:
           description: |
             Changes detected in the module `${{ parameters.moduleName }}`.
             Please review the changes and take necessary actions.
-          url: $(System.PullRequest.SourceRepositoryURI)
