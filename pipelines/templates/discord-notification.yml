@@ -12,7 +12,7 @@ steps:
   - script: |
       curl https://github.com/fieu/discord.sh/releases/download/v2.0.0/discord.sh -o discord.sh
       chmod +x discord.sh
-      discord.sh --title "${{ parameters.title }}" --description "${{ parameters.description }}" --url "${{ parameters.url }}"
+      ./discord.sh --title "${{ parameters.title }}" --description "${{ parameters.description }}""
     displayName: 'Send Discord Notification'
     env:
       DISCORD_WEBHOOK: ${{ parameters.webhookUrl }}
