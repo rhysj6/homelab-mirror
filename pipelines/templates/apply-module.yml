@@ -3,6 +3,9 @@ parameters:
     type: string
   - name: modulePath
     type: string
+  - name: env
+    type: object
+    default: {} # Optional, used for additional environment variables
   - name: kubeConfigSecureFile
     type: string
     default: '' # Optional, used for pipelines that require a local kubeconfig rather than using rancher
