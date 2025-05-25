@@ -19,5 +19,4 @@ stages:
       moduleName: Management - Core cluster
       modulePath: clusters/management/core
       notify: true
-      comment: 'Detected changes for Management cluster.'
       kubeConfigSecureFile: 'management-kubeconfig'

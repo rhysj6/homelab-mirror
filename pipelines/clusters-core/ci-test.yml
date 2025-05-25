@@ -19,4 +19,3 @@ stages:
       moduleName: Test - Core cluster
       modulePath: clusters/test/core
       notify: true
-      comment: 'Detected changes for test cluster.'

@@ -18,4 +18,3 @@ stages:
       moduleName: Observability stack
       modulePath: applications/observability
       notify: false
-      comment: 'Detected changes for observability module.'

@@ -6,8 +6,6 @@ parameters:
   - name: notify
     type: boolean
     default: true
-  - name: comment
-    type: string
   - name: env
     type: object
     default: {}
@@ -66,7 +64,7 @@ jobs:
         condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
         inputs:
           gitHubConnection: 'rhysj6'
-          comment: ${{ parameters.comment }}
+          comment: 'Changes detected in the module ${{ parameters.moduleName }}.'
       - template: ./discord-notification.yml
         parameters:
           condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')

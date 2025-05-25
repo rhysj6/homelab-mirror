@@ -19,4 +19,3 @@ stages:
       moduleName: Management - Applications
       modulePath: applications/clusters/management
       notify: true
-      comment: 'Detected changes for management cluster.'
