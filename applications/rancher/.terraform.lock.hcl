@@ -45,17 +45,7 @@ provider "registry.terraform.io/hashicorp/kubernetes" {
   version     = "2.37.1"
   constraints = ">= 2.0.0"
   hashes = [
-    "h1:+37jC6JlkPyPvDHudK3qaj7ZVJ0Zy9zc9+oq8h1WayA=",
-    "h1:+EHgRA7MlIYlj6Mr1dwKZSfn4TLSLQu546hhVE2ZebI=",
-    "h1:3U6xK/EtzYFMq4sKw9Dm0MdVaQzeDCxdskW4jP7oVjI=",
-    "h1:4IYtiAtixYC1ImaJ9HX8K1J+60nQ86bcheOCJ2NVwpk=",
     "h1:CtT3PtFlrxO1MocpAJxvRzLe6PHtcLSMKDSVPVV9zuw=",
-    "h1:RRViapugZerVuTYVnfOUZpAFq4PyG0lVRnPVRqmWeFQ=",
-    "h1:SsrLjpsD9rltZmr24CBiAB3TAMmJ0SyplBh8oyAr/qQ=",
-    "h1:okZwE5tiivdUNTXdJyN01Mmzt13WU+kV5/qjyj7RhKw=",
-    "h1:qo9Ue/rIEnvxOpiK9qizwRFV7rvb5gCziKVytIcZHyk=",
-    "h1:x4cNsR4InB/AEpSRCmv6SQEY/ChylNaPceNlyzvfv7c=",
-    "h1:x9AtnkeTRQ3fA3bkPZtdbwoNu3J8aqkk9eSXfgFQ1ao=",
     "zh:0ed097413c7fc804479e325966886b405dc0b75ad2b4f54ce4df1d8e4802b397",
     "zh:17dcf4a685a00d2d048671124e8a1a8e836b58ecd2ef628a1c666fe0ced2e598",
     "zh:36891284e5bced57c438f12d0b27856b0d4b70b562bd200b01919a6a89545be9",
