@@ -1,0 +1,21 @@
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - applications/rancher/**
+
+pool: Self hosted
+stages:
+- stage: RancherModuleChangeDetection
+  displayName: 'Rancher module change detection'
+  variables:
+  - group: terraform
+  jobs:
+  - template: ../templates/module-change-detection.yml
+    parameters:
+      moduleName: Rancher
+      modulePath: applications/rancher
+      notify: false
+      kubeConfigSecureFile: 'management-kubeconfig'

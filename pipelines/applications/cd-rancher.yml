@@ -1,0 +1,15 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - applications/rancher/**
+  batch: true
+pr: none
+extends:
+  template: ../templates/apply-module.yml
+  parameters:
+    moduleName: Rancher
+    modulePath: applications/rancher
+    kubeConfigSecureFile: 'management-kubeconfig'
