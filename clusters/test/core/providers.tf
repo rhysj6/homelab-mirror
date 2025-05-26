@@ -1,23 +1,39 @@
 terraform {
   required_version = ">= 1.11.1"
   backend "s3" {
-    bucket = "terraform"
-    key    = "clusters/test/core/terraform.tfstate"
+    bucket                      = "terraform"
+    key                         = "clusters/test/core/terraform.tfstate"
     region                      = "main"
     skip_region_validation      = true
-    skip_requesting_account_id = true
+    skip_requesting_account_id  = true
     skip_credentials_validation = true
-    skip_metadata_api_check = true
-    use_path_style = true
+    skip_metadata_api_check     = true
+    use_path_style              = true
   }
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
+    minio = {
+      source  = "aminueza/minio"
+      version = "3.5.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.7.2"
+    }
     helm = {
       source  = "hashicorp/helm"
       version = ">= 2.0.0"
+    }
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "2025.4.0"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "5.3.0"
     }
   }
 }
@@ -35,8 +51,8 @@ provider "kubernetes" {
 }
 
 module "test_cluster_config" {
-  source  = "rhysj6/kubeconfig/rancher"
-  version = "1.0.0"
+  source       = "rhysj6/kubeconfig/rancher"
+  version      = "1.0.0"
   cluster_name = "test"
 }
 

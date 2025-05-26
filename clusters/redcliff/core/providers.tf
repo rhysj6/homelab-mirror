@@ -31,6 +31,10 @@ terraform {
       source  = "goauthentik/authentik"
       version = "2025.4.0"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "5.3.0"
+    }
   }
 }
 
