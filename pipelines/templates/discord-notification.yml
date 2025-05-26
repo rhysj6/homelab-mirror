@@ -24,3 +24,5 @@ steps:
       DISCORD_WEBHOOK: ${{ parameters.webhookUrl }}
       URL: $(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)
       PING_ENABLED: ne(Build.Reason, PullRequest)
+      TITLE: ${{ parameters.title }}
+      DESCRIPTION: ${{ parameters.description }}
