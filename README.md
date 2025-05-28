@@ -1,7 +1,7 @@
 # My Homelab
-This repository contains the infrastructure as code (IaC) for my homelab, which is built primarily using Terraform and Ansible. The primary goal is to automate my homelab environment, so that I can easily test, experiment, and learn new technologies whilst keeping it all up to date. 
+This repository contains the infrastructure as code (IaC) for my homelab, which is built primarily using Terraform and Ansible. The primary goal is to automate any day-to-day tasks to do with managing my homelab such as updating servers, services and applications. I want to ensure that my homelab is resilient and can recover from failures, while also being easy to manage and maintain.
 
-This is what I would define as my fifth homelab iteration, as I have gone through several iterations of my homelab setup over the years, each time learning from the previous one and improving my setup or implementing new technologies that have peaked my interest.
+I have been running a homelab for several years now, and it has evolved significantly over time. I started with a single Raspberry Pi running open media vault. This is what I would define as my fifth homelab iteration, as I have gone through several iterations of my homelab setup over the years, each time learning from the previous one and improving my setup or implementing new technologies that have peaked my interest.
 
 # Hardware
 I have a small number of different devices that I use for my homelab.
@@ -25,3 +25,5 @@ This section describes the core components of my homelab, which are used to prov
 - **Ansible**: Configuration management and automation tool, used for automating the configuration and updating of servers.
 - **Semaphore UI**: A web-based UI for managing Ansible playbooks, making it easier to run and schedule playbooks.
 - **Rancher**: Container management platform for managing Kubernetes clusters, providing an easy-to-use web interface for looking at the state of my clusters and managing the lifecycle of my clusters.
+- **Azure DevOps**: Used for CI/CD pipelines, automating the running of Terraform modules when changes are made to the code in this repository.
+- **Renovate**: Automated dependency management tool that creates pull requests for updates to applications and modules, ensuring that my homelab is always up-to-date with the latest versions of software.
