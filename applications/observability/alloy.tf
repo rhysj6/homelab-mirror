@@ -3,7 +3,7 @@ resource "helm_release" "alloy" {
   chart      = "alloy"
   name       = "alloy"
   namespace  = "monitoring"
-  version    = "1.1.0"
+  version    = "1.1.1"
   values = [
     file("${path.module}/templates/alloy_values.yaml")
   ]
