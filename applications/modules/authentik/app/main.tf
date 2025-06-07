@@ -28,7 +28,7 @@ resource "helm_release" "authentik" {
   repository  = "https://charts.goauthentik.io/"
   name        = "authentik"
   namespace   = kubernetes_namespace.authentik.id
-  version     = "2025.6.0"
+  version     = "2025.6.1"
   max_history = 2
   depends_on  = [kubernetes_namespace.authentik]
   values = [yamlencode({
