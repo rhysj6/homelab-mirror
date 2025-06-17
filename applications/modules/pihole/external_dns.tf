@@ -3,7 +3,7 @@ resource "helm_release" "external_dns" {
   namespace  = kubernetes_namespace.dns.metadata[0].name
   repository = "https://kubernetes-sigs.github.io/external-dns/"
   chart      = "external-dns"
-  version    = "1.16.1"
+  version    = "1.17.0"
   values = [
     yamlencode({
       provider = {
