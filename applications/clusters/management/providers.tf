@@ -23,6 +23,14 @@ terraform {
       source  = "aminueza/minio"
       version = "3.5.0"
     }
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "2025.4.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.7.2"
+    }
   }
 }
 
