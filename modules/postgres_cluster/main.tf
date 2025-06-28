@@ -58,7 +58,7 @@ resource "kubernetes_manifest" "cluster" {
             }
             secretAccessKey = {
               name = "${local.name_prefix}-minio-backup"
-              key  = "secret_key"
+              key  = "secret_access_key"
             }
           }
           data = {
@@ -124,7 +124,7 @@ resource "kubernetes_secret_v1" "minio" {
   }
   data = {
     access_key = minio_iam_service_account.backup.access_key
-    secret_key = minio_iam_service_account.backup.secret_key
+    secret_access_key = minio_iam_service_account.backup.secret_key
   }
   type = "Opaque"
 }
