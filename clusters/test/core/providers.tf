@@ -15,6 +15,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.0.0"
+    }
     minio = {
       source  = "aminueza/minio"
       version = "3.5.0"
@@ -22,14 +26,6 @@ terraform {
     random = {
       source  = "hashicorp/random"
       version = "3.7.2"
-    }
-    helm = {
-      source  = "hashicorp/helm"
-      version = ">= 2.0.0"
-    }
-    authentik = {
-      source  = "goauthentik/authentik"
-      version = "2025.4.0"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"

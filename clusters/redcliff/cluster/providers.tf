@@ -21,11 +21,3 @@ terraform {
     }
   }
 }
-
-provider "minio" {
-  // Handled in the environment variables.
-  // MINIO_ENDPOINT
-  // MINIO_USER
-  // MINIO_PASSWORD
-  minio_ssl = true
-}
