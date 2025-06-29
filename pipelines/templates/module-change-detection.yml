@@ -31,7 +31,7 @@ jobs:
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
     - script: |
-        terraform plan -input=false -refresh=false -detailed-exitcode || EXIT_CODE=$?
+        terraform plan -input=false -detailed-exitcode || EXIT_CODE=$?
         if [ -z "$EXIT_CODE" ]; then EXIT_CODE=0; fi
         if [ "$EXIT_CODE" -eq 1 ]; then
           echo "Terraform plan failed with error code 1. Failing the pipeline."
