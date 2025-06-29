@@ -5,17 +5,6 @@ resource "minio_iam_service_account" "backup" {
   target_user = "${var.cluster_name}-postgres-backup"
 }
 
-resource "random_password" "superuser" {
-  count   = var.is_superuser_password_same ? 0 : 1
-  length  = 32
-  special = false
-}
-
-resource "random_password" "password" {
-  length  = 32
-  special = false
-}
-
 resource "kubernetes_manifest" "cluster" {
   manifest = {
     apiVersion = "postgresql.cnpg.io/v1"
@@ -39,9 +28,6 @@ resource "kubernetes_manifest" "cluster" {
         initdb = {
           database = var.name
           owner    = var.name
-          secret = {
-            name = local.name_prefix
-          }
         }
       }
       monitoring = {
@@ -91,30 +77,6 @@ resource "kubernetes_manifest" "backup_schedule" {
     }
   }
 
-}
-
-resource "kubernetes_secret_v1" "superuser" {
-  metadata {
-    name      = "${local.name_prefix}-superuser"
-    namespace = var.namespace
-  }
-  data = {
-    username = "postgres"
-    password = var.is_superuser_password_same ? random_password.password.result : random_password.superuser[0].result
-  }
-  type = "kubernetes.io/basic-auth"
-}
-
-resource "kubernetes_secret_v1" "password" {
-  metadata {
-    name      = local.name_prefix
-    namespace = var.namespace
-  }
-  data = {
-    username = var.name
-    password = random_password.password.result
-  }
-  type = "kubernetes.io/basic-auth"
 }
 
 resource "kubernetes_secret_v1" "minio" {
