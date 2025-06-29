@@ -68,66 +68,11 @@ stages:
               condition: eq(variables['plan.exitCode'], 2)
               webhookUrl: $(discord_webhook)
               title: 'Deployment approval required for module: ${{ parameters.moduleName }}'
-              description: Changes detected in the module ${{ parameters.moduleName }}. Please review the changes and take necessary actions.
-          - task: CopyFiles@2
-            displayName: 'Copy Terraform Plan and lockfile'
-            condition: eq(variables['plan.exitCode'], 2)
-            inputs:
-              SourceFolder: ${{ parameters.modulePath }}
-              Contents: |
-                tfplan
-                .terraform.lock.hcl
-              TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          - publish: '$(Build.ArtifactStagingDirectory)'
-            displayName: 'Publish Terraform Plan'
-            condition: eq(variables['plan.exitCode'], 2)
-            artifact: plan      
-
-
-  - stage: TerraformApply
-    displayName: 'Terraform Apply'
-    dependsOn: InitAndPlan
-    condition: eq(dependencies.InitAndPlan.outputs['InitAndPlan.plan.exitCode'], 2)
-    jobs:
-      - job: waitForValidation
-        displayName: Wait for external validation
-        pool: server
-        steps:
-          - task: ManualValidation@1
-            timeoutInMinutes: 1440 # 1 Day
-            inputs:
-              notifyUsers: '$(System.TeamProject)/DeploymentApprovers'
-      - job: TerraformApply
-        displayName: 'Terraform Apply'
-        dependsOn: waitForValidation
-        pool:
-          name: 'Self hosted'
-        workspace:
-          clean: all
-        steps:
-          - download: current
-            artifact: plan
-          - task: CopyFiles@2
-            displayName: 'Copy Terraform Plan and lockfile'
-            inputs:
-              SourceFolder: '$(Pipeline.Workspace)/plan'
-              TargetFolder: '${{ parameters.modulePath }}'
-              OverWrite: true
-          - ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
-            - task: DownloadSecureFile@1
-              name: kubeConfig
-              displayName: 'Download kubeconfig'
-              inputs:
-                secureFile: ${{ parameters.kubeConfigSecureFile }}
-          - script: |
-              terraform init -input=false
-            displayName: 'Terraform Init'
-            workingDirectory: '${{ parameters.modulePath }}'
-            env:
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+              description: Changes to be applied in the module ${{ parameters.moduleName }}.
           - script: |
               terraform apply -input=false tfplan
             displayName: 'Terraform Apply'
+            condition: eq(variables['plan.exitCode'], 2)
             workingDirectory: '${{ parameters.modulePath }}'
             env:
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
