@@ -21,7 +21,8 @@ resource "helm_release" "external_dns" {
         }
       ]
       extraArgs = [
-        "--pihole-server=http://pihole-web.dns.svc.cluster.local"
+        "--pihole-server=http://pihole-web.dns.svc.cluster.local",
+        "--pihole-api-version=6"
       ]
     })
   ]

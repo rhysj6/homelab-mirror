@@ -17,7 +17,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.0.0"
+      version = ">= 2.0.0, < 3.0.0"
     }
     minio = {
       source  = "aminueza/minio"
@@ -29,7 +29,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "5.3.0"
+      version = "5.6.0"
     }
   }
 }

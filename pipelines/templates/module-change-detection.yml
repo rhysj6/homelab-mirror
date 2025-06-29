@@ -14,8 +14,10 @@ parameters:
     default: '' # Optional, used for pipelines that require a local kubeconfig rather than using rancher
 
 jobs:
-- job: ModuleChangeDetection
-  displayName: 'Module Change Detection: ${{ parameters.moduleName }}'
+- job: checkModuleChange
+  displayName: 'Check Terraform Module Change: ${{ parameters.moduleName }}'
+  pool:
+    name: 'Self hosted'
   steps:
     - ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
       - task: DownloadSecureFile@1
@@ -31,14 +33,14 @@ jobs:
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
     - script: |
-        terraform plan -input=false -refresh=false -detailed-exitcode || EXIT_CODE=$?
+        terraform plan -input=false -detailed-exitcode || EXIT_CODE=$?
         if [ -z "$EXIT_CODE" ]; then EXIT_CODE=0; fi
         if [ "$EXIT_CODE" -eq 1 ]; then
           echo "Terraform plan failed with error code 1. Failing the pipeline."
           exit 1
         fi
         echo "##vso[task.setvariable variable=TF_PLAN_EXIT_CODE]$EXIT_CODE"
-      displayName: 'Terraform Plan (no refresh)'
+      displayName: 'Terraform Plan'
       workingDirectory: ${{ parameters.modulePath }}
       env:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
@@ -56,18 +58,3 @@ jobs:
         ${{ each env in parameters.env }}: # Include additional environment variables
           ${{ insert }}: 
             ${{ env.key }}: ${{ env.value }}
-
-
-    - ${{ if ne(parameters.notify, false) }}:
-      - task: GitHubComment@0
-        displayName: 'PR Comment'
-        condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
-        inputs:
-          gitHubConnection: 'rhysj6'
-          comment: 'Changes detected in the module ${{ parameters.moduleName }}.'
-      - template: ./discord-notification.yml
-        parameters:
-          condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
-          webhookUrl: $(discord_webhook)
-          title: 'Module Change Detected: ${{ parameters.moduleName }}'
-          description: Changes detected in the module ${{ parameters.moduleName }}. Please review the changes and take necessary actions.
