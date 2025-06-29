@@ -56,18 +56,3 @@ jobs:
         ${{ each env in parameters.env }}: # Include additional environment variables
           ${{ insert }}: 
             ${{ env.key }}: ${{ env.value }}
-
-
-    - ${{ if ne(parameters.notify, false) }}:
-      - task: GitHubComment@0
-        displayName: 'PR Comment'
-        condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
-        inputs:
-          gitHubConnection: 'rhysj6'
-          comment: 'Changes detected in the module ${{ parameters.moduleName }}.'
-      - template: ./discord-notification.yml
-        parameters:
-          condition: eq(variables['TF_PLAN_EXIT_CODE'], '2')
-          webhookUrl: $(discord_webhook)
-          title: 'Module Change Detected: ${{ parameters.moduleName }}'
-          description: Changes detected in the module ${{ parameters.moduleName }}. Please review the changes and take necessary actions.
