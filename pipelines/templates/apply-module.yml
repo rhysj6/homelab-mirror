@@ -64,7 +64,7 @@ jobs:
       parameters:
         condition: eq(variables['plan.exitCode'], 2)
         webhookUrl: $(discord_webhook)
-        title: 'Deployment approval required for module: ${{ parameters.moduleName }}'
+        title: 'Changes to be applied in the module: ${{ parameters.moduleName }}'
         description: Changes to be applied in the module ${{ parameters.moduleName }}.
     - script: |
         terraform apply -input=false tfplan
