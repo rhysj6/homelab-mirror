@@ -13,80 +13,75 @@ parameters:
 variables:
   - group: terraform
 
-stages:
-  - stage: InitAndPlan
-    pool:
-      name: 'Self hosted'
-    displayName: 'Terraform Init and Plan'
-    jobs:
-      - job: InitAndPlan
-        displayName: 'Terraform Init and Plan'
-        steps:
-          - ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
-            - task: DownloadSecureFile@1
-              name: kubeConfig
-              displayName: 'Download kubeconfig'
-              inputs:
-                secureFile: ${{ parameters.kubeConfigSecureFile }}
-          - script: |
-              set -e
-              terraform init
-            displayName: 'Terraform Init'
-            name: Init
-            workingDirectory: ${{ parameters.modulePath }}
-            env:
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-          - script: |
-              terraform plan -input=false -detailed-exitcode -out tfplan || EXIT_CODE=$?
-              if [ -z "$EXIT_CODE" ]; then EXIT_CODE=0; fi
-              if [ "$EXIT_CODE" -eq 1 ]; then
-                echo "Terraform plan failed with error code 1. Failing the pipeline."
-                exit 1
-              fi
-              echo "##vso[task.setvariable variable=exitCode;isOutput=true;]$EXIT_CODE"
-            displayName: 'Terraform Plan'
-            name: plan
-            workingDirectory: ${{ parameters.modulePath }}
-            env:
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-              AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
-              MINIO_PASSWORD: $(MINIO_PASSWORD)
-              CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
-              RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
-              TF_VAR_domain: $(TF_VAR_domain)
-              TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
-              TF_VAR_windows_domain: $(TF_VAR_windows_domain)
-              TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
-              TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
-              ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
-                KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
-              ${{ each env in parameters.env }}: # Include additional environment variables
-                ${{ insert }}: 
-                  ${{ env.key }}: ${{ env.value }}
-          - template: ./discord-notification.yml
-            parameters:
-              condition: eq(variables['plan.exitCode'], 2)
-              webhookUrl: $(discord_webhook)
-              title: 'Deployment approval required for module: ${{ parameters.moduleName }}'
-              description: Changes to be applied in the module ${{ parameters.moduleName }}.
-          - script: |
-              terraform apply -input=false tfplan
-            displayName: 'Terraform Apply'
-            condition: eq(variables['plan.exitCode'], 2)
-            workingDirectory: '${{ parameters.modulePath }}'
-            env:
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-              AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
-              MINIO_PASSWORD: $(MINIO_PASSWORD)
-              CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
-              RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
-              TF_VAR_domain: $(TF_VAR_domain)
-              TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
-              TF_VAR_windows_domain: $(TF_VAR_windows_domain)
-              TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
-              TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
-              ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
-                KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
-              ${{ each env in parameters.env }}: # Include additional environment variables
-                ${{ insert }}: 
-                  ${{ env.key }}: ${{ env.value }}
+pool:
+  name: 'Self hosted'
+  
+steps:
+  - ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
+    - task: DownloadSecureFile@1
+      name: kubeConfig
+      displayName: 'Download kubeconfig'
+      inputs:
+        secureFile: ${{ parameters.kubeConfigSecureFile }}
+  - script: |
+      set -e
+      terraform init
+    displayName: 'Terraform Init'
+    name: Init
+    workingDirectory: ${{ parameters.modulePath }}
+    env:
+      AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+  - script: |
+      terraform plan -input=false -detailed-exitcode -out tfplan || EXIT_CODE=$?
+      if [ -z "$EXIT_CODE" ]; then EXIT_CODE=0; fi
+      if [ "$EXIT_CODE" -eq 1 ]; then
+        echo "Terraform plan failed with error code 1. Failing the pipeline."
+        exit 1
+      fi
+      echo "##vso[task.setvariable variable=exitCode;isOutput=true;]$EXIT_CODE"
+    displayName: 'Terraform Plan'
+    name: plan
+    workingDirectory: ${{ parameters.modulePath }}
+    env:
+      AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+      AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
+      MINIO_PASSWORD: $(MINIO_PASSWORD)
+      CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
+      RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
+      TF_VAR_domain: $(TF_VAR_domain)
+      TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
+      TF_VAR_windows_domain: $(TF_VAR_windows_domain)
+      TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
+      TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+      ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
+        KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
+      ${{ each env in parameters.env }}: # Include additional environment variables
+        ${{ insert }}: 
+          ${{ env.key }}: ${{ env.value }}
+  - template: ./discord-notification.yml
+    parameters:
+      condition: eq(variables['plan.exitCode'], 2)
+      webhookUrl: $(discord_webhook)
+      title: 'Deployment approval required for module: ${{ parameters.moduleName }}'
+      description: Changes to be applied in the module ${{ parameters.moduleName }}.
+  - script: |
+      terraform apply -input=false tfplan
+    displayName: 'Terraform Apply'
+    condition: eq(variables['plan.exitCode'], 2)
+    workingDirectory: '${{ parameters.modulePath }}'
+    env:
+      AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+      AUTHENTIK_TOKEN: $(AUTHENTIK_TOKEN)
+      MINIO_PASSWORD: $(MINIO_PASSWORD)
+      CLOUDFLARE_API_TOKEN: $(CLOUDFLARE_API_TOKEN)
+      RANCHER_TOKEN_KEY: $(RANCHER_TOKEN_KEY)
+      TF_VAR_domain: $(TF_VAR_domain)
+      TF_VAR_secondary_domain: $(TF_VAR_secondary_domain)
+      TF_VAR_windows_domain: $(TF_VAR_windows_domain)
+      TF_VAR_cloudflare_email: $(TF_VAR_cloudflare_email)
+      TF_VAR_cloudflare_api_key: $(TF_VAR_cloudflare_api_key)
+      ${{ if ne(parameters.kubeConfigSecureFile, '') }}:
+        KUBE_CONFIG_PATH: '$(kubeConfig.secureFilePath)'
+      ${{ each env in parameters.env }}: # Include additional environment variables
+        ${{ insert }}: 
+          ${{ env.key }}: ${{ env.value }}
