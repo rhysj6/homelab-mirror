@@ -77,7 +77,7 @@ resource "kubernetes_deployment" "pihole" {
       spec {
         container {
           name  = "pihole"
-          image = "pihole/pihole:2024.07.0"
+          image = "pihole/pihole:2025.06.2"
           env {
             name  = "TZ"
             value = "Europe/London"
