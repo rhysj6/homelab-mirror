@@ -23,7 +23,7 @@ resource "helm_release" "longhorn" {
         defaultClassReplicaCount = var.number_of_nodes
       }
       backupTarget = {
-        backupTarget = "s3://${minio_s3_bucket.longhorn_backup.bucket}@us-east-1/"
+        backupTarget                 = "s3://${minio_s3_bucket.longhorn_backup.bucket}@us-east-1/"
         backupTargetCredentialSecret = kubernetes_secret.longhorn_backup.metadata[0].name
       }
     })
@@ -53,9 +53,9 @@ resource "minio_ilm_policy" "longhorn_backup" {
   bucket = minio_s3_bucket.longhorn_backup.bucket
 
   rule {
-    id     = "versioning"
+    id = "versioning"
     noncurrent_expiration {
-      days           = "15d" ## 15 days since chances of data loss that isn't found in 15 days is very low
+      days = "15d" ## 15 days since chances of data loss that isn't found in 15 days is very low
     }
     expiration = "DeleteMarker"
   }

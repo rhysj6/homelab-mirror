@@ -72,26 +72,28 @@ resource "helm_release" "backups" {
   chart      = "rancher-backup"
   namespace  = kubernetes_namespace.cattle_resources_system.metadata[0].name
   depends_on = [helm_release.backups_crd]
-  set {
-    name  = "s3.enabled"
-    value = "true"
-  }
-  set {
-    name  = "s3.endpoint"
-    value = "s3.hl.${var.domain}"
-  }
-  set {
-    name  = "s3.bucketName"
-    value = minio_s3_bucket.rancher_backup.bucket
-  }
-  set {
-    name  = "s3.credentialSecretName"
-    value = kubernetes_secret.rancher_backup.metadata[0].name
-  }
-  set {
-    name  = "s3.credentialSecretNamespace"
-    value = kubernetes_namespace.cattle_resources_system.metadata[0].name
-  }
+  set = [
+    {
+      name  = "s3.enabled"
+      value = "true"
+    },
+    {
+      name  = "s3.endpoint"
+      value = "s3.hl.${var.domain}"
+    },
+    {
+      name  = "s3.bucketName"
+      value = minio_s3_bucket.rancher_backup.bucket
+    },
+    {
+      name  = "s3.credentialSecretName"
+      value = kubernetes_secret.rancher_backup.metadata[0].name
+    },
+    {
+      name  = "s3.credentialSecretNamespace"
+      value = kubernetes_namespace.cattle_resources_system.metadata[0].name
+    }
+  ]
 }
 
 resource "kubernetes_manifest" "backup" {
@@ -99,7 +101,7 @@ resource "kubernetes_manifest" "backup" {
     apiVersion = "resources.cattle.io/v1"
     kind       = "Backup"
     metadata = {
-      name      = "rancher-minio-backup"
+      name = "rancher-minio-backup"
     }
     spec = {
       resourceSetName = "rancher-resource-set-full"
@@ -108,5 +110,5 @@ resource "kubernetes_manifest" "backup" {
     }
   }
 
-  depends_on = [ helm_release.backups_crd ] # If the CRD is not created then this plan will fail, run the plan with -target=helm_release.backups_crd
+  depends_on = [helm_release.backups_crd] # If the CRD is not created then this plan will fail, run the plan with -target=helm_release.backups_crd
 }

@@ -4,7 +4,7 @@ resource "kubernetes_namespace" "rancher" {
     name = "cattle-system"
   }
   lifecycle {
-    ignore_changes = [ metadata[0].annotations ]
+    ignore_changes = [metadata[0].annotations]
   }
 }
 
@@ -14,24 +14,26 @@ resource "helm_release" "rancher" {
   chart      = "rancher"
   version    = "2.11.3"
   namespace  = kubernetes_namespace.rancher.id
-  set {
-    name  = "hostname"
-    value = "rancher.hl.${var.domain}"
-  }
-  set {
-    name  = "ingress.extraAnnotations.cert-manager\\.io/cluster-issuer"
-    value = "cert-manager"
-  }
-  set {
-    name  = "ingress.tls.source"
-    value = "secret"
-  }
-  set {
-    name = "replicas"
-    value = 1
-  }
-  set {
-    name  = "agentTLSMode"
-    value = "system-store"
-  }
+  set = [
+    {
+      name  = "hostname"
+      value = "rancher.hl.${var.domain}"
+    },
+    {
+      name  = "ingress.extraAnnotations.cert-manager\\.io/cluster-issuer"
+      value = "cert-manager"
+    },
+    {
+      name  = "ingress.tls.source"
+      value = "secret"
+    },
+    {
+      name  = "replicas"
+      value = 1
+    },
+    {
+      name  = "agentTLSMode"
+      value = "system-store"
+    }
+  ]
 }

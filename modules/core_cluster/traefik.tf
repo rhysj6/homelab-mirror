@@ -22,32 +22,36 @@ resource "helm_release" "traefik" {
   version     = "36.2.0"
   max_history = 2
   depends_on  = [helm_release.traefik_crds, kubernetes_namespace.traefik]
-  set_list {
-    name  = "additionalArguments"
-    value = ["--serversTransport.insecureSkipVerify=true"]
-  }
-  set {
-    name  = "ports.websecure.asDefault"
-    value = true
-  }
-  set {
-    name  = "ports.websecure.tls.enabled"
-    value = true
-  }
-  set {
-    name  = "providers.kubernetesCRD.allowExternalNameServices"
-    value = true
-  }
-  set {
-    name  = "providers.kubernetesIngress.allowExternalNameServices"
-    value = true
-  }
-  set {
-    name  = "service.annotations.lbipam\\.cilium\\.io/ips"
-    value = var.ingress_controller_ip
-  }
-  set {
-    name = "service.spec.externalTrafficPolicy"
-    value = "Local"
-  }
+  set_list = [
+    {
+      name  = "additionalArguments"
+      value = ["--serversTransport.insecureSkipVerify=true"]
+    }
+  ]
+  set = [
+    {
+      name  = "ports.websecure.asDefault"
+      value = true
+    },
+    {
+      name  = "ports.websecure.tls.enabled"
+      value = true
+    },
+    {
+      name  = "providers.kubernetesCRD.allowExternalNameServices"
+      value = true
+    },
+    {
+      name  = "providers.kubernetesIngress.allowExternalNameServices"
+      value = true
+    },
+    {
+      name  = "service.annotations.lbipam\\.cilium\\.io/ips"
+      value = var.ingress_controller_ip
+    },
+    {
+      name  = "service.spec.externalTrafficPolicy"
+      value = "Local"
+    }
+  ]
 }

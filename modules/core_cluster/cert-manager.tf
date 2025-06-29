@@ -5,24 +5,26 @@ resource "kubernetes_namespace" "cert_manager" {
 }
 
 resource "helm_release" "cert_manager" {
-  chart      = "cert-manager"
-  repository = "https://charts.jetstack.io"
-  name       = "cert-manager"
-  namespace  = kubernetes_namespace.cert_manager.id
-  version    = "v1.18.1"
+  chart       = "cert-manager"
+  repository  = "https://charts.jetstack.io"
+  name        = "cert-manager"
+  namespace   = kubernetes_namespace.cert_manager.id
+  version     = "v1.18.1"
   max_history = 2
-  set {
-    name  = "crds.enabled"
-    value = "true"
-  }
-  set {
-    name = "prometheus.enabled"
-    value = true
-  }
-  set {
-    name  = "prometheus.podmonitor.enabled"
-    value = true
-  }
+  set = [
+    {
+      name  = "crds.enabled"
+      value = "true"
+    },
+    {
+      name  = "prometheus.enabled"
+      value = true
+    },
+    {
+      name  = "prometheus.podmonitor.enabled"
+      value = true
+    }
+  ]
 }
 
 resource "kubernetes_secret" "cluster_issuer" {
@@ -38,10 +40,10 @@ resource "kubernetes_secret" "cluster_issuer" {
 data "cloudflare_zones" "zones" {}
 
 data "kubernetes_resources" "cluster-issuer-crd" {
-  api_version = "apiextensions.k8s.io/v1"
-  kind        = "CustomResourceDefinition"
+  api_version    = "apiextensions.k8s.io/v1"
+  kind           = "CustomResourceDefinition"
   field_selector = "metadata.name=clusterissuers.cert-manager.io"
-  limit = 1
+  limit          = 1
 }
 
 resource "kubernetes_manifest" "cluster_issuer" {
