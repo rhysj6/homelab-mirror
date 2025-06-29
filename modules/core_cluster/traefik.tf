@@ -9,7 +9,7 @@ resource "helm_release" "traefik_crds" {
   repository  = "https://traefik.github.io/charts"
   name        = "traefik-crds"
   namespace   = kubernetes_namespace.traefik.id
-  version     = "1.8.1"
+  version     = "1.9.0"
   max_history = 2
 }
 
