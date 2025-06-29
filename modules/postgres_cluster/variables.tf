@@ -24,12 +24,6 @@ variable "namespace" {
   type        = string
 }
 
-variable "is_superuser_password_same" {
-  description = "Whether the superuser password should be the same as the regular password"
-  type        = bool
-  default     = false
-}
-
 variable "volume_size" {
   description = "The size of the volume to use for the postgres cluster"
   type        = number

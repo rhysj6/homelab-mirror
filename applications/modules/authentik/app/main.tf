@@ -19,7 +19,6 @@ module "postgresql" {
   name                       = "authentik"
   cluster_name               = "redcliff"
   volume_size                = 4
-  is_superuser_password_same = true
   domain                     = var.domain
 }
 

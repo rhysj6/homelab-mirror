@@ -43,7 +43,6 @@ module "postgresql" {
   namespace                  = kubernetes_namespace.semaphore.id
   name                       = "semaphore"
   cluster_name               = "management"
-  is_superuser_password_same = true
   volume_size                = 10
   domain = var.domain
 }
