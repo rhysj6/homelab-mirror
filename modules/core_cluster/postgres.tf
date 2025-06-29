@@ -22,13 +22,13 @@ resource "kubernetes_manifest" "longhorn_postgres" {
 }
 
 resource "helm_release" "cloud_native_postgres" {
-  chart       = "cloudnative-pg"
-  repository  = "https://cloudnative-pg.github.io/charts"
-  name        = "cloud-native-postgres"
-  namespace   = "cnpg-system"
+  chart            = "cloudnative-pg"
+  repository       = "https://cloudnative-pg.github.io/charts"
+  name             = "cloud-native-postgres"
+  namespace        = "cnpg-system"
   create_namespace = true
-  version     = "0.24.0"
-  max_history = 2
+  version          = "0.24.0"
+  max_history      = 2
 }
 
 resource "minio_s3_bucket" "postgres_backup" {
@@ -54,9 +54,9 @@ resource "minio_ilm_policy" "postgres_backup" {
   bucket = minio_s3_bucket.postgres_backup.bucket
 
   rule {
-    id     = "versioning"
+    id = "versioning"
     noncurrent_expiration {
-      days           = "45d"
+      days = "45d"
     }
     expiration = "DeleteMarker"
   }

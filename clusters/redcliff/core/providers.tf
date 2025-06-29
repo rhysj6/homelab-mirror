@@ -63,7 +63,7 @@ provider "kubernetes" {
   ]
 }
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host  = module.cluster_config.host
     token = module.cluster_config.token
   }
