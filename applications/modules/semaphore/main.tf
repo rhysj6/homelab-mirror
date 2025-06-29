@@ -118,8 +118,13 @@ resource "kubernetes_deployment" "semaphore" {
             value = "postgres"
           }
           env {
-            name  = "SEMAPHORE_DB_HOST"
-            value = module.postgresql.service_name
+            name = "SEMAPHORE_DB_HOST"
+            value_from {
+              secret_key_ref {
+                name = module.postgresql.secret_name
+                key  = "host"
+              }
+            }
           }
           env {
             name = "SEMAPHORE_DB_USER"
@@ -140,8 +145,13 @@ resource "kubernetes_deployment" "semaphore" {
             }
           }
           env {
-            name  = "SEMAPHORE_DB_NAME"
-            value = "semaphore"
+            name = "SEMAPHORE_DB_NAME"
+            value_from {
+              secret_key_ref {
+                name = module.postgresql.secret_name
+                key  = "dbname"
+              }
+            }
           }
           env {
             name  = "SEMAPHORE_PASSWORD_LOGIN_DISABLED"

@@ -35,7 +35,7 @@ resource "helm_release" "authentik" {
     authentik = {
       secret_key = random_password.secret.result,
       postgresql = {
-        host     = module.postgresql.service_name
+        host     = "file:///postgres-creds/host"
         user     = "file:///postgres-creds/username"
         password = "file:///postgres-creds/password"
       }
