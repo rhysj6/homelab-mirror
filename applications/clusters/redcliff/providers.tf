@@ -17,7 +17,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.0.0"
+      version = "3.0.2"
     }
     minio = {
       source  = "aminueza/minio"
@@ -51,7 +51,7 @@ provider "kubernetes" {
   ]
 }
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host  = module.cluster_config.host
     token = module.cluster_config.token
   }
