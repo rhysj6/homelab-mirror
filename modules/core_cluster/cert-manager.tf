@@ -39,15 +39,8 @@ resource "kubernetes_secret" "cluster_issuer" {
 
 data "cloudflare_zones" "zones" {}
 
-data "kubernetes_resources" "cluster-issuer-crd" {
-  api_version    = "apiextensions.k8s.io/v1"
-  kind           = "CustomResourceDefinition"
-  field_selector = "metadata.name=clusterissuers.cert-manager.io"
-  limit          = 1
-}
-
 resource "kubernetes_manifest" "cluster_issuer" {
-  count = length(data.kubernetes_resources.cluster-issuer-crd.objects)
+  count = (local.cert_manager_crd_exists ? 1 : 0) ## Only create the ClusterIssuer if the CRD exists (will require a re-run if the CRD is created by the Helm release)
   manifest = {
     apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
