@@ -94,7 +94,13 @@ resource "helm_release" "authentik" {
         annotations = {
           "cert-manager.io/cluster-issuer" = "cert-manager"
         }
-      }
+      },
+      metrics = {
+        enabled = true,
+        serviceMonitor = {
+          enabled = true
+        }
+      },
     },
     redis = {
       enabled = true,
