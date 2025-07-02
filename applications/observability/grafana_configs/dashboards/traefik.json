@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -171,7 +171,9 @@
             "type": "prometheus",
             "uid": "${prometheus}"
           },
-          "expr": "",
+          "editorMode": "code",
+          "expr": "sum(traefik_service_requests_total{}) by (exported_service)",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
@@ -270,11 +272,13 @@
             "type": "prometheus",
             "uid": "${prometheus}"
           },
-          "expr": "sum(traefik_service_request_duration_seconds_sum{}) by (service) / sum(traefik_service_request_duration_seconds_count{}) by (service)",
+          "editorMode": "code",
+          "expr": "sum(traefik_service_request_duration_seconds_sum{}) by (exported_service) / sum(traefik_service_request_duration_seconds_count{}) by (exported_service)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
-          "legendFormat": " {{service}}",
+          "legendFormat": " {{exported_service}}",
+          "range": true,
           "refId": "A",
           "step": 240
         }
@@ -756,335 +760,6 @@
         "x": 0,
         "y": 19
       },
-      "id": 22,
-      "panels": [],
-      "title": "Routers",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${prometheus}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 0,
-        "y": 20
-      },
-      "id": 37,
-      "options": {
-        "legend": {
-          "calcs": [
-            "last",
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "maxHeight": 600,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.0.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${prometheus}"
-          },
-          "editorMode": "code",
-          "expr": "sum by(router) (rate(traefik_router_requests_total[$__rate_interval]))",
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Requests per Router",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${prometheus}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 8,
-        "y": 20
-      },
-      "id": 38,
-      "options": {
-        "legend": {
-          "calcs": [
-            "last",
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "maxHeight": 600,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.0.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${prometheus}"
-          },
-          "editorMode": "code",
-          "expr": "sum by(service) (rate(traefik_router_request_duration_seconds_count[$__rate_interval]))",
-          "instant": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Request Duration per Router",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${prometheus}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisGridShow": true,
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 20
-      },
-      "id": 40,
-      "options": {
-        "legend": {
-          "calcs": [
-            "last",
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true,
-          "sortBy": "Mean",
-          "sortDesc": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "maxHeight": 600,
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "pluginVersion": "12.0.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${prometheus}"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "label_replace(sum by(service) (rate(traefik_service_responses_bytes_total[$__rate_interval])), \"service\", \"$1\", \"service\", \"([^-]+-[^-]+).*\")",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "Request size  per Router",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 29
-      },
       "id": 10,
       "panels": [],
       "title": "HTTP Codes",
@@ -1150,13 +825,38 @@
           },
           "unit": "reqps"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "PUT[200] on external-hosts"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
         "w": 8,
         "x": 0,
-        "y": 30
+        "y": 20
       },
       "id": 46,
       "options": {
@@ -1187,11 +887,11 @@
             "uid": "${prometheus}"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "topk(15, label_replace(sum by(service, method, code) (rate(traefik_service_requests_total{code=~\"2..\", protocol=\"http\"}[5m])), \"service\", \"$1\", \"service\", \"([^-]+-[^-]+).*\"))",
+          "editorMode": "code",
+          "expr": "topk(15, sum by(exported_service, method, code) (rate(traefik_service_requests_total{code=~\"2..\", protocol=\"http\"}[5m])))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{method}}[{{code}}] on {{service}}",
+          "legendFormat": "{{method}}[{{code}}] on {{exported_service}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1267,7 +967,7 @@
         "h": 12,
         "w": 8,
         "x": 8,
-        "y": 30
+        "y": 20
       },
       "id": 48,
       "options": {
@@ -1298,11 +998,11 @@
             "uid": "${prometheus}"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "topk(15, label_replace(sum by(service, method, code) (rate(traefik_service_requests_total{code=~\"5..\", protocol=\"http\"}[5m])), \"service\", \"$1\", \"service\", \"([^-]+-[^-]+).*\"))",
+          "editorMode": "code",
+          "expr": "topk(15, sum by(exported_service, method, code) (rate(traefik_service_requests_total{code=~\"5..\", protocol=\"http\"}[5m])))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{method}}[{{code}}] on {{service}}",
+          "legendFormat": "{{method}}[{{code}}] on {{exported_service}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1378,7 +1078,7 @@
         "h": 12,
         "w": 8,
         "x": 16,
-        "y": 30
+        "y": 20
       },
       "id": 47,
       "options": {
@@ -1409,11 +1109,11 @@
             "uid": "${prometheus}"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "topk(15, label_replace(sum by(service, method, code) (rate(traefik_service_requests_total{code!~\"2..|5..\", protocol=\"http\"}[5m])), \"service\", \"$1\", \"service\", \"([^-]+-[^-]+).*\"))",
+          "editorMode": "code",
+          "expr": "topk(15, sum by(exported_service, method, code) (rate(traefik_service_requests_total{code!~\"2..|5..\", protocol=\"http\"}[5m])))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{method}}[{{code}}] on {{service}}",
+          "legendFormat": "{{method}}[{{code}}] on {{exported_service}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1488,7 +1188,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 42
+        "y": 32
       },
       "id": 49,
       "options": {
@@ -1519,11 +1219,11 @@
             "uid": "${prometheus}"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "topk(15, label_replace(sum by(service, method) (rate(traefik_service_requests_bytes_total{protocol=\"http\"}[1m])), \"service\", \"$1\", \"service\", \"([^-]+-[^-]+).*\"))",
+          "editorMode": "code",
+          "expr": "topk(15, sum by(exported_service, method) (rate(traefik_service_requests_bytes_total{protocol=\"http\"}[1m])))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{method}} on {{service}}",
+          "legendFormat": "{{method}} on {{exported_service}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1598,7 +1298,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 42
+        "y": 32
       },
       "id": 50,
       "options": {
@@ -1629,11 +1329,11 @@
             "uid": "${prometheus}"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "topk(15, label_replace(sum by(service, method) (rate(traefik_service_responses_bytes_total{protocol=\"http\"}[1m])), \"service\", \"$1\", \"service\", \"([^-]+-[^-]+).*\"))",
+          "editorMode": "code",
+          "expr": "topk(15, sum by(exported_service) (rate(traefik_service_responses_bytes_total{protocol=\"http\"}[1m])))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{method}} on {{service}}",
+          "legendFormat": "{{exported_service}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1677,5 +1377,5 @@
   "timezone": "browser",
   "title": "Traefik",
   "uid": "ddmlqvk12uozka",
-  "version": 4
+  "version": 1
 }
