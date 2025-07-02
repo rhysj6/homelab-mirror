@@ -18,11 +18,11 @@ resource "helm_release" "cert_manager" {
     },
     {
       name  = "prometheus.enabled"
-      value = true
+      value = local.prometheus_crd_exists
     },
     {
       name  = "prometheus.podmonitor.enabled"
-      value = true
+      value = local.prometheus_crd_exists
     }
   ]
 }
