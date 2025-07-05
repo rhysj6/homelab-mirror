@@ -15,6 +15,7 @@ locals {
       LOKI_URL            = local.loki_url
       BASIC_AUTH_PASSWORD = random_password.loki_password.result
       TENANT              = "onsite-production"
+      PROMETHEUS_URL      = "prometheus-prometheus.monitoring.svc.cluster.local:9090"
     })
   }
 }

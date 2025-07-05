@@ -1,0 +1,19 @@
+
+loki.write "default" {
+  endpoint {
+    url = "https://${LOKI_URL}/loki/api/v1/push"
+    tenant_id = "${TENANT}"
+
+    basic_auth {
+      username = "${TENANT}"
+      password = "${BASIC_AUTH_PASSWORD}"
+    }
+  }
+}
+
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = "http://${PROMETHEUS_URL}/api/v1/write"
+  }
+}
