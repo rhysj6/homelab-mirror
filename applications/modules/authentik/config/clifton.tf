@@ -14,7 +14,7 @@ resource "authentik_provider_oauth2" "clifton" {
       matching_mode = "strict"
     }
   ]
-  authentication_flow = data.authentik_flow.authorization-flow.id
+  authentication_flow = authentik_flow.authentication.uuid
   invalidation_flow   = data.authentik_flow.invalidation-flow.id
   property_mappings = [
     data.authentik_property_mapping_provider_scope.scope-email.id,
