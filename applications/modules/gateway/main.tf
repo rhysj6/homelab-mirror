@@ -11,6 +11,7 @@ module "clifton" {
   ip_address = "10.0.0.20"
   port       = 8006
   portname = "https"
+  middleware = "authentik"
 }
 
 module "pbs" {
