@@ -14,14 +14,27 @@ resource "kubernetes_service_v1" "service" {
   }
 }
 
+locals {
+    base_annotations = {
+      "cert-manager.io/cluster-issuer" = "cert-manager"
+    }
+    optional_annotations = {
+        exists = {
+            "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-${var.middleware}@kubernetescrd"
+        }
+        not_exists = {}
+    }
+    annotations = "${merge(
+        local.base_annotations,
+        local.optional_annotations[var.middleware != "" ? "exists" : "not_exists"]
+    )}"
+}
 
 resource "kubernetes_ingress_v1" "ingress" {
   metadata {
     name      = var.name
     namespace = "external-hosts"
-    annotations = {
-      "cert-manager.io/cluster-issuer" = "cert-manager"
-    }
+    annotations = local.annotations
   }
   spec {
     rule {

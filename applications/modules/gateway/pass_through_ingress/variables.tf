@@ -23,3 +23,9 @@ variable "portname" {
   type        = string
   default     = "http"
 }
+
+variable "middleware" {
+  description = "The middleware to apply to the ingress resource."
+  type        = string
+  default     = ""
+}
