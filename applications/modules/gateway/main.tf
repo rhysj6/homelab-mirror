@@ -70,3 +70,13 @@ module "vcenter" {
   port       = 443
   portname = "https"
 }
+
+module "actualbudget" {
+  source     = "./pass_through_ingress"
+  name       = "actual-budget"
+  hostname   = "budget.${var.domain}"
+  ip_address = "10.10.1.5"
+  port       = 5006
+  portname = "https"
+  middleware = "local-only"
+}
