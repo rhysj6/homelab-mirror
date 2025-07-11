@@ -1,0 +1,37 @@
+controller:
+  ingress:
+    enabled: true
+    hostName: ${jenkins_url}
+    annotations:
+      cert-manager.io/cluster-issuer: cert-manager
+    tls:
+      - hosts:
+          - ${jenkins_url}
+        secretName: jenkins-tls
+  jenkinsUrlProtocol: "https"
+  installPlugins:
+    - kubernetes
+    - workflow-aggregator
+    - git
+    - github
+    - github-branch-source
+    - configuration-as-code
+    - gradle
+    - oic-auth
+    - pipeline-utility-steps
+  existingSecret: jenkins-security
+  additionalExistingSecrets:
+    - name: jenkins-security
+      keyName: client-id
+    - name: jenkins-security
+      keyName: client-secret
+    - name: jenkins-security
+      keyName: authentik-oic-well-known-url
+agent:
+  resources:
+    requests:
+      cpu: "512m"
+      memory: "512Mi"
+    limits:
+      cpu: "4096m"
+      memory: "8192Mi"

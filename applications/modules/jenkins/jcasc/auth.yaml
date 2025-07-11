@@ -1,0 +1,20 @@
+controller:
+  JCasC:
+    defaultConfig: true
+    securityRealm: |
+      oic:
+        clientId: "${jenkins-security-client-id}"
+        clientSecret: "${jenkins-security-client-secret}"
+        emailFieldName: "email"
+        fullNameFieldName: "name"
+        groupsFieldName: "groups"
+        logoutFromOpenidProvider: false
+        pkceEnabled: true
+        serverConfiguration:
+          wellKnown:
+            scopesOverride: "openid profile email"
+            wellKnownOpenIDConfigurationUrl: ${authentik-oic-well-known-url}
+        userNameField: "preferred_username"
+        userIdStrategy: "caseSensitive"
+        groupIdStrategy: "caseSensitive"
+
