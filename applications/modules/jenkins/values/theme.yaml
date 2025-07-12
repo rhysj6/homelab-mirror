@@ -1,0 +1,6 @@
+controller:
+  JCasC:
+    appearance:
+      themeManager:
+        disableUserThemes: true
+        theme: "darkSystem"

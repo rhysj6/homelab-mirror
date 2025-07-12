@@ -1,0 +1,11 @@
+controller:
+  installPlugins:
+    - kubernetes
+    - workflow-aggregator
+    - git
+    - github
+    - github-branch-source
+    - configuration-as-code
+    - gradle
+    - oic-auth
+    - pipeline-utility-steps

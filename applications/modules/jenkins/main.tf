@@ -15,12 +15,17 @@ resource "helm_release" "jenkins" {
   namespace   = "jenkins"
   version     = "5.8.67"
   max_history = 2
-  values = [
-    templatefile("${path.module}/values.yaml", {
-      jenkins_url = local.url
-    }),
-    file("${path.module}/jcasc/auth.yaml")
-  ]
+    values = concat(
+    [
+      templatefile("${path.module}/main_values.yaml", {
+        jenkins_url = local.url
+      })
+    ],
+    [
+      for f in fileset(path.module, "values/*.yaml") : file("${path.module}/${f}")
+    ]
+  )
+
   depends_on = [
     kubernetes_namespace.jenkins,
     kubernetes_secret.jenkins-security,

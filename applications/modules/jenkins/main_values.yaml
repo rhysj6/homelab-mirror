@@ -9,16 +9,6 @@ controller:
           - ${jenkins_url}
         secretName: jenkins-tls
   jenkinsUrlProtocol: "https"
-  installPlugins:
-    - kubernetes
-    - workflow-aggregator
-    - git
-    - github
-    - github-branch-source
-    - configuration-as-code
-    - gradle
-    - oic-auth
-    - pipeline-utility-steps
   existingSecret: jenkins-security
   additionalExistingSecrets:
     - name: jenkins-security
