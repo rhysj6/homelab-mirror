@@ -9,3 +9,4 @@ controller:
     - gradle
     - oic-auth
     - pipeline-utility-steps
+    - dark-theme
