@@ -3,5 +3,5 @@ kind: Pod
 spec:
   containers:
   - name: ansible
-    image: ansible/ansible:latest
+    image: alpine/ansible:latest
     tty: true
