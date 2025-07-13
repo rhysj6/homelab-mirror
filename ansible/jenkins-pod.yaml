@@ -5,3 +5,4 @@ spec:
   - name: ansible
     image: alpine/ansible:latest
     tty: true
+    command: ["/bin/sh", "-c", "while true; do sleep 30; done;"]
