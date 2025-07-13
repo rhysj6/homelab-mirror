@@ -6,6 +6,7 @@ resource "authentik_provider_proxy" "protected_services" {
   authentication_flow = authentik_flow.authentication.uuid
   invalidation_flow   = data.authentik_flow.invalidation-flow.id
   mode                = "forward_domain"
+  access_token_validity = "days=7"
 }
 
 resource "authentik_application" "protected_services" {
