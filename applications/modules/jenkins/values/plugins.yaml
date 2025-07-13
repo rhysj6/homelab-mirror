@@ -10,3 +10,4 @@ controller:
     - oic-auth
     - pipeline-utility-steps
     - dark-theme
+    - ansible

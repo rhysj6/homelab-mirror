@@ -1,0 +1,21 @@
+pipeline {
+    agent {
+        kubernetes {
+            defaultContainer 'jnlp'
+            yamlFile 'ansible/jenkins-pod.yaml'
+        }
+    }
+    stages {
+        stage('Playbook') {
+            steps {
+                container('ansible') {
+                    script {
+                        def playbook = 'ansible/initial_setup/playbook.yaml'
+                        def inventory = 'ansible/initial_setup/inventory.ini'
+                        sh "ansible-playbook -i ${inventory} ${playbook}"
+                    }
+                }
+            }
+        }
+    }
+}
