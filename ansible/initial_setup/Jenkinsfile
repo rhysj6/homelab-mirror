@@ -7,28 +7,23 @@ pipeline {
     }
     stages {
         stage('Playbook') {
+            environment {
+                ANSIBLE_USER = credentials('ansible_user')
+                ANSIBLE_USER_PUBLIC_SSH_KEY = credentials('ansible_user_public_ssh_key')
+                ANSIBLE_HOST_KEY_CHECKING = 'False'
+            }
             steps {
                 container('ansible') {
-                    environment {
-                        ANSIBLE_USER = credentials('ansible_user')
-                    }
-                    script {
-
-                        def playbook = 'ansible/initial_setup/site.yml'
-                        def inventory = 'ansible/initial_setup/inventory.ini'
-                        ansiblePlaybook(
-                            credentialsId: 'initial_setup_private_key',
-                            inventory: inventory,
-                            playbook: playbook,
-                            hostKeyChecking: false,
-                            colorized: true,
-                            become: true,
-                            extraVars: [
-                                ansible_user_password: ANSIBLE_USER_PWD
-                                ansible_user_public_ssh_key: credentials('ansible_user_public_ssh_key')
-                            ]
-                        )
-                    }
+                    ansiblePlaybook(
+                        playbook: 'ansible/initial_setup/site.yml',
+                        inventory: 'ansible/initial_setup/inventory.ini',
+                        credentialsId: 'initial_setup_private_key',
+                        become: true,
+                        extraVars: [
+                            ansible_user_password: env.ANSIBLE_USER_PSW,
+                            ansible_user_public_ssh_key: env.ANSIBLE_USER_PUBLIC_SSH_KEY
+                        ]
+                    )
                 }
             }
         }
