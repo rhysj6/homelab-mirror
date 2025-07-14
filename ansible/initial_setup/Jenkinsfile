@@ -9,6 +9,9 @@ pipeline {
         stage('Playbook') {
             steps {
                 container('ansible') {
+                    environment {
+                        ANSIBLE_USER = credentials('ansible_user')
+                    }
                     script {
 
                         def playbook = 'ansible/initial_setup/site.yml'
@@ -21,7 +24,7 @@ pipeline {
                             colorized: true,
                             become: true,
                             extraVars: [
-                                ansible_user_password: credentials('ansible_user').password,
+                                ansible_user_password: ANSIBLE_USER_PWD
                                 ansible_user_public_ssh_key: credentials('ansible_user_public_ssh_key')
                             ]
                         )
