@@ -8,7 +8,7 @@
     - name: Create a login user
       user:
         name: ansible
-        password: "{{ lookup('env', 'ANSIBLE_USER_PASSWORD') | password_hash('sha512') }}"
+        password: "{{ lookup('env', 'user_password') | password_hash('sha512') }}"
         groups:
           - sudo
         state: present

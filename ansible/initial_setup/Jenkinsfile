@@ -10,9 +10,14 @@ pipeline {
             steps {
                 container('ansible') {
                     script {
-                        def playbook = 'ansible/initial_setup/playbook.yaml'
+                        environment {
+                            pub_key = credentials('ansible_user_public_ssh_key')
+                            user_password = credentials('ansible_user').password
+                            ANSIBLE_HOST_KEY_CHECKING = 'False'
+                        }
+                        def playbook = 'ansible/initial_setup/site.yml'
                         def inventory = 'ansible/initial_setup/inventory.ini'
-                        sh "ansible-playbook -i ${inventory} ${playbook}"
+                        ansiblePlaybook credentialsId: 'initial_setup_private_key', inventory: inventory, playbook: playbook
                     }
                 }
             }
