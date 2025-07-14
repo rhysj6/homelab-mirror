@@ -8,7 +8,7 @@
     - name: Create a login user
       user:
         name: ansible
-        password: "{{ lookup('env', 'user_password') | password_hash('sha512') }}"
+        password: "{{ ansible_user_password | password_hash('sha512') }}"
         groups:
           - sudo
         state: present
@@ -16,7 +16,7 @@
     - name: Add SSH key to ansible user
       authorized_key:
         user: ansible
-        key: "{{ lookup ('env', 'pub_key') }}"
+        key: "{{ ansible_user_public_ssh_key }}"
         state: present
 
     - name: Enable passwordless sudo for ansible user
