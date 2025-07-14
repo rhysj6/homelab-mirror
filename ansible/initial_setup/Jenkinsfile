@@ -10,6 +10,10 @@ pipeline {
             environment {
                 ANSIBLE_USER = credentials('ansible_user')
                 ANSIBLE_USER_PUBLIC_SSH_KEY = credentials('ansible_user_public_ssh_key')
+                PROMETHEUS_IP = credentials('prometheus_ip')
+                LOKI_URL = credentials('loki_url')
+                LOKI_TENANT = credentials('loki_tenant')
+                LOKI_PASSWORD = credentials('loki_password')
                 ANSIBLE_HOST_KEY_CHECKING = 'False'
             }
             steps {
@@ -21,7 +25,11 @@ pipeline {
                         become: true,
                         extraVars: [
                             ansible_user_password: env.ANSIBLE_USER_PSW,
-                            ansible_user_public_ssh_key: env.ANSIBLE_USER_PUBLIC_SSH_KEY
+                            ansible_user_public_ssh_key: env.ANSIBLE_USER_PUBLIC_SSH_KEY,
+                            prometheus_ip: env.PROMETHEUS_IP,
+                            loki_url: env.LOKI_URL,
+                            loki_tenant: env.LOKI_TENANT,
+                            loki_password: env.LOKI_PASSWORD
                         ]
                     )
                 }

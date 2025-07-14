@@ -1,17 +1,17 @@
 prometheus.remote_write "local" {
   endpoint {
-    url = "http://{{ PROMETHEUS_IP }}:9090/api/v1/write"
+    url = "http://{{ prometheus_ip }}:9090/api/v1/write"
   }
 }
 
 loki.write "local" {
   endpoint {
-    url = "https://{{ LOKI_URL }}/loki/api/v1/push"
-    tenant_id = "{{ LOKI_TENANT }}"
+    url = "https://{{ loki_url }}/loki/api/v1/push"
+    tenant_id = "{{ loki_tenant }}"
 
     basic_auth {
-      username = "{{ LOKI_TENANT }}"
-      password = "{{ LOKI_PASSWORD }}"
+      username = "{{ loki_tenant }}"
+      password = "{{ loki_password }}"
     }
   }
 }
