@@ -24,7 +24,7 @@ pipeline {
                         inventory: 'ansible/initial_setup/inventory.ini',
                         credentialsId: 'initial_setup_private_key',
                         sudoUser: env.INITIAL_USER,
-                        become: true,
+                        sudo: true,
                         extraVars: [
                             ansible_user: env.ANSIBLE_USER_USR,
                             ansible_user_password: env.ANSIBLE_USER_PSW,
