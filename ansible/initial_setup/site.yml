@@ -2,8 +2,6 @@
 - name: Create ansible user and configure sudo and SSH access if it doesn't exist
   hosts: "*"
   become: true
-  become_method: sudo
-  become_user: root
   tasks:
     - name: Create a login user
       user:
@@ -29,7 +27,10 @@
         dest: /etc/sudoers.d/{{ initial_user }}
         content: "{{ initial_user }} ALL=(ALL) NOPASSWD:ALL\n"
         mode: "0440"
-
+- name: Install Grafana Alloy on all servers
+  hosts: all
+  become: true
+  tasks:
     - name: Ensure /etc/alloy directory exists
       file:
         path: /etc/alloy
@@ -52,8 +53,6 @@
 - name: Install QEMU guest agent on all VMs
   hosts: vm_servers
   become: true
-  become_method: sudo
-  become_user: root
   tasks:
     - name: Install qemu-guest-agent
       apt:
