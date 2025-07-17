@@ -7,6 +7,7 @@
       user:
         name: ansible
         password: "{{ automation_user_password | password_hash('sha512') }}"
+        update_password: on_create
         groups:
           - sudo
         state: present
