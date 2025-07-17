@@ -1,6 +1,6 @@
 resource "rancher2_cluster_v2" "cluster" {
   name               = var.cluster_name
-  kubernetes_version = "v1.31.6+rke2r1"
+  kubernetes_version = "v1.32.5+rke2r1"
   fleet_namespace    = "fleet-default"
   rke_config {
     etcd {
@@ -50,7 +50,6 @@ resource "rancher2_cluster_v2" "cluster" {
     }
   }
 }
-
 
 ## Create a Minio bucket for etcd with applicable IAM policies
 resource "minio_s3_bucket" "etcd" {
