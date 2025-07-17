@@ -25,9 +25,9 @@ pipeline {
                         credentialsId: 'initial_setup_private_key',
                         become: true,
                         extraVars: [
-                            ansible_user: env.ANSIBLE_USER_USR,
-                            ansible_user_password: env.ANSIBLE_USER_PSW,
-                            ansible_user_public_ssh_key: env.ANSIBLE_USER_PUBLIC_SSH_KEY,
+                            automation_user: env.ANSIBLE_USER_USR,
+                            automation_user_password: env.ANSIBLE_USER_PSW,
+                            automation_user_public_ssh_key: env.ANSIBLE_USER_PUBLIC_SSH_KEY,
                             initial_user: env.INITIAL_USER,
                             prometheus_ip: env.PROMETHEUS_IP,
                             loki_url: env.LOKI_URL,
