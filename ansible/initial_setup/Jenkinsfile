@@ -23,8 +23,7 @@ pipeline {
                         playbook: 'ansible/initial_setup/site.yml',
                         inventory: 'ansible/initial_setup/inventory.ini',
                         credentialsId: 'initial_setup_private_key',
-                        sudoUser: env.INITIAL_USER,
-                        sudo: true,
+                        become: true,
                         extraVars: [
                             ansible_user: env.ANSIBLE_USER_USR,
                             ansible_user_password: env.ANSIBLE_USER_PSW,
