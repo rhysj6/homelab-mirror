@@ -35,7 +35,7 @@ resource "kubernetes_manifest" "management_ingress_route" {
           ]
         },
         {
-          match = "HostSNI(`iac.homelab.example`)"
+          match = "HostSNI(`secrets.homelab.example`)"
           services = [
             {
               name = "management-cluster-ingress"

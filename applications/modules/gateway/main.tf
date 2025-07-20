@@ -47,21 +47,6 @@ module "portainer" {
   port       = 9000
 }
 
-module "secrets" {
-  source     = "./pass_through_ingress"
-  name       = "infisical"
-  hostname   = "secrets.hl.${var.domain}"
-  ip_address = "10.10.1.10"
-  port       = 80
-}
-module "semaphore" {
-  source     = "./pass_through_ingress"
-  name       = "semaphore"
-  hostname   = "semaphore.hl.${var.domain}"
-  ip_address = "10.10.1.10"
-  port       = 3000
-}
-
 module "vcenter" {
   source     = "./pass_through_ingress"
   name       = "vcenter"
