@@ -9,14 +9,13 @@
         ssh_key: "{{ automation_user_public_ssh_key }}"
     - role: passwordless_sudo
       vars:
-        my_account: "{{ automation_user }}"
+        my_account: "{{ lookup('infisical_vault', project_id='ansible', path='init', env_slug='prod', secret_name='initial_user') }}"
 
 - name: Install Grafana Alloy on all servers
   hosts: all
   become: true
   roles:
     - role: alloy
-
 
 - name: Install QEMU guest agent on all VMs
   hosts: vm_servers
