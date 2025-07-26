@@ -20,8 +20,8 @@ pipeline {
             steps {
                 container('ansible') {
                     ansiblePlaybook(
-                        playbook: 'ansible/linux/initial_setup/site.yml',
-                        inventory: 'ansible/linux/initial_setup/inventory.ini',
+                        playbook: 'ansible/linux/initial_setup.yml',
+                        inventory: 'ansible/linux/inventory.ini',
                         credentialsId: 'initial_setup_private_key',
                         become: true,
                         extraVars: [

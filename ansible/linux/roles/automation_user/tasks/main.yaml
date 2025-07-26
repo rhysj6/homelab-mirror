@@ -1,0 +1,19 @@
+- name: Ensure standard users exist
+  ansible.builtin.user:
+    name: "{{ name }}"
+    password: "{{ password | password_hash('sha512') }}"
+    update_password: on_create
+    groups: sudo
+    state: present
+
+- name: Add SSH key for standard users
+  ansible.builtin.authorized_key:
+    user: "{{ name }}"
+    key: "{{ ssh_key }}"
+    state: present
+
+- name: Enable passwordless sudo for standard users
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ name }}"
+    content: "{{ name }} ALL=(ALL) NOPASSWD:ALL\n"
+    mode: "0440"
