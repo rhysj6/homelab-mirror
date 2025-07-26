@@ -98,32 +98,22 @@ provider "registry.terraform.io/hashicorp/helm" {
 }
 
 provider "registry.terraform.io/hashicorp/kubernetes" {
-  version     = "2.37.1"
+  version     = "2.38.0"
   constraints = ">= 2.0.0"
   hashes = [
-    "h1:+37jC6JlkPyPvDHudK3qaj7ZVJ0Zy9zc9+oq8h1WayA=",
-    "h1:+EHgRA7MlIYlj6Mr1dwKZSfn4TLSLQu546hhVE2ZebI=",
-    "h1:3U6xK/EtzYFMq4sKw9Dm0MdVaQzeDCxdskW4jP7oVjI=",
-    "h1:4IYtiAtixYC1ImaJ9HX8K1J+60nQ86bcheOCJ2NVwpk=",
-    "h1:CtT3PtFlrxO1MocpAJxvRzLe6PHtcLSMKDSVPVV9zuw=",
-    "h1:RRViapugZerVuTYVnfOUZpAFq4PyG0lVRnPVRqmWeFQ=",
-    "h1:SsrLjpsD9rltZmr24CBiAB3TAMmJ0SyplBh8oyAr/qQ=",
-    "h1:okZwE5tiivdUNTXdJyN01Mmzt13WU+kV5/qjyj7RhKw=",
-    "h1:qo9Ue/rIEnvxOpiK9qizwRFV7rvb5gCziKVytIcZHyk=",
-    "h1:x4cNsR4InB/AEpSRCmv6SQEY/ChylNaPceNlyzvfv7c=",
-    "h1:x9AtnkeTRQ3fA3bkPZtdbwoNu3J8aqkk9eSXfgFQ1ao=",
-    "zh:0ed097413c7fc804479e325966886b405dc0b75ad2b4f54ce4df1d8e4802b397",
-    "zh:17dcf4a685a00d2d048671124e8a1a8e836b58ecd2ef628a1c666fe0ced2e598",
-    "zh:36891284e5bced57c438f12d0b27856b0d4b70b562bd200b01919a6a89545be9",
-    "zh:3e49d86b508e641ba122d1b0af24cdc4d8ffa2ec1b30022436fb1d7c6ba696ea",
-    "zh:40be623e116708bdcb0fac32989db43720f031c5fe9a4dc63395078185d24403",
-    "zh:44fc0ac3bc39e289b67f9dde7ee9fef29eb8192197e5e68fee69098573021722",
-    "zh:957aa451573bcde5d57f6f8338ea3139010c7f61fefe8f6a140a8c267f056511",
-    "zh:c55fd85b7e8acaac17e30670ac3574b88b3530820dd004bcd2a5daa8624a46e9",
-    "zh:c743f06843a1f5ecde2b8ef639f4d3db654a334ef248dee57261c719ea843f3a",
-    "zh:c93cc71c64b838d89522ac5fb60f68e0e1e7f2fc39db6b0ead7afd78795e79ed",
-    "zh:eda1163c2266905adc54bc78cc3e7b606a164fbc6b59be607db933b302015ccd",
+    "h1:XCkL/mxjWTawg6gg+jlpCQhF/+SNRoCEZxbbkDTj42s=",
+    "zh:0af928d776eb269b192dc0ea0f8a3f0f5ec117224cd644bdacdc682300f84ba0",
+    "zh:1be998e67206f7cfc4ffe77c01a09ac91ce725de0abaec9030b22c0a832af44f",
+    "zh:326803fe5946023687d603f6f1bab24de7af3d426b01d20e51d4e6fbe4e7ec1b",
+    "zh:4a99ec8d91193af961de1abb1f824be73df07489301d62e6141a656b3ebfff12",
+    "zh:5136e51765d6a0b9e4dbcc3b38821e9736bd2136cf15e9aac11668f22db117d2",
+    "zh:63fab47349852d7802fb032e4f2b6a101ee1ce34b62557a9ad0f0f0f5b6ecfdc",
+    "zh:924fb0257e2d03e03e2bfe9c7b99aa73c195b1f19412ca09960001bee3c50d15",
+    "zh:b63a0be5e233f8f6727c56bed3b61eb9456ca7a8bb29539fba0837f1badf1396",
+    "zh:d39861aa21077f1bc899bc53e7233262e530ba8a3a2d737449b100daeb303e4d",
+    "zh:de0805e10ebe4c83ce3b728a67f6b0f9d18be32b25146aa89116634df5145ad4",
     "zh:f569b65999264a9416862bca5cd2a6177d94ccb0424f3a4ef424428912b9cb3c",
+    "zh:faf23e45f0090eef8ba28a8aac7ec5d4fdf11a36c40a8d286304567d71c1e7db",
   ]
 }
 
@@ -147,22 +137,45 @@ provider "registry.terraform.io/hashicorp/random" {
   ]
 }
 
+provider "registry.terraform.io/infisical/infisical" {
+  version     = "0.15.23"
+  constraints = "0.15.23"
+  hashes = [
+    "h1:vsSBFHgC0Wk6TGK3bFKfMwS1H0zu7dYyb5yqntv4GTU=",
+    "zh:42b20b55a7593136eed31aa09a80a5ad3d5a417a0cc8dc1748b584f9401a9092",
+    "zh:47ac469f4a77e6ea90f9d5e1f4d78ff02599d6a0e3c2b4fbdfbfd85366936743",
+    "zh:49a44655cf86a84d20ef3ae5cfc0ddcc69a2815acd102d9e6041bc5f672b6b21",
+    "zh:4c0f9a64cef416ccb08613c05993d52aac5460026aeef7c82990c30db131337e",
+    "zh:4d88b271cf5ad598032b21249e05f3e70742a7b1299baf958239786d3337a84e",
+    "zh:630e904f3fb96f600a5f0252e5cf51c031138f0f30da78bfa8d73a4ec3102b12",
+    "zh:65cb37637681bbf7a675ef4e560244e1fbf196a1ed97314dd79dd0a3f71495dc",
+    "zh:734d3db82a1a0ee5adb09a38da311a4d57ec7af7cbfd523901da662b5c9dc5eb",
+    "zh:814e926f4ceb603267416c65c01fca98299f12b41dc2a91d2f875e7638059496",
+    "zh:88ec628025dcdd3f7f23140f3a5b71e6e3ea4a36ef57b2ff5bea7ef0223bdeb3",
+    "zh:890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
+    "zh:8b84a00dd79d5d301ac432d8fc2af5ff358dc7353441ae4b1679d94f0a2dfd63",
+    "zh:b2503955334b54f4968faa91b57bb573d9c5d1c09b06049d0c8a62de418df63f",
+    "zh:e07b56f65fa7fa4b032f55bceb5e68d1a53caef6aec595bde81e5721d2935fa5",
+    "zh:e2a2d47deb3d39a3c8f03e352b60f62b25a70d0ac6f76967ca962fce1b96da25",
+  ]
+}
+
 provider "registry.terraform.io/rancher/rancher2" {
-  version     = "7.0.0"
+  version     = "7.3.2"
   constraints = ">= 6.0.0"
   hashes = [
-    "h1:ieXcpntLKwb/2UgUK/v20K1dfjAblfldhXsQIfRRIuk=",
-    "zh:2197b07bd53864ed99e2e9c038093075fbce2183e7014b5fc63eda122ea7e7c4",
-    "zh:36bb523b0e49d70d2e96298adc05bef3567673b6023c6ade1f6feedbc3f4bff3",
-    "zh:48ccb13ba943a7cc0f8ea1bc3263c33d4702dff483c3507df467bb5b3b169087",
-    "zh:531c481522acee3d726069319bba41178be585bbd421cfc21e0e54fa8eb53a50",
-    "zh:5c0552a2c9e9a56661703e52925a07e6a61d5f1d07bbe2b260c837d2ef2564be",
-    "zh:777394549dd5a66f96ac227b28f29821b699e839e819dce8aa8817d393b0df2d",
-    "zh:9c7c7a13b1c3d41c6361376741097e3f731bea6fcf0359651eb045eb8f390fe4",
-    "zh:9e64a42aa34326f426edfe641076df23efbe5c1c97346e3f8a33c5aab68a1025",
-    "zh:a3a1a98916246336d7ffed8ff8262a04082b3e2815c1e2f6974690e455ca2331",
-    "zh:b374192405612d666560665cf86e3f78b2da1d488b5733e2da69e8797796dc28",
-    "zh:d1b6ff1089821ff8bd79f451fa663c0f7af1bf6d2f5b83710313f710f8ec1e84",
-    "zh:dae9d7c085f8ad470d76b5e5e57f179ef23480bc74a96bfae00789ad918e3658",
+    "h1:+jmNe1sZGjZ496WSOQchATgGxEdsNgwVU1exiWjDAmo=",
+    "zh:043a1b62b733f4e7a52c41a93119848e5c1069a975ab075908b89b0640235c47",
+    "zh:20dae4514eda69f7a0ad44934abd5a65841f8f03fc059ecc851a93e46ae639de",
+    "zh:4ccdc76dda6a7c0424c239ae46d002c3cea6aedd84c2ca2c0bd54007cca052b2",
+    "zh:64f5c082624c12d5ff84d0bb01418a342db5bd6049b1583f600d79b9f85c47aa",
+    "zh:7ef0e52a67496cad4d27e8a5c572a3accbd8d491be3e09f007140860830e6c85",
+    "zh:8350d0f033e670e0618426a4b89cdbe86240e188583cda3cc3a316d519c01429",
+    "zh:981a9e4282eae4ef42a4af51e9412558eb9e077be0b16fb85c5d88705b431bd8",
+    "zh:c4ccbb8a2193a87292f98423be122f88160f7084bcc1f02a6bb135185caf1e85",
+    "zh:cbef97762e69694bd7415459b01f05a0a557f4fc28e009c9cebde4b308113411",
+    "zh:d7c993c34cc34274a81a38e3ecf9595fa5aef34736c24b9a90756242f23b5c6e",
+    "zh:dc9718529cbaf3487e6cdfc003fc819935932c38ad0d4cd5e082dc897a719c6f",
+    "zh:f65d9f6698792dded35275c34f797201f7c7a295f885b3c48faaade3649a4a29",
   ]
 }

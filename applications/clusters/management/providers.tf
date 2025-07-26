@@ -31,6 +31,11 @@ terraform {
       source  = "hashicorp/random"
       version = "3.7.2"
     }
+    infisical = {
+      source = "Infisical/infisical"
+      version = "0.15.23"
+    }
+
   }
 }
 
