@@ -1,17 +1,17 @@
 prometheus.remote_write "local" {
   endpoint {
-    url = "http://{{ prometheus_ip }}:9090/api/v1/write"
+    url = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='prometheus_url') }}"
   }
 }
 
 loki.write "local" {
   endpoint {
-    url = "https://{{ loki_url }}/loki/api/v1/push"
-    tenant_id = "{{ loki_tenant }}"
+    url = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_url') }}"
+    tenant_id = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_tenant') }}"
 
     basic_auth {
-      username = "{{ loki_tenant }}"
-      password = "{{ loki_password }}"
+      username = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_tenant') }}"
+      password = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_password') }}"
     }
   }
 }

@@ -4,9 +4,9 @@
   roles:
     - role: automation_user 
       vars:
-        name: "{{ automation_user }}"
-        password: "{{ automation_user_password }}"
-        ssh_key: "{{ automation_user_public_ssh_key }}"
+        name: "{{ lookup('infisical_vault', project_id='ansible', path='init/automation_user', env_slug='prod', secret_name='username') }}"
+        password: "{{ lookup('infisical_vault', project_id='ansible', path='init/automation_user', env_slug='prod', secret_name='password') }}"
+        ssh_key: "{{ lookup('infisical_vault', project_id='ansible', path='init/automation_user', env_slug='prod', secret_name='public_ssh_key') }}"
     - role: passwordless_sudo
       vars:
         my_account: "{{ lookup('infisical_vault', project_id='ansible', path='init', env_slug='prod', secret_name='initial_user') }}"
