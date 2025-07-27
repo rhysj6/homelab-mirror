@@ -8,13 +8,14 @@ pipeline {
     stages {
         stage('Playbook') {
             environment {
-
                 ANSIBLE_HOST_KEY_CHECKING = 'False'
                 INFISICAL_URL = credentials('infisical_url')
                 INFISICAL = credentials('infisical')
             }
             steps {
                 container('ansible') {
+                    sh 'ansible-galaxy install -r ansible/linux/requirements.yml'
+                    sh 'pip install infisicalsdk'
                     ansiblePlaybook(
                         playbook: 'ansible/linux/initial_setup.yml',
                         inventory: 'ansible/linux/inventory.ini',

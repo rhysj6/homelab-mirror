@@ -1,17 +1,17 @@
 prometheus.remote_write "local" {
   endpoint {
-    url = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='prometheus_url') }}"
+    url = "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/alloy', env_slug='prod', secret_name='prometheus_url').value }}"
   }
 }
 
 loki.write "local" {
   endpoint {
-    url = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_url') }}"
-    tenant_id = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_tenant') }}"
+    url = "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/alloy', env_slug='prod', secret_name='loki_url').value }}"
+    tenant_id = "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/alloy', env_slug='prod', secret_name='loki_tenant').value }}"
 
     basic_auth {
-      username = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_tenant') }}"
-      password = "{{ lookup('infisical_vault', project_id='ansible', path='init/alloy', env_slug='prod', secret_name='loki_password') }}"
+      username = "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/alloy', env_slug='prod', secret_name='loki_tenant').value }}"
+      password = "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/alloy', env_slug='prod', secret_name='loki_password').value }}"
     }
   }
 }

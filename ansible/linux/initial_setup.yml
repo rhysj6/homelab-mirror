@@ -4,18 +4,28 @@
   roles:
     - role: automation_user 
       vars:
-        name: "{{ lookup('infisical_vault', project_id='ansible', path='init/automation_user', env_slug='prod', secret_name='username') }}"
-        password: "{{ lookup('infisical_vault', project_id='ansible', path='init/automation_user', env_slug='prod', secret_name='password') }}"
-        ssh_key: "{{ lookup('infisical_vault', project_id='ansible', path='init/automation_user', env_slug='prod', secret_name='public_ssh_key') }}"
+        name: "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/automation_user', env_slug='prod', secret_name='username').value }}"
+        password: "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/automation_user', env_slug='prod', secret_name='password').value }}"
+        ssh_key: "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init/automation_user', env_slug='prod', secret_name='public_ssh_key').value }}"
     - role: passwordless_sudo
       vars:
-        my_account: "{{ lookup('infisical_vault', project_id='ansible', path='init', env_slug='prod', secret_name='initial_user') }}"
+        my_account: "{{ lookup('infisical.vault.read_secrets', project_id='962f409d-8e60-41b2-88c4-13d313546083', path='/init', env_slug='prod', secret_name='initial_user').value }}"
 
-- name: Install Grafana Alloy on all servers
+- name: Configure Grafana Alloy
   hosts: all
   become: true
   roles:
-    - role: alloy
+    - role: configure_alloy
+- name: Install Grafana Alloy
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Grafana Alloy
+      ansible.builtin.include_role:
+        name: grafana.grafana.alloy
+      vars:
+        alloy_env_file_vars:
+          CONFIG_FILE: /etc/alloy/default.alloy
 
 - name: Install QEMU guest agent on all VMs
   hosts: vm_servers

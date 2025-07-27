@@ -11,10 +11,3 @@
     src: config.alloy.j2
     dest: /etc/alloy/default.alloy
     mode: "0644"
-
-- name: Install Alloy
-  ansible.builtin.include_role:
-    name: grafana.grafana.alloy
-  vars:
-    alloy_env_file_vars:
-      CONFIG_FILE: /etc/alloy/default.alloy
