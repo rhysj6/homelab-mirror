@@ -22,7 +22,7 @@ resource "helm_release" "loki" {
   chart      = "loki"
   name       = "loki"
   namespace  = "monitoring"
-  version    = "6.33.0"
+  version    = "6.34.0"
   values = [
     templatefile("${path.module}/templates/loki_values.yaml", {
       BUCKET_PREFIX        = local.loki_bucket_prefix
