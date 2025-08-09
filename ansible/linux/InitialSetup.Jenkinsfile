@@ -10,22 +10,17 @@ pipeline {
             environment {
                 ANSIBLE_HOST_KEY_CHECKING = 'False'
                 INFISICAL_URL = credentials('infisical_url')
-                INFISICAL = credentials('infisical')
+                UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_ID = credentials('INFISICAL_CLIENT_ID')
+                UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_SECRET = credentials('INFISICAL_CLIENT_SECRET')
             }
             steps {
                 container('ansible') {
+                    sh 'pip3 install -r ansible/linux/requirements.txt'
                     sh 'ansible-galaxy install -r ansible/linux/requirements.yml'
-                    sh 'pip install infisicalsdk'
                     ansiblePlaybook(
                         playbook: 'ansible/linux/initial_setup.yml',
                         inventory: 'ansible/linux/inventory.ini',
-                        credentialsId: 'initial_setup_private_key',
-                        become: true,
-                        extraVars: [
-                            UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_ID: env.INFISICAL_USR,
-                            UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_SECRET: env.INFISICAL_PSW,
-                            INFISICAL_URL: env.INFISICAL_URL,
-                        ]
+                        credentialsId: 'initial_setup_private_key'
                     )
                 }
             }
