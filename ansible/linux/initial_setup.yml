@@ -1,6 +1,5 @@
 - name: Main play for all servers
   hosts: all
-  become: true
   roles:
     - role: automation_user
     - role: passwordless_sudo
@@ -13,7 +12,6 @@
 
 - name: Install QEMU guest agent on all VMs
   hosts: vm_servers
-  become: true
   tasks:
     - name: Install qemu-guest-agent
       ansible.builtin.apt:
