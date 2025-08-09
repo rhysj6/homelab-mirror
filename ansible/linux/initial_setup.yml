@@ -3,19 +3,6 @@
   become: true
   roles:
     - role: automation_user
-      vars:
-        automation_user_name: "{{ lookup('infisical.vault.read_secrets',
-          project_id=infisical_project, env_slug=env,
-          path='/init/automation_user', secret_name='username'
-          ).value }}"
-        automation_user_password: "{{ lookup('infisical.vault.read_secrets',
-          project_id=infisical_project, env_slug=env,
-          path='/init/automation_user', secret_name='password'
-          ).value }}"
-        automation_user_ssh_key: "{{ lookup('infisical.vault.read_secrets',
-          project_id=infisical_project, env_slug=env,
-          path='/init/automation_user', secret_name='public_ssh_key'
-          ).value }}"
     - role: passwordless_sudo
       vars:
         passwordless_sudo_account: "{{ lookup('infisical.vault.read_secrets',
