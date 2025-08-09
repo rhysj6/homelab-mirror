@@ -1,5 +1,5 @@
 - name: Ensure /etc/alloy directory exists
-  file:
+  ansible.builtin.file:
     path: /etc/alloy
     state: directory
     mode: "0755"
@@ -11,3 +11,9 @@
     src: config.alloy.j2
     dest: /etc/alloy/default.alloy
     mode: "0644"
+- name: Install Grafana Alloy
+  ansible.builtin.include_role:
+    name: grafana.grafana.alloy
+  vars:
+    alloy_env_file_vars:
+      CONFIG_FILE: /etc/alloy/default.alloy

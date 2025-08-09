@@ -1,5 +1,0 @@
-- name: Enable passwordless sudo for my account
-  ansible.builtin.copy:
-    dest: "/etc/sudoers.d/{{ my_account }}"
-    content: "{{ my_account }} ALL=(ALL) NOPASSWD:ALL\n"
-    mode: "0440"

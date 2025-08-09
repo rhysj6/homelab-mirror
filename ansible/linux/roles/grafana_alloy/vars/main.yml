@@ -1,0 +1,14 @@
+grafana_alloy_loki:
+  url: "{{ lookup('infisical.vault.read_secrets',
+    project_id=infisical_project, env_slug=env,
+    path='/init/alloy', secret_name='loki_url').value }}"
+  tenant_id: "{{ lookup('infisical.vault.read_secrets',
+    project_id=infisical_project, env_slug=env,
+    path='/init/alloy', secret_name='loki_tenant').value }}"
+  password: "{{ lookup('infisical.vault.read_secrets',
+    project_id=infisical_project, env_slug=env,
+    path='/init/alloy', secret_name='loki_password').value }}"
+
+grafana_alloy_prometheus_url: "{{ lookup('infisical.vault.read_secrets',
+    project_id=infisical_project, env_slug=env,
+    path='/init/alloy', secret_name='prometheus_url').value }}"

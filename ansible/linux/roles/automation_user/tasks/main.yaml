@@ -1,19 +1,22 @@
-- name: Ensure standard users exist
+- name: Ensure automation user exist
+  become: true
   ansible.builtin.user:
-    name: "{{ name }}"
-    password: "{{ password | password_hash('sha512') }}"
+    name: "{{ automation_user_name }}"
+    password: "{{ automation_user_password | password_hash('sha512') }}"
     update_password: on_create
     groups: sudo
     state: present
 
-- name: Add SSH key for standard users
-  ansible.builtin.authorized_key:
-    user: "{{ name }}"
-    key: "{{ ssh_key }}"
+- name: Add SSH key for automation user
+  become: true
+  ansible.posix.authorized_key:
+    user: "{{ automation_user_name }}"
+    key: "{{ automation_user_ssh_key }}"
     state: present
 
-- name: Enable passwordless sudo for standard users
+- name: Enable passwordless sudo for automation user
+  become: true
   ansible.builtin.copy:
-    dest: "/etc/sudoers.d/{{ name }}"
-    content: "{{ name }} ALL=(ALL) NOPASSWD:ALL\n"
+    dest: "/etc/sudoers.d/{{ automation_user_name }}"
+    content: "{{ automation_user_name }} ALL=(ALL) NOPASSWD:ALL\n"
     mode: "0440"
