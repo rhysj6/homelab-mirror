@@ -1,0 +1,2 @@
+passlib
+infisical-python
