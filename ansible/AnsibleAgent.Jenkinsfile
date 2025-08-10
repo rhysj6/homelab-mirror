@@ -13,15 +13,15 @@ pipeline {
                     privileged: true
                     volumeMounts:
                     - mountPath: /var/lib/docker
-                        name: docker-graph-storage
+                    name: docker-graph-storage
                 - name: python
-                    image: python:3.21
-                    command:
+                image: python:3.21
+                command:
                     - sleep
                     - infinity
                 volumes:
                 - name: docker-graph-storage
-                    emptyDir: {}
+                emptyDir: {}
             """
         }
     }
