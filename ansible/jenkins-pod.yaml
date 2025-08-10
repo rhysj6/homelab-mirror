@@ -4,5 +4,7 @@ spec:
   containers:
   - name: ansible
     image: rhysj6/ansible-agent:latest
+    securityContext:
+      runAsUser: 1000
     tty: true
     command: ["/bin/sh", "-c", "while true; do sleep 30; done;"]
