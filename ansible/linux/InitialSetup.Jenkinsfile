@@ -15,7 +15,6 @@ pipeline {
             }
             steps {
                 container('ansible') {
-                    sh 'pip3 install -r ansible/linux/requirements.txt'
                     sh 'ansible-galaxy install -r ansible/linux/requirements.yml'
                     ansiblePlaybook(
                         playbook: 'ansible/linux/initial_setup.yml',
