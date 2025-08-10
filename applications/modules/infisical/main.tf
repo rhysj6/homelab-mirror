@@ -58,7 +58,7 @@ resource "kubernetes_deployment" "infisical" {
         service_account_name = kubernetes_service_account.infisical.metadata[0].name
         init_container {
           name  = "migration"
-          image = "infisical/infisical:v0.142.0-postgres"
+          image = "infisical/infisical:v0.146.0-postgres"
           command = ["npm", "run", "migration:latest"]
           env {
             name = "DB_CONNECTION_URI"
@@ -78,7 +78,7 @@ resource "kubernetes_deployment" "infisical" {
 
         container {
           name  = "infisical"
-          image = "infisical/infisical:v0.142.0-postgres"
+          image = "infisical/infisical:v0.146.0-postgres"
           env {
             name = "DB_CONNECTION_URI"
             value_from {
