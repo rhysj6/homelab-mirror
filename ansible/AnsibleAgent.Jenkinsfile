@@ -15,7 +15,7 @@ pipeline {
                   - mountPath: /var/lib/docker
                     name: docker-graph-storage
                 - name: python
-                  image: python:3.21
+                  image: python:alpine3.21
                   command:
                     - sleep
                     - infinity
