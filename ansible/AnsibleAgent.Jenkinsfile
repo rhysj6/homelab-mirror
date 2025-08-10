@@ -61,7 +61,7 @@ pipeline {
         stage('Docker build') {
             steps {
                 container('docker') {
-                    sh "docker build -t ansible-agent ansible/context"
+                    sh "docker build -t ansible-agent context"
                 }
             }
         }
