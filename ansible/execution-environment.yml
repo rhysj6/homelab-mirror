@@ -19,5 +19,3 @@ dependencies:
   - cargo
   python: requirements.txt
   galaxy: requirements.yml
-options:
-  user: jenkins
