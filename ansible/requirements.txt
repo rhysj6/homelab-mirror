@@ -1,2 +1,2 @@
 passlib
-infisical-python
+infisicalsdk

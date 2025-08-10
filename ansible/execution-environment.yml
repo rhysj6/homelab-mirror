@@ -15,7 +15,5 @@ dependencies:
   system:
   - openssh-clients
   - sshpass
-  - rust
-  - cargo
   python: requirements.txt
   galaxy: requirements.yml
