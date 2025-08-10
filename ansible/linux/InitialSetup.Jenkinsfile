@@ -15,7 +15,6 @@ pipeline {
             }
             steps {
                 container('ansible') {
-                    sh 'ansible-galaxy install -r ansible/linux/requirements.yml'
                     ansiblePlaybook(
                         playbook: 'ansible/linux/initial_setup.yml',
                         inventory: 'ansible/linux/inventory.ini',
