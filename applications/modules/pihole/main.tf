@@ -68,6 +68,9 @@ resource "kubernetes_deployment" "pihole" {
         app = "pihole"
       }
     }
+    strategy {
+      type = "Recreate"
+    }
     template {
       metadata {
         labels = {
