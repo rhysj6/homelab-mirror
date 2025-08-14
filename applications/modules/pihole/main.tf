@@ -85,7 +85,11 @@ resource "kubernetes_deployment" "pihole" {
             value = "Europe/London"
           }
           env {
-            name = "WEBPASSWORD"
+            name = "FTLCONF_misc_etc_dnsmasq_d"
+            value = "true"
+          }
+          env {
+            name = "FTLCONF_webserver_api_password"
             value_from {
               secret_key_ref {
                 name = kubernetes_secret_v1.password.metadata[0].name
