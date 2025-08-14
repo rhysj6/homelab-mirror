@@ -116,7 +116,7 @@ resource "kubernetes_deployment" "pihole" {
           }
           liveness_probe {
             http_get {
-              path = "/admin/"
+              path = "/admin/login"
               port = 80
             }
             initial_delay_seconds = 10
@@ -124,7 +124,7 @@ resource "kubernetes_deployment" "pihole" {
           }
           readiness_probe {
             http_get {
-              path = "/admin/"
+              path = "/admin/login"
               port = 80
             }
             initial_delay_seconds = 5
