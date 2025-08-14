@@ -112,6 +112,22 @@ resource "kubernetes_deployment" "pihole" {
             protocol       = "UDP"
             name           = "dns-udp"
           }
+          liveness_probe {
+            http_get {
+              path = "/admin/"
+              port = 80
+            }
+            initial_delay_seconds = 10
+            period_seconds        = 10
+          }
+          readiness_probe {
+            http_get {
+              path = "/admin/"
+              port = 80
+            }
+            initial_delay_seconds = 5
+            period_seconds        = 10
+          }
         }
         volume {
           name = "pihole-storage"
