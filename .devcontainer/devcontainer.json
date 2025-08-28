@@ -57,8 +57,16 @@
 				"github.copilot-chat",
 				"hashicorp.terraform",
 				"ms-azuretools.vscode-docker",
-				"starkwang.markdown"
-			]
+				"starkwang.markdown",
+				"ms-python.vscode-pylance",
+				"ms-python.debugpy",
+				"ms-python.python",
+				"ms-python.vscode-python-envs"
+			],
+			"settings": {
+				"python.terminal.activateEnvInCurrentTerminal": true,
+				"python.defaultInterpreterPath": "/usr/local/py-utils/venvs/ansible-core/bin/python"
+			}
 		}
 	}
 
