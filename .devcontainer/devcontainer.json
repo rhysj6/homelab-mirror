@@ -18,9 +18,6 @@
 			"tflint": "latest",
 			"terragrunt": "latest"
 		},
-		"ghcr.io/gickis/devcontainer-features/kubeseal:1": {
-			"version": "latest"
-		},
 		"ghcr.io/devcontainers-extra/features/ansible:2": {
 			"version": "latest"
 		},
