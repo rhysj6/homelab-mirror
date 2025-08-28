@@ -34,6 +34,7 @@
 	},
 
 	"initializeCommand": "cd .devcontainer && bash ensure-mount-sources",
+	"postCreateCommand": "cd .devcontainer && bash custom.sh",
 	"mounts": [
 		{
 			"source": "${env:HOME}${env:USERPROFILE}/.kube",
