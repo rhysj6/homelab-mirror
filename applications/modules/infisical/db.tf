@@ -29,7 +29,7 @@ resource "helm_release" "redis" {
     repository  = "https://charts.bitnami.com/bitnami"
     name        = "redis"
     namespace   = kubernetes_namespace.infisical.id
-    version     = "21.2.14"
+    version     = "22.0.7"
     max_history = 2
     values = [
         yamlencode({
