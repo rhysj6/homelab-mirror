@@ -48,7 +48,7 @@ provider "kubernetes" {
 
 module "test_cluster_config" {
   source       = "rhysj6/kubeconfig/rancher"
-  version      = "1.0.0"
+  version      = "1.1.0"
   cluster_name = "test"
 }
 
