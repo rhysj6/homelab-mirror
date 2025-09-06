@@ -36,7 +36,7 @@ terraform {
 
 module "cluster_config" {
   source       = "rhysj6/kubeconfig/rancher"
-  version      = "1.0.1"
+  version      = "1.1.0"
   cluster_name = "redcliff"
 }
 
