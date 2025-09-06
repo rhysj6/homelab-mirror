@@ -25,18 +25,6 @@ resource "kubernetes_secret_v1" "password" {
   type = "Opaque"
 }
 
-resource "kubernetes_config_map" "pihole_dnsmasq_config" {
-  metadata {
-    name      = "pihole-dnsmasq-config"
-    namespace = kubernetes_namespace.dns.metadata[0].name
-  }
-  data = {
-    "02-custom-config.conf" = templatefile("${path.module}/dnsmasq.conf", {
-      windows_domain = var.windows_domain
-    })
-  }
-}
-
 resource "kubernetes_persistent_volume_claim" "pihole" {
   metadata {
     name      = "pihole"
@@ -85,10 +73,6 @@ resource "kubernetes_deployment" "pihole" {
             value = "Europe/London"
           }
           env {
-            name = "FTLCONF_misc_etc_dnsmasq_d"
-            value = "true"
-          }
-          env {
             name = "FTLCONF_webserver_api_password"
             value_from {
               secret_key_ref {
@@ -100,10 +84,6 @@ resource "kubernetes_deployment" "pihole" {
           volume_mount {
             name       = "stateful-storage"
             mount_path = "/etc/pihole"
-          }
-          volume_mount {
-            name       = "dnsmasq-config"
-            mount_path = "/etc/dnsmasq.d"
           }
           port {
             container_port = 80
@@ -135,12 +115,6 @@ resource "kubernetes_deployment" "pihole" {
           name = "stateful-storage"
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.pihole.metadata[0].name
-          }
-        }
-        volume {
-          name = "dnsmasq-config"
-          config_map {
-            name = kubernetes_config_map.pihole_dnsmasq_config.metadata[0].name
           }
         }
       }
