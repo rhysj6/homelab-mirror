@@ -21,7 +21,7 @@ terraform {
     }
     minio = {
       source  = "aminueza/minio"
-      version = "3.5.4"
+      version = "3.6.5"
     }
     authentik = {
       source  = "goauthentik/authentik"
