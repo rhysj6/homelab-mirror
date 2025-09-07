@@ -69,6 +69,10 @@ resource "kubernetes_deployment" "infisical" {
               }
             }
           }
+          env {
+            name = "ALLOW_INTERNAL_IP_CONNECTIONS"
+            value = "true"
+          }
           env_from {
             secret_ref {
               name = kubernetes_secret.infisical_secrets.metadata[0].name
