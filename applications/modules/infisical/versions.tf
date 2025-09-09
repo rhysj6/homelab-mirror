@@ -7,7 +7,7 @@ terraform {
     }
     authentik = {
       source  = "goauthentik/authentik"
-      version = "2025.8.0"
+      version = "2025.8.1"
     }
     helm = {
       source  = "hashicorp/helm"
