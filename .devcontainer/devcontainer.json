@@ -62,7 +62,8 @@
 				"ms-python.vscode-pylance",
 				"ms-python.debugpy",
 				"ms-python.python",
-				"ms-python.vscode-python-envs"
+				"ms-python.vscode-python-envs",
+				"redhat.ansible"
 			],
 			"settings": {
 				"python.terminal.activateEnvInCurrentTerminal": true,
