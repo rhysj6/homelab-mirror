@@ -9,6 +9,10 @@
       project_id=infisical_project, env_slug=env,
       path='/init/automation_user',
       secret_name='username').value }}"
+    ansible_vault_minio_root_password: "{{ lookup('infisical.vault.read_secrets',
+      project_id=infisical_project, env_slug=env,
+      path='/minio',
+      secret_name='root_password').value }}"
   delegate_to: localhost
 
 # this actually puts it in to a template so I can have multiple passwords in yaml format
