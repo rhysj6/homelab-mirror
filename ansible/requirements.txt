@@ -1,2 +1,4 @@
 passlib
 infisicalsdk
+proxmoxer
+requests
