@@ -40,3 +40,4 @@ terraform.rc
 .env
 backend.hcl
 **kubeconfig**
+.lock
