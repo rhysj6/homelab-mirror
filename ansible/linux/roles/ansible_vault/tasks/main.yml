@@ -1,0 +1,26 @@
+- name: Set vault password as vault pass
+  ansible.builtin.set_fact:
+    ansible_vault_pass: "{{ lookup('ansible.builtin.file', vault_pass_file) }}"
+  delegate_to: localhost
+
+- name: Get passwords from Infisical
+  ansible.builtin.set_fact:
+    ansible_vault_automation_user_name: "{{ lookup('infisical.vault.read_secrets',
+      project_id=infisical_project, env_slug=env,
+      path='/init/automation_user',
+      secret_name='username').value }}"
+  delegate_to: localhost
+
+# this actually puts it in to a template so I can have multiple passwords in yaml format
+- name: Create templated yaml structure
+  ansible.builtin.set_fact:
+    ansible_vault_encrypted_content: "{{ lookup('ansible.builtin.template', 'vault.j2') }}"
+  delegate_to: localhost
+
+- name: Write the content to a new file and encrypt it
+  ansible.builtin.copy:
+    content: "{{ ansible_vault_encrypted_content | ansible.builtin.vault(ansible_vault_pass) }}"
+    dest: "group_vars/all/vault"
+    decrypt: false
+    mode: '0600'
+  delegate_to: localhost

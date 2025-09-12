@@ -1,0 +1,5 @@
+- name: Configure Ansible Vault
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - ansible_vault
