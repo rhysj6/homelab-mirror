@@ -25,7 +25,7 @@ pipeline {
                 container('ansible') {
                     withCredentials([sshUserPrivateKey(credentialsId: 'initial_setup_private_key', 
                         keyFileVariable: 'ANSIBLE_PRIVATE_KEY_FILE', usernameVariable: 'SSH_USER')]) {
-                        sh 'ansible-playbook -i private/ansible/inventory.yml ansible/linux/initial_setup.yml --become'
+                        sh 'ansible-playbook -i private/ansible/inventory.yml ansible/linux/playbooks/initial_setup.yml --become'
                     }
                 }
             }
