@@ -1,5 +1,6 @@
 - name: Main play for all servers
   hosts: all
+  become: true
   roles:
     - role: automation_user
     - role: passwordless_sudo

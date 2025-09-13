@@ -1,3 +1,8 @@
+- name: Ensure alloy group exists
+  become: true
+  ansible.builtin.group:
+    name: alloy
+    state: present
 - name: Ensure /etc/alloy directory exists
   become: true
   ansible.builtin.file:
@@ -13,6 +18,7 @@
     src: config.alloy.j2
     dest: /etc/alloy/default.alloy
     mode: "0644"
+
 - name: Install Grafana Alloy
   ansible.builtin.include_role:
     name: grafana.grafana.alloy
