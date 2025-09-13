@@ -10,15 +10,8 @@
     ansible_vault_minio_root_password: "{{ lookup(vault_plugin, project_id=infisical_project, env_slug=env,
       path='/minio', secret_name='root_password').value }}"
 
-    ansible_vault_proxmox_greenhill_user_name: "{{ lookup(vault_plugin, project_id=infisical_project,
-      env_slug=env, path='/proxmox', secret_name='greenhill_user').value }}"
-    ansible_vault_proxmox_greenhill_token_id: "{{ lookup(vault_plugin, project_id=infisical_project,
-      env_slug=env, path='/proxmox', secret_name='greenhill_token_id').value }}"
-    ansible_vault_proxmox_greenhill_secret: "{{ lookup(vault_plugin, project_id=infisical_project,
-      env_slug=env, path='/proxmox', secret_name='greenhill_secret').value }}"
-    ansible_vault_proxmox_greenhill_host: "{{ lookup(vault_plugin, project_id=infisical_project,
-      env_slug=env, path='/proxmox', secret_name='greenhill_host').value }}"
-
+    ansible_vault_proxmox: "{{ lookup(vault_plugin, project_id=infisical_project,
+      env_slug=env, path='/proxmox') }}"
   delegate_to: localhost
 
 # this actually puts it in to a template so I can have multiple passwords in yaml format

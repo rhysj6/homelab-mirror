@@ -4,8 +4,6 @@ minio:
     root_password: "{{ ansible_vault_minio_root_password }}"
 
 proxmox:
-    greenhill:
-        user: "{{ ansible_vault_proxmox_greenhill_user_name }}"
-        token_id: "{{ ansible_vault_proxmox_greenhill_token_id }}"
-        secret: "{{ ansible_vault_proxmox_greenhill_secret }}"
-        host: "{{ ansible_vault_proxmox_greenhill_host }}"
+{% for item in ansible_vault_proxmox %}
+    {{ item.key }}: {{ item.value }}
+{% endfor %}
