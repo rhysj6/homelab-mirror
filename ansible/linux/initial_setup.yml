@@ -1,4 +1,4 @@
-- name: Main play for all servers
+- name: Initial linux setup
   hosts: all
   become: true
   roles:
