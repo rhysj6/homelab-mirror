@@ -1,0 +1,13 @@
+infisical_project: 962f409d-8e60-41b2-88c4-13d313546083
+env: prod
+vault_plugin: infisical.vault.read_secrets
+
+proxmox:
+  gh_host: "{{ lookup(vault_plugin, project_id=infisical_project,
+      env_slug=env, path='/proxmox', secret_name='gh_host').value }}"
+  gh_user: "{{ lookup(vault_plugin, project_id=infisical_project,
+      env_slug=env, path='/proxmox', secret_name='gh_user').value }}"
+  gh_token_id: "{{ lookup(vault_plugin, project_id=infisical_project,
+      env_slug=env, path='/proxmox', secret_name='gh_token_id').value }}"
+  gh_secret: "{{ lookup(vault_plugin, project_id=infisical_project,
+      env_slug=env, path='/proxmox', secret_name='gh_secret').value }}"

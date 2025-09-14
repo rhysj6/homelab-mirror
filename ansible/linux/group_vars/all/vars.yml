@@ -1,3 +1,0 @@
-infisical_project: 962f409d-8e60-41b2-88c4-13d313546083
-env: prod
-vault_plugin: infisical.vault.read_secrets
