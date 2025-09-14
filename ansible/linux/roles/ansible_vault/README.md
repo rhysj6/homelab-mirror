@@ -1,1 +1,0 @@
-This role creates and managed the Ansible Vault file, it connects to an Infisical server to fetch secrets and store them in the vault file. The aim of this is to be able to manage secrets in a centralised way but also enables us to have some ansible variables easily accessible should the Infisical server be down.

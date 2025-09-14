@@ -1,9 +1,0 @@
-automation_user: {{ ansible_vault_automation_user_name }}
-minio:
-    root_user: root
-    root_password: "{{ ansible_vault_minio_root_password }}"
-
-proxmox:
-{% for item in ansible_vault_proxmox %}
-    {{ item.key }}: {{ item.value }}
-{% endfor %}
