@@ -1,0 +1,21 @@
+- name: Check replication status for each instance
+  ansible.builtin.command: mc admin replicate status {{ item.name }}
+  loop: "{{ aliases }}"
+  register: minio_replication_status
+  changed_when: false
+  ignore_errors: true
+  run_once: true
+
+- name: Set fact if any instance needs replication
+  ansible.builtin.set_fact:
+    minio_replication_needed: true
+  when: >
+    minio_replication_status.results | selectattr('stdout', 'search', 'SiteReplication is not enabled') | list | length > 0
+  run_once: true
+
+- name: Configure site replication if needed
+  ansible.builtin.shell: >
+    mc admin replicate add {{ aliases | map(attribute='name') | join(' ') }} --replicate-ilm-expiry
+  when: minio_replication_needed | default(false)
+  run_once: true
+  changed_when: true

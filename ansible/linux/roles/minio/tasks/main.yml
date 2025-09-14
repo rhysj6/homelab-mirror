@@ -21,3 +21,7 @@
 - name: Ensure MinIO client is configured
   ansible.builtin.include_tasks:
     file: configure_client.yml
+
+- name: Ensure MinIO replication is configured
+  ansible.builtin.include_tasks:
+    file: configure_replication.yml
