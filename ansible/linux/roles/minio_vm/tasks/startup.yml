@@ -1,0 +1,31 @@
+- name: Get VM info
+  community.proxmox.proxmox_vm_info:
+    api_user: "{{ minio_vm_api_user }}"
+    api_token_id: "{{ minio_vm_token_id }}"
+    api_token_secret: "{{ minio_vm_token_secret }}"
+    api_host: "{{ minio_vm_host }}"
+    node: "{{ minio_vm_node }}"
+    vmid: "{{ minio_vm_id }}"
+  register: minio_vm_info
+  delegate_to: localhost
+
+- name: Start VM
+  community.proxmox.proxmox_kvm:
+    api_user: "{{ minio_vm_api_user }}"
+    api_token_id: "{{ minio_vm_token_id }}"
+    api_token_secret: "{{ minio_vm_token_secret }}"
+    api_host: "{{ minio_vm_host }}"
+    vmid: "{{ minio_vm_id }}"
+    node: "{{ minio_vm_node }}"
+    state: started
+  when: minio_vm_info.proxmox_vms[0].status != 'running'
+  delegate_to: localhost
+
+- name: Wait for SSH to come up
+  ansible.builtin.wait_for:
+    host: "{{ minio_vm_ip }}"
+    port: 22
+    delay: 10
+    timeout: 300
+  when: minio_vm_info.proxmox_vms[0].status != 'running'
+  delegate_to: localhost

@@ -1,0 +1,12 @@
+- name: Create additional data disk
+  community.proxmox.proxmox_disk:
+    api_user: "{{ minio_vm_api_user }}"
+    api_token_id: "{{ minio_vm_token_id }}"
+    api_token_secret: "{{ minio_vm_token_secret }}"
+    api_host: "{{ minio_vm_host }}"
+    vmid: "{{ minio_vm_id }}"
+    disk: virtio0
+    storage: "{{ minio_vm_storage }}"
+    size: 1000
+    state: present
+  delegate_to: localhost

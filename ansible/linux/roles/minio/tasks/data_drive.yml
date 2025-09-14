@@ -1,0 +1,47 @@
+- name: Gather mount facts
+  ansible.builtin.setup:
+    filter: ansible_mounts
+
+- name: Set minio_skip_data_drive_setup fact if /data is already mounted
+  ansible.builtin.set_fact:
+    minio_skip_data_drive_setup: true
+  when: ansible_mounts | selectattr('mount', 'equalto', '/data') | list | length > 0
+
+- name: Create a single partition on /dev/vda if it doesn't exist
+  community.general.parted:
+    device: /dev/vda
+    number: 1
+    state: present
+    part_type: primary
+    fs_type: ext4
+  when: not minio_skip_data_drive_setup | default(false)
+
+- name: Format /dev/vda1 as ext4 if not already formatted
+  community.general.filesystem:
+    fstype: ext4
+    dev: /dev/vda1
+  when: not minio_skip_data_drive_setup | default(false)
+
+- name: Ensure /data exists
+  ansible.builtin.file:
+    path: /data
+    state: directory
+    mode: '0755'
+  when: not minio_skip_data_drive_setup | default(false)
+
+- name: Ensure data drive is mounted
+  ansible.posix.mount:
+    path: /data
+    src: /dev/vda1
+    fstype: ext4
+    opts: defaults
+    state: mounted
+  when: not minio_skip_data_drive_setup | default(false)
+
+- name: Ensure /data/minio exists
+  ansible.builtin.file:
+    path: /data/minio
+    state: directory
+    mode: '0755'
+    owner: minio-user
+    group: minio-user

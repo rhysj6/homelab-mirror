@@ -1,0 +1,15 @@
+- name: Create VM
+  ansible.builtin.include_tasks:
+    file: vm.yml
+
+- name: VM Networking
+  ansible.builtin.include_tasks:
+    file: network.yml
+
+- name: Storage
+  ansible.builtin.include_tasks:
+    file: storage.yml
+
+- name: Start VM
+  ansible.builtin.include_tasks:
+    file: startup.yml

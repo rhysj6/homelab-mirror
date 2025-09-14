@@ -1,0 +1,16 @@
+- name: Create VM from clone
+  community.proxmox.proxmox_kvm:
+    api_user: "{{ minio_vm_api_user }}"
+    api_token_id: "{{ minio_vm_token_id }}"
+    api_token_secret: "{{ minio_vm_token_secret }}"
+    api_host: "{{ minio_vm_host }}"
+    node: "{{ minio_vm_node }}"
+    newid: "{{ minio_vm_id }}"
+    name: "minio-{{ minio_vm_instance_number }}"
+    clone: ubuntu-24-cloud
+    vmid: "{{ minio_vm_clone_id }}"
+    storage: "{{ minio_vm_storage }}"
+    full: true
+    cores: 4
+    memory: 4096
+  delegate_to: localhost

@@ -1,0 +1,49 @@
+- name: Check if minio is installed
+  ansible.builtin.command: minio --version
+  register: minio_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Check if minio config file exists
+  ansible.builtin.stat:
+    path: /etc/default/minio
+  register: minio_config
+  changed_when: false
+
+- name: Write template MinIO config file
+  ansible.builtin.template:
+    src: minio.j2
+    dest: /etc/default/minio
+    mode: '0644'
+  when: not minio_config.stat.exists
+
+- name: Download MinIO server
+  ansible.builtin.get_url:
+    url: https://dl.min.io/server/minio/release/linux-amd64/minio.deb
+    dest: /tmp/minio.deb
+    mode: '0755'
+  when: minio_check.rc != 0
+
+- name: Install MinIO server
+  ansible.builtin.apt:
+    deb: /tmp/minio.deb
+    state: present
+  when: minio_check.rc != 0
+  notify:
+    - Verify minio installation
+
+- name: Open firewall for MinIO
+  ansible.builtin.ufw:
+    rule: allow
+    port: '9000,9001'
+    proto: tcp
+  when: minio_check.rc == 0
+
+- name: Ensure MinIO service is started and enabled
+  ansible.builtin.service:
+    name: minio
+    state: started
+    enabled: true
+  when: minio_check.rc == 0
+  notify:
+    - Verify minio service is running

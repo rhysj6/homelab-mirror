@@ -1,0 +1,19 @@
+- name: Ensure minio group exists
+  ansible.builtin.group:
+    name: minio-user
+    system: true
+- name: Ensure minio user exists
+  ansible.builtin.user:
+    name: minio-user
+    system: true
+    create_home: false
+    group: minio-user
+    shell: /sbin/nologin
+
+- name: Ensure /data/minio is owned by minio user
+  ansible.builtin.file:
+    path: /data/minio
+    owner: minio-user
+    group: minio-user
+    state: directory
+    mode: '0755'

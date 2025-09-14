@@ -1,0 +1,14 @@
+- name: Verify mc installation
+  ansible.builtin.command: mc --version
+  changed_when: false
+
+- name: Verify minio installation
+  ansible.builtin.command: minio --version
+  changed_when: false
+
+- name: Verify minio service is running
+  ansible.builtin.service_facts:
+  register: minio_service_facts
+  changed_when: false
+  failed_when: "'minio.service' not in minio_service_facts.services or minio_service_facts.services['minio.service'].state != 'running'"
+  ignore_errors: true

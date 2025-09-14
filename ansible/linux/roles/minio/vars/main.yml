@@ -1,0 +1,7 @@
+minio_root_user: "{{ lookup(vault_plugin,
+  project_id=infisical_project, env_slug=env,
+  path='/minio', secret_name='root_user').value }}"
+
+minio_root_password: "{{ lookup(vault_plugin,
+  project_id=infisical_project, env_slug=env,
+  path='/minio', secret_name='root_password').value }}"

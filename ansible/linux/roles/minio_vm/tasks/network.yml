@@ -1,0 +1,27 @@
+- name: Update NIC
+  community.proxmox.proxmox_nic:
+    api_user: "{{ minio_vm_api_user }}"
+    api_token_id: "{{ minio_vm_token_id }}"
+    api_token_secret: "{{ minio_vm_token_secret }}"
+    api_host: "{{ minio_vm_host }}"
+    vmid: "{{ minio_vm_id }}"
+    interface: net0
+    bridge: vmbr0
+    tag: "{{ minio_vm_vlan_tag }}"
+    model: virtio
+    mac: 'BC:24:11:11:7E:{{ "%02x" | format(minio_vm_instance_number) }}'
+  delegate_to: localhost
+
+- name: Update vm cloud init config
+  community.proxmox.proxmox_kvm:
+    api_user: "{{ minio_vm_api_user }}"
+    api_token_id: "{{ minio_vm_token_id }}"
+    api_token_secret: "{{ minio_vm_token_secret }}"
+    api_host: "{{ minio_vm_host }}"
+    vmid: "{{ minio_vm_id }}"
+    node: "{{ minio_vm_node }}"
+    ipconfig:
+      ipconfig0: 'ip={{ minio_vm_ip }}/24,gw={{ minio_vm_gateway }}'
+    update: true
+  changed_when: false
+  delegate_to: localhost

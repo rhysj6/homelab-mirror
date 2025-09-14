@@ -1,0 +1,19 @@
+- name: Ensure MinIO client is installed
+  ansible.builtin.include_tasks:
+    file: minio_client.yml
+
+- name: Ensure user and group for minio exist
+  ansible.builtin.include_tasks:
+    file: user_group.yml
+
+# - name: Ensure tls certs are in place
+#   ansible.builtin.include_tasks:
+#     file: tls.yml
+
+- name: Ensure data drive is mounted
+  ansible.builtin.include_tasks:
+    file: data_drive.yml
+
+- name: Ensure MinIO server is installed
+  ansible.builtin.include_tasks:
+    file: minio_server.yml

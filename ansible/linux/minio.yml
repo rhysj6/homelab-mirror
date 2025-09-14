@@ -1,0 +1,38 @@
+- name: Create VMs
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: minio_vm
+      vars:
+        minio_vm_api_user: "{{ proxmox.gh_user }}"
+        minio_vm_token_id: "{{ proxmox.gh_token_id }}"
+        minio_vm_token_secret: "{{ proxmox.gh_secret }}"
+        minio_vm_host: "{{ proxmox.gh_host }}"
+        minio_vm_node: clifton
+        minio_vm_instance_number: 1
+        minio_vm_id: 401
+        minio_vm_storage: BX-2TB-1
+        minio_vm_ip: 10.10.0.141
+        minio_vm_gateway: 10.10.0.1
+        minio_vm_vlan_tag: 30
+        minio_vm_clone_id: 8000
+    - role: minio_vm
+      vars:
+        minio_vm_api_user: "{{ proxmox.gh_user }}"
+        minio_vm_token_id: "{{ proxmox.gh_token_id }}"
+        minio_vm_token_secret: "{{ proxmox.gh_secret }}"
+        minio_vm_host: "{{ proxmox.gh_host }}"
+        minio_vm_node: filton
+        minio_vm_instance_number: 2
+        minio_vm_id: 402
+        minio_vm_storage: Datastore_2
+        minio_vm_ip: 10.10.0.142
+        minio_vm_gateway: 10.10.0.1
+        minio_vm_vlan_tag: 30
+        minio_vm_clone_id: 8100
+- name: Setup MinIO
+  hosts: minio
+  become: true
+  gather_facts: true
+  roles:
+    - role: minio
