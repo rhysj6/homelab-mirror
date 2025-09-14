@@ -1,6 +1,6 @@
 - name: Ensure MinIO client is installed
   ansible.builtin.include_tasks:
-    file: minio_client.yml
+    file: install_client.yml
 
 - name: Ensure user and group for minio exist
   ansible.builtin.include_tasks:
@@ -17,3 +17,7 @@
 - name: Ensure MinIO server is installed
   ansible.builtin.include_tasks:
     file: minio_server.yml
+
+- name: Ensure MinIO client is configured
+  ansible.builtin.include_tasks:
+    file: configure_client.yml

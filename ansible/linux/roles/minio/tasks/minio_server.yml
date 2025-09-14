@@ -33,7 +33,7 @@
     - Verify minio installation
 
 - name: Open firewall for MinIO
-  ansible.builtin.ufw:
+  community.general.ufw:
     rule: allow
     port: '9000,9001'
     proto: tcp
