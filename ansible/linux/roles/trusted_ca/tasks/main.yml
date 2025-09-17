@@ -1,0 +1,13 @@
+- name: Make sure the folder exists (Debian, Ubuntu)
+  ansible.builtin.file:
+    path: /usr/local/share/ca-certificates
+    state: directory
+    mode: '0755'
+
+# Note that the .crt is actually a .pem renamed
+- name: Copy the certificate (Debian, Ubuntu)
+  ansible.builtin.copy:
+    content: "{{ trusted_ca_cert }}"
+    dest: "/usr/local/share/ca-certificates/homelab-ca.cer"
+    mode: '0644'
+  notify: Update CA Trust

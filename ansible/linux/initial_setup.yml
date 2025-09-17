@@ -2,6 +2,7 @@
   hosts: all
   become: true
   roles:
+    - role: trusted_ca
     - role: automation_user
     - role: passwordless_sudo
       vars:
