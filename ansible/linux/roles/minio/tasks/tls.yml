@@ -1,0 +1,66 @@
+- name: Ensure CA certificate directory exists
+  ansible.builtin.file:
+    path: "/opt/minio/certs/CAs"
+    state: directory
+    mode: '0755'
+    owner: minio-user
+    group: minio-user
+
+- name: Ensure CA certificate is present
+  ansible.builtin.copy:
+    content: "{{ minio_ca_cert }}"
+    dest: "/opt/minio/certs/CAs/homelab-ca.crt"
+    mode: '0644'
+    owner: minio-user
+    group: minio-user
+
+- name: Check if TLS certificate already exist
+  ansible.builtin.stat:
+    path: "/opt/minio/certs/public.crt"
+  register: minio_tls_cert_file
+  changed_when: false
+
+- name: Get certificate information
+  community.crypto.x509_certificate_info:
+    path: /opt/minio/certs/public.crt
+    # for valid_at, invalid_at and valid_in
+    valid_at:
+      quarter: "+12w"
+  register: minio_tls_cert_info
+  when: minio_tls_cert_file.stat.exists
+  changed_when: false
+
+- name: Register TLS certificate facts
+  ansible.builtin.set_fact:
+    minio_generate_tls_cert: >-
+      {{
+        not minio_tls_cert_file.stat.exists or
+        (
+          minio_tls_cert_info.valid_in.quarter is defined and
+          (not minio_tls_cert_info.valid_in.quarter)
+        )
+      }}
+
+- name: Generate private key
+  community.crypto.openssl_privatekey:
+    path: /opt/minio/certs/private.key
+    owner: minio-user
+    group: minio-user
+    mode: '0600'
+  when: minio_generate_tls_cert
+
+- name: Generate an Certificate Signing Request
+  community.crypto.openssl_csr:
+    path: /opt/minio/certs/private.csr
+    privatekey_path: /opt/minio/certs/private.key
+    subject_alt_name: 'IP:{{ ansible_default_ipv4.address }},DNS:{{ ansible_fqdn }},DNS:{{ ansible_hostname }}'
+  when: minio_generate_tls_cert
+
+- name: Generate a signed TLS certificate
+  community.crypto.x509_certificate:
+    path: /opt/minio/certs/public.crt
+    csr_path: /opt/minio/certs/private.csr
+    ownca_path: /opt/minio/certs/CAs/homelab-ca.cer
+    ownca_privatekey_content: "{{ minio_ca_key }}"
+    provider: ownca
+  when: minio_generate_tls_cert

@@ -6,9 +6,9 @@
   ansible.builtin.include_tasks:
     file: user_group.yml
 
-# - name: Ensure tls certs are in place
-#   ansible.builtin.include_tasks:
-#     file: tls.yml
+- name: Ensure tls certs are in place
+  ansible.builtin.include_tasks:
+    file: tls.yml
 
 - name: Ensure data drive is mounted
   ansible.builtin.include_tasks:
