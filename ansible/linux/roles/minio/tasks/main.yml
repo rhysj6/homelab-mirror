@@ -10,6 +10,10 @@
   ansible.builtin.include_tasks:
     file: tls.yml
 
+- name: Ensure CA cert is in place
+  ansible.builtin.include_role:
+    name: trusted_ca
+
 - name: Ensure data drive is mounted
   ansible.builtin.include_tasks:
     file: data_drive.yml
