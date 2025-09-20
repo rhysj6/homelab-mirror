@@ -9,7 +9,6 @@ controller:
         fullNameFieldName: "name"
         groupsFieldName: "groups"
         logoutFromOpenidProvider: false
-        pkceEnabled: true
         serverConfiguration:
           wellKnown:
             scopesOverride: "openid profile email"
