@@ -30,6 +30,20 @@
         minio_vm_gateway: 10.10.0.1
         minio_vm_vlan_tag: 30
         minio_vm_clone_id: 8100
+    - role: minio_vm
+      vars:
+        minio_vm_api_user: "{{ proxmox.ch_user }}"
+        minio_vm_token_id: "{{ proxmox.ch_token_id }}"
+        minio_vm_token_secret: "{{ proxmox.ch_secret }}"
+        minio_vm_host: "{{ proxmox.ch_host }}"
+        minio_vm_node: zeus
+        minio_vm_instance_number: 3
+        minio_vm_id: 403
+        minio_vm_storage: local-lvm
+        minio_vm_ip: 192.64.0.143
+        minio_vm_gateway: 192.64.0.1
+        minio_vm_vlan_tag: 4001
+        minio_vm_clone_id: 8000
 - name: Setup MinIO
   hosts: minio
   become: true

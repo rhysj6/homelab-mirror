@@ -3,3 +3,5 @@ aliases:
     ip_address: 10.10.0.141
   - name: minio-2
     ip_address: 10.10.0.142
+  - name: minio-3
+    ip_address: 192.64.0.143
