@@ -37,13 +37,11 @@
     rule: allow
     port: '9000,9001'
     proto: tcp
-  when: minio_check.rc == 0
 
 - name: Ensure MinIO service is started and enabled
   ansible.builtin.service:
     name: minio
     state: started
     enabled: true
-  when: minio_check.rc == 0
   notify:
     - Verify minio service is running

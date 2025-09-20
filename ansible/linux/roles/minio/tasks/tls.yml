@@ -60,7 +60,7 @@
   community.crypto.x509_certificate:
     path: /opt/minio/certs/public.crt
     csr_path: /opt/minio/certs/private.csr
-    ownca_path: /opt/minio/certs/CAs/homelab-ca.cer
+    ownca_path: /opt/minio/certs/CAs/homelab-ca.crt
     ownca_privatekey_content: "{{ minio_ca_key }}"
     provider: ownca
   when: minio_generate_tls_cert
