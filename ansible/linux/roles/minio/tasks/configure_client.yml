@@ -1,22 +1,5 @@
-- name: Read mc config
-  ansible.builtin.slurp:
-    src: $HOME/.mc/config.json
-  register: minio_mc_config_raw
-  ignore_errors: true
-
-- name: Parse mc config JSON
-  ansible.builtin.set_fact:
-    minio_mc_config: "{{ minio_mc_config_raw.content | from_json }}"
-  when: minio_mc_config_raw is defined and minio_mc_config_raw.failed is not defined
-
-- name: Get existing alias names
-  ansible.builtin.set_fact:
-    minio_existing_aliases: "{{ minio_mc_config.aliases | map(attribute='name') | list }}"
-  when: minio_mc_config.aliases is defined
-
-- name: Add missing aliases
+- name: Set existing aliases
   ansible.builtin.shell: >
     mc alias set {{ item.name }} https://{{ item.ip_address }}:9000 {{ minio_root_user }} {{ minio_root_password }}
   loop: "{{ aliases }}"
-  changed_when: item.name not in minio_existing_aliases | default([])
-  when: item.name not in minio_existing_aliases | default([])
+  changed_when: false
