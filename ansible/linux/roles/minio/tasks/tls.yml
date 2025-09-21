@@ -69,13 +69,12 @@
   register: minio_tls_cert
   when: minio_generate_tls_cert
 
-- name: Assemble full certificate chain (leaf, sub-CA, root-CA)
+- name: Assemble full certificate chain
   ansible.builtin.copy:
     dest: /opt/minio/certs/public.crt
     content: |
       {{ minio_tls_cert.certificate }}
       {{ minio_ca_cert }}
-      {{ minio_root_ca_cert }}
     owner: minio-user
     group: minio-user
     mode: '0644'
