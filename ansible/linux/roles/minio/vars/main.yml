@@ -6,9 +6,13 @@ minio_root_password: "{{ lookup(vault_plugin,
   project_id=infisical_project, env_slug=env,
   path='/minio', secret_name='root_password').value }}"
 
+minio_root_ca_cert: "{{ lookup(vault_plugin,
+  project_id=infisical_project, env_slug=env,
+  path='/pki', secret_name='rootca_crt').value }}"
+
 minio_ca_cert: "{{ lookup(vault_plugin,
   project_id=infisical_project, env_slug=env,
-  path='/pki', secret_name='subca_cer').value }}"
+  path='/pki', secret_name='subca_crt').value }}"
 
 minio_ca_key: "{{ lookup(vault_plugin,
   project_id=infisical_project, env_slug=env,

@@ -25,7 +25,7 @@
     path: /opt/minio/certs/public.crt
     # for valid_at, invalid_at and valid_in
     valid_at:
-      quarter: "+12w"
+      year: "+52w"
   register: minio_tls_cert_info
   when: minio_tls_cert_file.stat.exists
   changed_when: false
@@ -36,8 +36,8 @@
       {{
         not minio_tls_cert_file.stat.exists or
         (
-          minio_tls_cert_info.valid_in.quarter is defined and
-          (not minio_tls_cert_info.valid_in.quarter)
+          minio_tls_cert_info.valid_in.year is defined and
+          (not minio_tls_cert_info.valid_in.year)
         )
       }}
 
@@ -53,14 +53,30 @@
   community.crypto.openssl_csr:
     path: /opt/minio/certs/private.csr
     privatekey_path: /opt/minio/certs/private.key
+    common_name: "{{ ansible_fqdn }}"
     subject_alt_name: 'IP:{{ ansible_default_ipv4.address }},DNS:{{ ansible_fqdn }},DNS:{{ ansible_hostname }}'
   when: minio_generate_tls_cert
 
 - name: Generate a signed TLS certificate
   community.crypto.x509_certificate:
-    path: /opt/minio/certs/public.crt
+    path: /opt/minio/certs/public-leaf.crt
     csr_path: /opt/minio/certs/private.csr
     ownca_path: /opt/minio/certs/CAs/homelab-ca.crt
     ownca_privatekey_content: "{{ minio_ca_key }}"
     provider: ownca
+    ownca_not_after: "+824d"
+    return_content: true
+  register: minio_tls_cert
+  when: minio_generate_tls_cert
+
+- name: Assemble full certificate chain (leaf, sub-CA, root-CA)
+  ansible.builtin.copy:
+    dest: /opt/minio/certs/public.crt
+    content: |
+      {{ minio_tls_cert.certificate }}
+      {{ minio_ca_cert }}
+      {{ minio_root_ca_cert }}
+    owner: minio-user
+    group: minio-user
+    mode: '0644'
   when: minio_generate_tls_cert
