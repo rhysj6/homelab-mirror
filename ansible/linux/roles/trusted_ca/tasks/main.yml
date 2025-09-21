@@ -8,6 +8,6 @@
 - name: Copy the certificate (Debian, Ubuntu)
   ansible.builtin.copy:
     content: "{{ trusted_ca_cert }}"
-    dest: "/usr/local/share/ca-certificates/homelab-ca.crt"
+    dest: "/usr/local/share/ca-certificates/root-ca.crt"
     mode: '0644'
   notify: Update CA Trust
