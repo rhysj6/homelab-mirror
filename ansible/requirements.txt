@@ -2,3 +2,4 @@ passlib
 infisicalsdk
 proxmoxer
 requests
+httpx
