@@ -21,5 +21,9 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "5.9.0"
     }
+    infisical = {
+      source = "Infisical/infisical"
+      version = "0.15.37"
+    }
   }
 }

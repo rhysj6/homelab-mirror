@@ -79,3 +79,41 @@ resource "kubernetes_manifest" "cluster_issuer" {
   }
   depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager, kubernetes_secret.cluster_issuer]
 }
+
+
+
+resource "kubernetes_secret" "infisical_cluster_issuer" {
+  metadata {
+    name      = "infisical-cluster-issuer"
+    namespace = kubernetes_namespace.cert_manager.metadata[0].name
+  }
+  data = {
+    "clientSecret" = infisical_identity_universal_auth_client_secret.cert-manager.client_secret
+  }
+}
+
+resource "kubernetes_manifest" "infisical_cluster_issuer" {
+  count = (local.infisical_pki_crd_exists ? 1 : 0) ## Only create the ClusterIssuer if the CRD exists (will require a re-run if the CRD is created by the Helm release)
+  manifest = {
+    apiVersion = "infisical-issuer.infisical.com/v1alpha1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "infisical"
+    }
+    spec = {
+      url = data.infisical_secrets.metadata.secrets["infisical_url"].value
+      projectId = data.infisical_secrets.metadata.secrets["certs_project_id"].value
+      certificateTemplateName = "default"
+      authentication = {
+        universalAuth = {
+          clientId = infisical_identity_universal_auth_client_secret.cert-manager.client_id
+          secretRef = {
+            name = kubernetes_secret.infisical_cluster_issuer.metadata[0].name
+            key  = "clientSecret"
+          }
+        }
+      }
+    }
+  }
+  depends_on = [kubernetes_namespace.cert_manager, helm_release.cert_manager, kubernetes_secret.cluster_issuer]
+}
