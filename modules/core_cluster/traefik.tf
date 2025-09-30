@@ -31,6 +31,7 @@ resource "helm_release" "traefik" {
 }
 
 resource "kubernetes_manifest" "local_only_middleware" {
+  count = local.traefik_crd_exists ? 1 : 0
   manifest = {
     apiVersion = "traefik.io/v1alpha1"
     kind       = "Middleware"
@@ -48,6 +49,7 @@ resource "kubernetes_manifest" "local_only_middleware" {
 
 
 resource "kubernetes_manifest" "authentik_middleware" {
+  count = local.traefik_crd_exists ? 1 : 0
   manifest = {
     apiVersion = "traefik.io/v1alpha1"
     kind       = "Middleware"
