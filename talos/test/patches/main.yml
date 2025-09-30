@@ -25,3 +25,9 @@
 - op: add
   path: /cluster/allowSchedulingOnControlPlanes
   value: true
+
+- op: add 
+  path: /machine/features
+  value:
+    kubePrism:
+      enabled: false
