@@ -1,0 +1,27 @@
+- op: replace
+  path: /machine/controlPlane
+  value: 
+    scheduler:
+      disabled: false
+
+- op: replace
+  path: /machine/install
+  value:
+    diskSelector:
+        size: '>= 16GB' # Disk size.
+    wipe: true
+
+- op: replace
+  path: /cluster/network
+  value: 
+    cni:
+      name: none
+
+- op: replace
+  path: /cluster/proxy
+  value: 
+    disabled: true
+
+- op: add
+  path: /cluster/allowSchedulingOnControlPlanes
+  value: true

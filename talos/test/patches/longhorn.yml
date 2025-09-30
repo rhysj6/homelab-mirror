@@ -1,0 +1,30 @@
+# - op: add
+#   path: /customization
+#   value: 
+#     systemExtensions: 
+#       officialExtensions: 
+#         - siderolabs/iscsi-tools
+#         - siderolabs/util-linux-tools
+
+- op: add
+  path: /machine/kubelet/extraMounts
+  value:
+    - destination: /var/lib/longhorn
+      type: bind
+      source: /var/lib/longhorn
+      options:
+        - bind
+        - rshared
+        - rw
+
+- op: add
+  path: /machine/sysctls
+  value:
+    vm.nr_hugepages: "1024"
+
+- op: add
+  path: /machine/kernel
+  value:
+    modules:
+      - name: nvme_tcp
+      - name: vfio_pci
