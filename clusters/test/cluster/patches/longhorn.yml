@@ -1,11 +1,3 @@
-# - op: add
-#   path: /customization
-#   value: 
-#     systemExtensions: 
-#       officialExtensions: 
-#         - siderolabs/iscsi-tools
-#         - siderolabs/util-linux-tools
-
 - op: add
   path: /machine/kubelet/extraMounts
   value:
