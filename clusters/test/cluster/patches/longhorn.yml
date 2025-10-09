@@ -1,6 +1,6 @@
-- op: add
-  path: /machine/kubelet/extraMounts
-  value:
+machine:
+  kubelet:
+    extraMounts:
     - destination: /var/lib/longhorn
       type: bind
       source: /var/lib/longhorn
@@ -8,15 +8,9 @@
         - bind
         - rshared
         - rw
-
-- op: add
-  path: /machine/sysctls
-  value:
+  sysctls:
     vm.nr_hugepages: "1024"
-
-- op: add
-  path: /machine/kernel
-  value:
+  kernel:
     modules:
       - name: nvme_tcp
       - name: vfio_pci

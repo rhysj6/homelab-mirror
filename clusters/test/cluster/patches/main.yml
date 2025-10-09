@@ -1,33 +1,18 @@
-- op: replace
-  path: /machine/controlPlane
-  value: 
-    scheduler:
-      disabled: false
-
-- op: replace
-  path: /machine/install
-  value:
+machine:
+  install:
     diskSelector:
         size: '>= 16GB' # Disk size.
     wipe: true
-
-- op: replace
-  path: /cluster/network
-  value: 
-    cni:
-      name: none
-
-- op: replace
-  path: /cluster/proxy
-  value: 
-    disabled: true
-
-- op: add
-  path: /cluster/allowSchedulingOnControlPlanes
-  value: true
-
-- op: add 
-  path: /machine/features
-  value:
+  controlPlane:
+    scheduler:
+      disabled: false
+  features:
     kubePrism:
       enabled: false
+cluster:
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+  allowSchedulingOnControlPlanes: true
