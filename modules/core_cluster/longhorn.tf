@@ -21,6 +21,8 @@ resource "helm_release" "longhorn" {
         autoDeletePodWhenVolumeDetachedUnexpectedly = true
         nodeDownPodDeletionPolicy                   = "delete-both-statefulset-and-deployment-pod"
         nodeDrainPolicy                             = "always-allow"
+        storageReservedPercentageForDefaultDisk     = "1"
+        defaultDataPath                             = "/var/mnt/longhorn"
       }
       persistence = {
         defaultClassReplicaCount = var.number_of_nodes
