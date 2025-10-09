@@ -26,7 +26,9 @@ resource "talos_machine_configuration_apply" "cp_01_config_apply" {
   config_patches = [
     templatefile("${path.module}/patches/node_specific/network.yml.tmpl", {
       ip       = local.node_1_ip,
-      hostname = "test-node-1"
+      hostname = "test-node-1",
+      vip      = local.kubevip,
+      nodetype = "controlplane"
     })
   ]
 }
@@ -39,7 +41,9 @@ resource "talos_machine_configuration_apply" "cp_02_config_apply" {
   config_patches = [
     templatefile("${path.module}/patches/node_specific/network.yml.tmpl", {
       ip       = local.node_2_ip,
-      hostname = "test-node-2"
+      hostname = "test-node-2",
+      vip      = local.kubevip,
+      nodetype = "controlplane"
     })
   ]
   depends_on = [talos_machine_configuration_apply.cp_01_config_apply] # One after another
@@ -54,7 +58,9 @@ resource "talos_machine_configuration_apply" "cp_03_config_apply" {
   config_patches = [
     templatefile("${path.module}/patches/node_specific/network.yml.tmpl", {
       ip       = local.node_3_ip,
-      hostname = "test-node-3"
+      hostname = "test-node-3",
+      vip      = local.kubevip,
+      nodetype = "controlplane"
     })
   ]
   depends_on = [talos_machine_configuration_apply.cp_01_config_apply, talos_machine_configuration_apply.cp_02_config_apply] # One after another
