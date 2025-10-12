@@ -9,4 +9,6 @@ resource "helm_release" "cilium" {
   values = [
     file("${path.module}/cilium_values.yaml")
   ]
+
+  depends_on = [ talos_cluster_kubeconfig.kubeconfig ]
 }
