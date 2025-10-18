@@ -2,9 +2,9 @@
 resource "talos_machine_secrets" "machine_secrets" {}
 
 data "talos_client_configuration" "talosconfig" {
-  cluster_name         = local.cluster_name
+  cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = [local.node_1_ip, local.node_2_ip, local.node_3_ip]
+  endpoints            = [var.node_1_ip, var.node_2_ip, var.node_3_ip]
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
@@ -14,7 +14,7 @@ resource "talos_machine_bootstrap" "bootstrap" {
     talos_machine_configuration_apply.cp_03_config_apply
   ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = local.node_1_ip
+  node                 = var.node_1_ip
 }
 
 data "talos_cluster_health" "health" {
@@ -24,7 +24,7 @@ data "talos_cluster_health" "health" {
     talos_machine_configuration_apply.cp_03_config_apply
     ]
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
-  control_plane_nodes  = [ local.node_1_ip, local.node_2_ip, local.node_3_ip ]
+  control_plane_nodes  = [ var.node_1_ip, var.node_2_ip, var.node_3_ip ]
   endpoints            = data.talos_client_configuration.talosconfig.endpoints
 }
 
@@ -34,15 +34,5 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
     data.talos_cluster_health.health
   ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = local.node_1_ip
-}
-
-output "talosconfig" {
-  value     = data.talos_client_configuration.talosconfig.talos_config
-  sensitive = true
-}
-
-output "kubeconfig" {
-  value     = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
-  sensitive = true
+  node                 = var.node_1_ip
 }

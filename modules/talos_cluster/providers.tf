@@ -32,17 +32,17 @@ required_version = ">= 1.11.1"
 }
 
 provider "kubernetes" {
-    host = "https://${local.kubevip}:6443"
-    cluster_ca_certificate = talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.ca_certificate
-    client_certificate = talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_certificate
-    client_key = talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_key
+    host = local.k8s_host
+    cluster_ca_certificate = local.k8s_cluster_ca_certificate
+    client_certificate = local.k8s_client_certificate
+    client_key = local.k8s_client_key
 }
 
 provider "helm" {
   kubernetes = {
-    host                   = "https://${local.kubevip}:6443"
-    cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.ca_certificate)
-    client_certificate     = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_certificate)
-    client_key             = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_key)
+    host                   = local.k8s_host
+    cluster_ca_certificate = local.k8s_cluster_ca_certificate
+    client_certificate     = local.k8s_client_certificate
+    client_key             = local.k8s_client_key
   }
 }
