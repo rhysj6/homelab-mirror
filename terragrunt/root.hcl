@@ -9,7 +9,7 @@ generate "backend" {
 terraform {
   backend "s3" {
     bucket         = "terraform"
-    key            = "tg/${path_relative_to_include()}/terraform.tfstate"
+    key            = "${path_relative_to_include()}/terraform.tfstate"
     region                      = "main"
     skip_region_validation      = true
     skip_requesting_account_id  = true
