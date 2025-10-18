@@ -1,3 +1,7 @@
+locals {
+  env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+}
+
 generate "backend" {
   path      = "backend.tf"
   if_exists = "overwrite_terragrunt"
@@ -31,27 +35,27 @@ ephemeral "infisical_secret" "kubernetes_host" {
   name         = "HOST"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.cluster}"
+  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
 }
 ephemeral "infisical_secret" "kubernetes_cluster_ca_certificate" {
   name         = "CLUSTER_CA_CERTIFICATE"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.cluster}"
+  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
 }
 
 ephemeral "infisical_secret" "kubernetes_client_certificate" {
   name         = "CLIENT_CERTIFICATE"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.cluster}"
+  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
 }
 
 ephemeral "infisical_secret" "kubernetes_client_key" {
   name         = "CLIENT_KEY"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.cluster}"
+  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
 }
 
 
