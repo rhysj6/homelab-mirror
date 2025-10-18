@@ -5,51 +5,34 @@ locals {
   k8s_client_key             = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_key)
 }
 
-output "kubeconfig" {
-  value     = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
-  sensitive = true
-}
-
-resource "infisical_secret_folder" "k8s_folder" {
-  name             = var.cluster_name
-  environment_slug = "main"
-  project_id       = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path      = "/kubeconfigs/${var.cluster_name}"
-
-}
-
 resource "infisical_secret" "k8s_host" {
-  name         = "HOST"
+  name         = "${upper(var.cluster_name)}_HOST"
   value        = local.k8s_host
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = infisical_secret_folder.k8s_folder.path
-  depends_on   = [infisical_secret_folder.k8s_folder]
+  folder_path  = "/kubeconfigs"
 }
 
 resource "infisical_secret" "k8s_cluster_ca_certificate" {
-  name         = "CLUSTER_CA_CERTIFICATE"
+  name         = "${upper(var.cluster_name)}_CLUSTER_CA_CERTIFICATE"
   value        = local.k8s_cluster_ca_certificate
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = infisical_secret_folder.k8s_folder.path
-  depends_on   = [infisical_secret_folder.k8s_folder]
+  folder_path  = "/kubeconfigs"
 }
 
 resource "infisical_secret" "k8s_client_certificate" {
-  name         = "CLIENT_CERTIFICATE"
+  name         = "${upper(var.cluster_name)}_CLIENT_CERTIFICATE"
   value        = local.k8s_client_certificate
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = infisical_secret_folder.k8s_folder.path
-  depends_on   = [infisical_secret_folder.k8s_folder]
+  folder_path  = "/kubeconfigs"
 }
 
 resource "infisical_secret" "k8s_client_key" {
-  name         = "CLIENT_KEY"
+  name         = "${upper(var.cluster_name)}_CLIENT_KEY"
   value        = local.k8s_client_key
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = infisical_secret_folder.k8s_folder.path
-  depends_on   = [infisical_secret_folder.k8s_folder]
+  folder_path  = "/kubeconfigs"
 }

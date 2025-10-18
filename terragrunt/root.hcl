@@ -32,30 +32,30 @@ generate "providers" {
   if_exists = "skip" # The talos modules generate the secrets so we skip this file there
   contents = <<EOF
 ephemeral "infisical_secret" "kubernetes_host" {
-  name         = "HOST"
+  name         = "${upper(local.env_vars.locals.cluster)}_HOST"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
+  folder_path  = "/kubeconfigs"
 }
 ephemeral "infisical_secret" "kubernetes_cluster_ca_certificate" {
-  name         = "CLUSTER_CA_CERTIFICATE"
+  name         = "${upper(local.env_vars.locals.cluster)}_CLUSTER_CA_CERTIFICATE"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
+  folder_path  = "/kubeconfigs"
 }
 
 ephemeral "infisical_secret" "kubernetes_client_certificate" {
-  name         = "CLIENT_CERTIFICATE"
+  name         = "${upper(local.env_vars.locals.cluster)}_CLIENT_CERTIFICATE"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
+  folder_path  = "/kubeconfigs"
 }
 
 ephemeral "infisical_secret" "kubernetes_client_key" {
-  name         = "CLIENT_KEY"
+  name         = "${upper(local.env_vars.locals.cluster)}_CLIENT_KEY"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs/${local.env_vars.locals.cluster}"
+  folder_path  = "/kubeconfigs"
 }
 
 
