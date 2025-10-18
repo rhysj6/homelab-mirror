@@ -24,7 +24,7 @@ EOF
 generate "versions" {
   path      = "versions.tf"
   if_exists = "overwrite_terragrunt"
-  contents = file("${get_repo_root()}/versions.tf")
+  contents = file("${get_repo_root()}/terragrunt/versions.tf")
 }
 
 generate "providers" {
