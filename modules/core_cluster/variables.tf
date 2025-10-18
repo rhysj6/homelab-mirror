@@ -40,18 +40,3 @@ variable "cluster_node_ips" {
   description = "List of cluster node IPs"
   type        = list(string)
 }
-
-variable "domain" {
-  description = "The domain name that most resources will be created under."
-  type        = string
-}
-
-variable "cloudflare_email" {
-  description = "The email address for Cloudflare"
-  type        = string
-}
-variable "cloudflare_api_key" {
-  description = "The API key for Cloudflare"
-  type        = string
-  sensitive   = true
-}

@@ -2,7 +2,7 @@
 resource "infisical_identity" "automation_user" {
   name   = "${var.cluster_name}-automation-user"
   role   = "admin"
-  org_id = data.infisical_secrets.metadata.secrets["infisical_org_id"].value
+  org_id = data.infisical_secrets.common.secrets.infisical_org_id.value
 }
 
 resource "infisical_identity_universal_auth" "ua-auth" {
