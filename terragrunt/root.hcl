@@ -5,7 +5,7 @@ locals {
 generate "backend" {
   path      = "backend.tf"
   if_exists = "overwrite_terragrunt"
-  contents = <<EOF
+  contents  = <<EOF
 terraform {
   backend "s3" {
     bucket         = "terraform"
@@ -24,13 +24,13 @@ EOF
 generate "versions" {
   path      = "versions.tf"
   if_exists = "overwrite_terragrunt"
-  contents = file("${get_repo_root()}/terragrunt/versions.tf")
+  contents  = file("${get_repo_root()}/terragrunt/versions.tf")
 }
 
 generate "providers" {
   path      = "providers.tf"
   if_exists = "skip" # The talos modules generate the secrets so we skip this file there
-  contents = <<EOF
+  contents  = <<EOF
 ephemeral "infisical_secret" "kubernetes_host" {
   name         = "${upper(local.env_vars.locals.cluster)}_HOST"
   env_slug     = "main"
