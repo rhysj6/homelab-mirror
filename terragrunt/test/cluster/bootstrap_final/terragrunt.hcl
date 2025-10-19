@@ -7,7 +7,7 @@ dependencies {
 }
 
 terraform {
-  source = "${get_repo_root()}/modules/cluster/bootstrap_final"
+  source = "${get_repo_root()}/terraform/cluster/bootstrap_final"
 }
 
 
