@@ -1,5 +1,4 @@
 resource "kubernetes_manifest" "cilium_loadbalancer_ip_pool" {
-  count = local.cilium_crd_exists ? 1 : 0 ## Only create the IP pool if the CRD exists (will require a re-run if the CRD is created by the Helm release)
   manifest = {
     apiVersion = "cilium.io/v2alpha1"
     kind       = "CiliumLoadBalancerIPPool"
@@ -17,23 +16,23 @@ resource "kubernetes_manifest" "cilium_loadbalancer_ip_pool" {
   }
 }
 
-resource "kubernetes_manifest" "cilium_l2_announcement_policy" {
-  count = (local.cilium_crd_exists && var.cilium_use_bgp ? 0 : 1) ## Only create the policy if the CRD exists (will require a re-run if the CRD is created by the Helm release) and BGP is not used
-  manifest = {
-    apiVersion = "cilium.io/v2alpha1"
-    kind       = "CiliumL2AnnouncementPolicy"
-    metadata = {
-      name = "default-policy"
-    }
-    spec = {
-      externalIPs     = true
-      loadBalancerIPs = true
-    }
-  }
-}
+# resource "kubernetes_manifest" "cilium_l2_announcement_policy" {
+#   count = var.cilium_use_bgp ? 0 : 1
+#   manifest = {
+#     apiVersion = "cilium.io/v2alpha1"
+#     kind       = "CiliumL2AnnouncementPolicy"
+#     metadata = {
+#       name = "default-policy"
+#     }
+#     spec = {
+#       externalIPs     = true
+#       loadBalancerIPs = true
+#     }
+#   }
+# }
 
 resource "kubernetes_manifest" "cilium_bgp_cluster_config" {
-  count = (local.cilium_crd_exists && var.cilium_use_bgp ? 1 : 0) ## Only create the config if the CRD exists (will require a re-run if the CRD is created by the Helm release) and BGP is used
+  # count = var.cilium_use_bgp ? 1 : 0
   manifest = {
     apiVersion = "cilium.io/v2alpha1"
     kind       = "CiliumBGPClusterConfig"
@@ -62,7 +61,7 @@ resource "kubernetes_manifest" "cilium_bgp_cluster_config" {
 }
 
 resource "kubernetes_manifest" "cilium_bgp_peer_config" {
-  count = (local.cilium_crd_exists && var.cilium_use_bgp ? 1 : 0) ## Only create the config if the CRD exists (will require a re-run if the CRD is created by the Helm release) and BGP is used
+  # count = var.cilium_use_bgp ? 1 : 0
   manifest = {
     apiVersion = "cilium.io/v2alpha1"
     kind       = "CiliumBGPPeerConfig"
@@ -95,7 +94,7 @@ resource "kubernetes_manifest" "cilium_bgp_peer_config" {
 }
 
 resource "kubernetes_manifest" "cilium_bgp_advertisement" {
-  count = (local.cilium_crd_exists && var.cilium_use_bgp ? 1 : 0) ## Only create the config if the CRD exists (will require a re-run if the CRD is created by the Helm release) and BGP is used
+  # count = var.cilium_use_bgp ? 1 : 0
   manifest = {
     apiVersion = "cilium.io/v2alpha1"
     kind       = "CiliumBGPAdvertisement"

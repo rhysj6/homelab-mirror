@@ -23,15 +23,6 @@ resource "infisical_identity_universal_auth_client_secret" "cert-manager" {
   depends_on = [infisical_identity_universal_auth.ua-auth]
 }
 
-resource "helm_release" "infisical_pki_operator" {
-  chart       = "infisical-pki-issuer"
-  repository  = "https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts"
-  name        = "infisical-pki-issuer"
-  namespace   = kubernetes_namespace.cert_manager.id
-  version     = "v0.1.0"
-  max_history = 2
-}
-
 resource "kubernetes_cluster_role" "infisical_issuer_approver" {
   metadata {
     name = "infisical-issuer-approver"
@@ -63,4 +54,40 @@ resource "kubernetes_cluster_role_binding" "infisical_issuer_approver_binding" {
     name      = "cert-manager"
     namespace = "cert-manager"
   }
+}
+
+
+resource "kubernetes_secret" "infisical_cluster_issuer" {
+  metadata {
+    name      = "infisical-cluster-issuer"
+    namespace = "cert-manager"
+  }
+  data = {
+    "clientSecret" = infisical_identity_universal_auth_client_secret.cert-manager.client_secret
+  }
+}
+
+resource "kubernetes_manifest" "infisical_cluster_issuer" {
+  manifest = {
+    apiVersion = "infisical-issuer.infisical.com/v1alpha1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "infisical"
+    }
+    spec = {
+      url = data.infisical_secrets.common.secrets.infisical_url.value
+      projectId = data.infisical_secrets.common.secrets.certs_project_id.value
+      certificateTemplateName = "default"
+      authentication = {
+        universalAuth = {
+          clientId = infisical_identity_universal_auth_client_secret.cert-manager.client_id
+          secretRef = {
+            name = kubernetes_secret.infisical_cluster_issuer.metadata[0].name
+            key  = "clientSecret"
+          }
+        }
+      }
+    }
+  }
+  depends_on = [kubernetes_secret.infisical_cluster_issuer]
 }

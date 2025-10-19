@@ -22,9 +22,6 @@ service:
   spec:
     externalTrafficPolicy: Local
 
-## Only enable Prometheus metrics if the CRD exists
-%{ for _ in  cilium_crds ~}
-
 metrics:
   prometheus:
     service:
@@ -33,4 +30,3 @@ metrics:
       enabled: true
     addServicesLabels: true
     addRouterLabels: true
-%{ endfor ~}
