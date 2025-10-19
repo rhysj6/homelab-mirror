@@ -4,7 +4,7 @@ include "root" {
 }
 
 terraform {
-  source = "${get_repo_root()}/modules/talos_cluster"
+  source = "${get_repo_root()}/modules/cluster/talos_cluster"
 }
 
 

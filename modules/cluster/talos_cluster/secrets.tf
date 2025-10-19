@@ -36,3 +36,11 @@ resource "infisical_secret" "k8s_client_key" {
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
   folder_path  = "/kubeconfigs"
 }
+
+resource "infisical_secret" "talos_config" {
+  name         = "${upper(var.cluster_name)}_TALOS_CONFIG"
+  value        = data.talos_client_configuration.talosconfig.talos_config
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/kubeconfigs"
+}
