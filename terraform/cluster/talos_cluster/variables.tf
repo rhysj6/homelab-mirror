@@ -8,17 +8,21 @@ variable "kubevip" {
   type        = string
 }
 
-variable "node_1_ip" {
-  description = "The IP address of the first control plane node"
-  type        = string
+variable "nodes" {
+  description = "The nodes"
+  type = list(object({
+    name            = string,
+    ip_address      = string,
+    control_plane   = bool,
+    storage_enabled = bool
+    vm              = bool
+  }))
+
+  validation {
+    condition     = length(var.nodes) == length(distinct([for n in var.nodes : n.name]))
+    error_message = "Duplicate node names found in var.nodes — names must be unique."
+  }
+
 }
 
-variable "node_2_ip" {
-  description = "The IP address of the second control plane node"
-  type        = string
-}
 
-variable "node_3_ip" {
-  description = "The IP address of the third control plane node"
-  type        = string
-}

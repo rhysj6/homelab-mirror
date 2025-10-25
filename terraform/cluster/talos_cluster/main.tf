@@ -1,30 +1,38 @@
+locals {
+  nodes = { for n in var.nodes : n.name => n }
+  control_plane_nodes = {
+    for name, node in local.nodes : name => node
+    if node.control_plane == true
+  }
+  worker_nodes = {
+    for name, node in local.nodes : name => node
+    if node.control_plane == false
+  }
+
+  control_plane_endpoints = [for n in local.control_plane_nodes : n.ip_address]
+}
+
 
 resource "talos_machine_secrets" "machine_secrets" {}
 
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = [var.node_1_ip, var.node_2_ip, var.node_3_ip]
+  endpoints            = local.control_plane_endpoints
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on = [
-    talos_machine_configuration_apply.cp_01_config_apply,
-    talos_machine_configuration_apply.cp_02_config_apply,
-    talos_machine_configuration_apply.cp_03_config_apply
-  ]
+  depends_on = [talos_machine_configuration_apply.control_plane]
+
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = var.node_1_ip
+  node                 = local.control_plane_endpoints[0]
 }
 
 data "talos_cluster_health" "health" {
-  depends_on           = [ 
-    talos_machine_configuration_apply.cp_01_config_apply,
-    talos_machine_configuration_apply.cp_02_config_apply,
-    talos_machine_configuration_apply.cp_03_config_apply
-    ]
+  depends_on = [talos_machine_configuration_apply.control_plane]
+
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
-  control_plane_nodes  = [ var.node_1_ip, var.node_2_ip, var.node_3_ip ]
+  control_plane_nodes  = local.control_plane_endpoints
   endpoints            = data.talos_client_configuration.talosconfig.endpoints
 }
 
@@ -34,5 +42,5 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
     data.talos_cluster_health.health
   ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = var.node_1_ip
+  node                 = local.control_plane_endpoints[0]
 }

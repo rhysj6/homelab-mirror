@@ -1,3 +1,23 @@
+# apiVersion: v1alpha1
+# kind: VolumeConfig
+# name: EPHEMERAL
+# provisioning:
+#     grow: false
+#     maxSize: 16GiB
+
+---
+
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: longhorn
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 16GB
+  maxSize: 400GB # Adjust later to fit prod nodes
+
+---
+
 machine:
   kubelet:
     extraMounts:
