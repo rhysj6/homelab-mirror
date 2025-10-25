@@ -9,7 +9,7 @@ data "talos_machine_configuration" "this" {
     file("${path.module}/patches/main.yml"),
     each.value.control_plane ? file("${path.module}/patches/control-plane.yml") : "",
     each.value.storage_enabled ? file("${path.module}/patches/longhorn.yml") : "",
-    templatefile("${path.module}/patches/node_specific/network.yml.tmpl", {
+    templatefile("${path.module}/patches/network.yml.tftpl", {
       ip       = each.value.ip_address,
       hostname = each.key,
       vip      = var.kubevip,
