@@ -10,7 +10,7 @@ resource "infisical_secret" "k8s_host" {
   value        = local.k8s_host
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 
 resource "infisical_secret" "k8s_cluster_ca_certificate" {
@@ -18,7 +18,7 @@ resource "infisical_secret" "k8s_cluster_ca_certificate" {
   value        = local.k8s_cluster_ca_certificate
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 
 resource "infisical_secret" "k8s_client_certificate" {
@@ -26,7 +26,7 @@ resource "infisical_secret" "k8s_client_certificate" {
   value        = local.k8s_client_certificate
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 
 resource "infisical_secret" "k8s_client_key" {
@@ -34,7 +34,7 @@ resource "infisical_secret" "k8s_client_key" {
   value        = local.k8s_client_key
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 
 resource "infisical_secret" "talos_config" {
@@ -42,5 +42,5 @@ resource "infisical_secret" "talos_config" {
   value        = data.talos_client_configuration.talosconfig.talos_config
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }

@@ -35,27 +35,27 @@ ephemeral "infisical_secret" "kubernetes_host" {
   name         = "${upper(local.env_vars.locals.cluster)}_HOST"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 ephemeral "infisical_secret" "kubernetes_cluster_ca_certificate" {
   name         = "${upper(local.env_vars.locals.cluster)}_CLUSTER_CA_CERTIFICATE"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 
 ephemeral "infisical_secret" "kubernetes_client_certificate" {
   name         = "${upper(local.env_vars.locals.cluster)}_CLIENT_CERTIFICATE"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 
 ephemeral "infisical_secret" "kubernetes_client_key" {
   name         = "${upper(local.env_vars.locals.cluster)}_CLIENT_KEY"
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/kubeconfigs"
+  folder_path  = "/providers/kubeconfigs"
 }
 
 
