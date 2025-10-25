@@ -31,6 +31,16 @@ resource "helm_release" "longhorn" {
         backupTarget                 = "s3://${minio_s3_bucket.longhorn_backup.bucket}@us-east-1/"
         backupTargetCredentialSecret = kubernetes_secret.longhorn_backup.metadata[0].name
       }
+      longhornManager = {
+        nodeSelector = {
+          storage_enabled = "true"
+        }
+      }
+      longhornDriver = {
+        nodeSelector = {
+          storage_enabled = "true"
+        }
+      }
     })
   ]
 }
@@ -56,7 +66,7 @@ resource "kubernetes_manifest" "longhorn_postgres" {
       dataLocality        = "strict-local"
     }
   }
-  depends_on = [ helm_release.longhorn ]
+  depends_on = [helm_release.longhorn]
 }
 
 

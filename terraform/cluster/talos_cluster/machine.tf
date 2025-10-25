@@ -6,7 +6,9 @@ data "talos_machine_configuration" "this" {
   machine_type     = each.value.control_plane ? "controlplane" : "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
   config_patches = [
-    file("${path.module}/patches/main.yml"),
+    templatefile("${path.module}/patches/main.yml.tftpl",{
+      storage_enabled = each.value.storage_enabled
+    }),
     each.value.control_plane ? file("${path.module}/patches/control-plane.yml") : "",
     each.value.storage_enabled ? file("${path.module}/patches/longhorn.yml") : "",
     templatefile("${path.module}/patches/network.yml.tftpl", {

@@ -9,6 +9,11 @@ machine:
   features:
     kubePrism:
       enabled: false
+  nodeLabels:
+%{ if storage_enabled ~}
+    storage_enabled: true
+%{ endif ~}
+
 cluster:
   network:
     cni:
