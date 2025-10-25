@@ -29,6 +29,12 @@ generate "versions" {
 
 generate "providers" {
   path      = "providers.tf"
+  if_exists = "overwrite_terragrunt"
+  contents  = file("${get_repo_root()}/terraform/providers.tf")
+}
+
+generate "kubernetes_providers" {
+  path      = "kubernetes_providers.tf"
   if_exists = "skip" # The talos modules generate the secrets so we skip this file there
   contents  = <<EOF
 ephemeral "infisical_secret" "kubernetes_host" {
