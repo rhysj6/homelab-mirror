@@ -7,8 +7,10 @@ resource "helm_release" "cilium" {
   version     = "1.18.2"
   max_history = 2
   values = [
-    file("${path.module}/cilium_values.yaml")
+    templatefile("${path.module}/cilium_values.yaml.tftpl", {
+      control_plane_ip = var.kubevip
+    })
   ]
 
-  depends_on = [ talos_cluster_kubeconfig.kubeconfig ]
+  depends_on = [talos_cluster_kubeconfig.kubeconfig]
 }
