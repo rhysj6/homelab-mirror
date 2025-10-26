@@ -20,7 +20,7 @@ data "talos_machine_configuration" "this" {
     yamlencode({
       machine = {
         install = {
-          image = local.image
+          image = "factory.talos.dev/metal-installer/${talos_image_factory_schematic.machine[each.key].id}:${local.latest}"
         }
       }
     })

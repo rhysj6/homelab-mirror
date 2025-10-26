@@ -8,37 +8,32 @@ locals {
   latest = element(data.talos_image_factory_versions.this.talos_versions, length(data.talos_image_factory_versions.this.talos_versions) - 1)
 }
 
-data "talos_image_factory_extensions_versions" "this" {
-  talos_version = local.latest
-  filters = {
-    names = [
-      "qemu-guest-agent",
-      "iscsi-tools",
-      "util-linux-tools"
-    ]
-  }
-}
-
-resource "talos_image_factory_schematic" "this" {
+resource "talos_image_factory_schematic" "machine" {
+  for_each = local.nodes
   schematic = yamlencode(
     {
       customization = {
         systemExtensions = {
-          officialExtensions = data.talos_image_factory_extensions_versions.this.extensions_info.*.name
+          officialExtensions = concat(
+            each.value.storage_enabled ? [
+              "siderolabs/iscsi-tools",
+              "siderolabs/util-linux-tools",
+            ] : [],
+            each.value.vm ? ["siderolabs/qemu-guest-agent"] : []
+          )
         }
       }
     }
   )
 }
 
-locals {
-  image = "factory.talos.dev/metal-installer/${talos_image_factory_schematic.this.id}:${local.latest}"
-}
-
 output "latest_talos_version" {
   value = local.latest
 }
 
-output "talos_image" {
-  value = local.image
+output "node_images" {
+  value = {
+    for node in local.nodes :
+    node.name => "factory.talos.dev/metal-installer/${talos_image_factory_schematic.machine[node.name].id}:${local.latest}"
+  }
 }
