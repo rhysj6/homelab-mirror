@@ -2,15 +2,19 @@ include "root" {
   path = find_in_parent_folders("root.hcl")
 }
 
+include "env" {
+  path = find_in_parent_folders("env.hcl")
+  expose = true
+}
+
 dependencies {
   paths = ["../talos", "../bootstrap_init"]
 }
 
 terraform {
-  source = "${get_repo_root()}/terraform/cluster/bootstrap_final"
+  source = "."
 }
 
-
 inputs = {
-  cluster_name = "test"
+  cluster_name = include.env.locals.cluster
 }
