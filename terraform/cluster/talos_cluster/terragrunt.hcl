@@ -3,7 +3,7 @@ include "root" {
 }
 
 include "env" {
-  path = find_in_parent_folders("env.hcl")
+  path   = find_in_parent_folders("env.hcl")
   expose = true
 }
 
@@ -13,6 +13,6 @@ terraform {
 
 inputs = {
   cluster_name = include.env.locals.cluster
-  nodes = include.env.locals.nodes
-  kubevip = include.env.locals.kubevip
+  nodes        = include.env.locals.nodes
+  kubevip      = include.env.locals.kubevip
 }

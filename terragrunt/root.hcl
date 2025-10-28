@@ -1,6 +1,6 @@
 locals {
   env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-  s3_path = "${replace(path_relative_to_include(), "//.terragrunt-stack//", "/")}"
+  s3_path  = "${replace(path_relative_to_include(), "//.terragrunt-stack//", "/")}"
 }
 
 generate "backend" {
