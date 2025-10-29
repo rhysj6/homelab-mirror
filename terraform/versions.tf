@@ -22,12 +22,16 @@ terraform {
       version = "5.9.0"
     }
     infisical = {
-      source = "Infisical/infisical"
+      source  = "Infisical/infisical"
       version = "0.15.37"
     }
     talos = {
-      source = "siderolabs/talos"
+      source  = "siderolabs/talos"
       version = "0.9.0"
+    }
+    proxmox = {
+      source  = "bpg/proxmox"
+      version = "0.85.1"
     }
   }
 }
