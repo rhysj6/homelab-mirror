@@ -1,6 +1,5 @@
 locals {
   cluster = "test"
-  kubevip = "10.20.30.10"
   nodes = [
     {
       name            = "test-node-1",
@@ -24,10 +23,17 @@ locals {
       vm              = true
     }
   ]
-  cilium_loadbalancer_ip_pool_cidr = "10.21.30.1/24"
-  cilium_bgp_asn                   = 65553
-  ips = {
-    ingress_controller = "10.21.30.11"
-    monitoring         = "10.21.30.12"
+
+  network = {
+    gateway                   = "10.20.0.1"
+    node_netmask              = "255.255.0.0"
+    vlan_id                   = 40
+    loadbalancer_ip_pool_cidr = "10.21.30.1/24"
+    loadbalancer_bgp_asn      = 65553
+    ips = {
+      kubevip            = "10.20.30.10"
+      ingress_controller = "10.21.30.11"
+      monitoring         = "10.21.30.12"
+    }
   }
 }

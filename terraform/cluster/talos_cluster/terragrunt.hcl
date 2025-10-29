@@ -14,5 +14,5 @@ terraform {
 inputs = {
   cluster_name = include.env.locals.cluster
   nodes        = include.env.locals.nodes
-  kubevip      = include.env.locals.kubevip
+  kubevip      = include.env.locals.network.ips.kubevip
 }
