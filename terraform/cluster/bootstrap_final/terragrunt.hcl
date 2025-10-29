@@ -8,7 +8,7 @@ include "env" {
 }
 
 dependencies {
-  paths = ["../talos", "../bootstrap_init"]
+  paths = ["../bootstrap_init"]
 }
 
 terraform {

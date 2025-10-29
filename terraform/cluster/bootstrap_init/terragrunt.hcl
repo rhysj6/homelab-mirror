@@ -8,7 +8,7 @@ include "env" {
 }
 
 dependencies {
-  paths = ["../talos"]
+  paths = ["../talos_cluster"]
 }
 
 terraform {

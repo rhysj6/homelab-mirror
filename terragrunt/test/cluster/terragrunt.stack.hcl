@@ -1,6 +1,6 @@
-unit "talos" {
+unit "talos_cluster" {
   source = "${get_repo_root()}/terraform/cluster/talos_cluster"
-  path   = "talos"
+  path   = "talos_cluster"
 }
 
 unit "bootstrap_init" {
