@@ -26,3 +26,10 @@ variable "nodes" {
 }
 
 
+variable "network" {
+  description = "Network configuration"
+  type = object({
+    node_gateway             = string,
+    node_subnet_size         = string,
+  })
+}

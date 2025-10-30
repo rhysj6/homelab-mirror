@@ -13,6 +13,8 @@ data "talos_machine_configuration" "this" {
     each.value.storage_enabled ? file("${path.module}/patches/longhorn.yml") : "",
     templatefile("${path.module}/patches/network.yml.tftpl", {
       ip       = each.value.ip_address,
+      gateway  = var.network.node_gateway,
+      subnet_size = var.network.node_subnet_size,
       hostname = each.key,
       vip      = var.kubevip,
       nodetype = each.value.control_plane ? "controlplane" : "worker"

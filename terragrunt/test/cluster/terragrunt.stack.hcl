@@ -1,3 +1,8 @@
+unit "test_talos_nodes" {
+  source = "${get_repo_root()}/terraform/cluster/test_talos_nodes"
+  path   = "talos_nodes"
+}
+
 unit "talos_cluster" {
   source = "${get_repo_root()}/terraform/cluster/talos_cluster"
   path   = "talos_cluster"

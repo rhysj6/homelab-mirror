@@ -70,6 +70,12 @@ provider "proxmox" {
   endpoint  = ephemeral.infisical_secret.grh_proxmox_host.value
   api_token = ephemeral.infisical_secret.grh_proxmox_api_key.value
   insecure  = true
+}
+
+provider "proxmox" {
+  endpoint  = ephemeral.infisical_secret.grh_proxmox_host.value
+  api_token = ephemeral.infisical_secret.grh_proxmox_api_key.value
+  insecure  = true
   alias     = "grh"
 }
 

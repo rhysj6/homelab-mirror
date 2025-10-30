@@ -5,10 +5,10 @@ machine:
       - deviceSelector:
           physical: true
         addresses:
-          - ${ip}/16
+          - ${ip}/${subnet_size}
         routes:
           - network: 0.0.0.0/0
-            gateway: 10.20.0.1
+            gateway: ${gateway}
 %{ if nodetype == "controlplane" ~}
         vip:
           ip: ${vip}
