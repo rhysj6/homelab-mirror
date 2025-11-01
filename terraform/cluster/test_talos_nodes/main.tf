@@ -4,7 +4,7 @@ resource "proxmox_virtual_environment_vm" "node" {
   description = "Test cluster node Managed by Terraform"
   tags        = ["kubernetes", "test-cluster"]
 
-  node_name = "clifton"
+  node_name = each.value.host
   vm_id     = each.value.vmid
 
   agent {
@@ -22,7 +22,7 @@ resource "proxmox_virtual_environment_vm" "node" {
   }
 
   memory {
-    dedicated = 8192
+    dedicated = 12288
   }
 
   cdrom {
