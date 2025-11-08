@@ -12,8 +12,3 @@ unit "gateway" {
   source = "${get_repo_root()}/terraform/applications/gateway"
   path   = "gateway"
 }
-
-unit "authentik" {
-  source = "${get_repo_root()}/terraform/applications/authentik"
-  path   = "authentik"
-}

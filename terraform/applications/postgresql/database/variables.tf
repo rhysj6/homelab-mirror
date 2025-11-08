@@ -3,13 +3,7 @@ variable "name" {
   type        = string
 }
 
-variable "namespace" {
-  description = "The Kubernetes namespace where a secret for the database credentials will be created."
+variable "env" {
+  description = "The environment for the database."
   type        = string
-}
-
-data "kubernetes_all_namespaces" "allns" {}
-
-locals {
-  app_ns_exists = contains(data.kubernetes_all_namespaces.allns.namespaces, var.namespace)
 }

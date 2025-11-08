@@ -114,6 +114,14 @@ module "database" {
 
   for_each = { for db in var.databases : db.name => db }
 
-  name      = each.value.name
-  namespace = each.value.namespace
+  name = each.value.name
+  env  = var.env
+}
+
+resource "infisical_secret" "password" {
+  name         = "HOST"
+  value        = var.loadbalancer_ip
+  env_slug     = var.env
+  workspace_id = "2ace56f5-d07e-455e-9009-e44dfce28566"
+  folder_path  = "/db-creds/"
 }
