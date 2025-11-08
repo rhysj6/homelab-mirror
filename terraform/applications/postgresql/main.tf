@@ -62,6 +62,7 @@ resource "kubernetes_manifest" "cluster" {
             name = "${db.name}-db-credentials"
             key  = "password"
           }
+          login = true
         }]
       }
       backup = {
