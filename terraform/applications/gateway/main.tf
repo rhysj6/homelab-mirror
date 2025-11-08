@@ -7,7 +7,7 @@ resource "kubernetes_namespace" "external_hosts" {
 module "clifton" {
   source     = "./pass_through_ingress"
   name       = "clifton"
-  hostname   = "clifton.hl.${var.domain}"
+  hostname   = "clifton.hl.${local.domain}"
   ip_address = "10.0.0.20"
   port       = 8006
   portname = "https"
@@ -17,7 +17,7 @@ module "clifton" {
 module "pbs" {
   source     = "./pass_through_ingress"
   name       = "pbs"
-  hostname   = "pbs.hl.${var.domain}"
+  hostname   = "pbs.hl.${local.domain}"
   ip_address = "10.10.0.25"
   port       = 8007
   portname = "https"
@@ -26,7 +26,7 @@ module "pbs" {
 module "home_assistant" {
   source     = "./pass_through_ingress"
   name       = "home-assistant"
-  hostname   = "ha.${var.domain}"
+  hostname   = "ha.${local.domain}"
   ip_address = "10.10.0.4"
   port       = 8123
 }
@@ -34,32 +34,24 @@ module "home_assistant" {
 module "paperless" {
   source     = "./pass_through_ingress"
   name       = "paperless"
-  hostname   = "paperless.${var.domain}"
+  hostname   = "paperless.${local.domain}"
   ip_address = "10.10.1.4"
   port       = 8000
+  middleware = "local-only"
 }
 
 module "portainer" {
   source     = "./pass_through_ingress"
   name       = "portainer"
-  hostname   = "portainer.hl.${var.domain}"
+  hostname   = "portainer.hl.${local.domain}"
   ip_address = "10.10.1.10"
   port       = 9000
-}
-
-module "vcenter" {
-  source     = "./pass_through_ingress"
-  name       = "vcenter"
-  hostname   = "vcenter.${var.secondary_domain}"
-  ip_address = "ddns.${var.secondary_domain}"
-  port       = 443
-  portname = "https"
 }
 
 module "actualbudget" {
   source     = "./pass_through_ingress"
   name       = "actual-budget"
-  hostname   = "budget.${var.domain}"
+  hostname   = "budget.${local.domain}"
   ip_address = "10.10.1.5"
   port       = 5006
   portname = "https"

@@ -24,7 +24,7 @@ resource "kubernetes_manifest" "aovpn_ingress_route" {
     spec = {
       routes = [
         {
-          match = "HostSNI(`aovpn.${var.windows_domain}`)"
+          match = "HostSNI(`aovpn.${local.windows_domain}`)"
           services = [
             {
               name = "aovpn"
@@ -49,9 +49,9 @@ resource "kubernetes_manifest" "aovpn_cert" {
       namespace = kubernetes_namespace.external_hosts.metadata[0].name
     }
     spec = {
-      commonName = "aovpn.${var.windows_domain}"
+      commonName = "aovpn.${local.windows_domain}"
       dnsNames = [
-        "aovpn.${var.windows_domain}"
+        "aovpn.${local.windows_domain}"
       ]
       secretName = "aovpn-tls"
       issuerRef = {

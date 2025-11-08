@@ -40,7 +40,7 @@ resource "kubernetes_ingress_v1" "minio_ingress" {
   }
   spec {
     rule {
-      host = "s3.hl.${var.domain}"
+      host = "s3.hl.${local.domain}"
       http {
         path {
           backend {
@@ -56,7 +56,7 @@ resource "kubernetes_ingress_v1" "minio_ingress" {
       }
     }
     rule {
-      host = "s3-1.hl.${var.domain}"
+      host = "s3-1.hl.${local.domain}"
       http {
         path {
           backend {
@@ -71,7 +71,7 @@ resource "kubernetes_ingress_v1" "minio_ingress" {
       }
     }
     rule {
-      host = "s3-2.hl.${var.domain}"
+      host = "s3-2.hl.${local.domain}"
       http {
         path {
           backend {
@@ -88,9 +88,9 @@ resource "kubernetes_ingress_v1" "minio_ingress" {
     tls {
       secret_name = "minio-s3-tls"
       hosts = [
-        "s3.hl.${var.domain}",
-        "s3-1.hl.${var.domain}",
-        "s3-2.hl.${var.domain}"
+        "s3.hl.${local.domain}",
+        "s3-1.hl.${local.domain}",
+        "s3-2.hl.${local.domain}"
       ]
     }
   }
