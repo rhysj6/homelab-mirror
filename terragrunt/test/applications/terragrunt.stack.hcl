@@ -7,3 +7,8 @@ unit "postgresql" {
   source = "${get_repo_root()}/terraform/applications/postgresql"
   path   = "postgresql"
 }
+
+unit "authentik" {
+  source = "${get_repo_root()}/terraform/applications/authentik"
+  path   = "authentik"
+}

@@ -7,3 +7,14 @@ variable "loadbalancer_ip" {
   description = "IP Address to expose the cluster on"
   type        = string
 }
+
+variable "databases" {
+  description = "List of databases to create"
+  type = list(
+    object({
+      name      = string
+      namespace = string
+    })
+  )
+  default = []
+}

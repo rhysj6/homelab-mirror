@@ -34,7 +34,6 @@ resource "kubernetes_manifest" "cluster" {
         }
       }
       enableSuperuserAccess = true
-      bootstrap             = {} # Empty bootstrap to use defaults
       monitoring = {
         enablePodMonitor = true
       }
@@ -57,6 +56,13 @@ resource "kubernetes_manifest" "cluster" {
             }
           ]
         }
+        roles = [for db in var.databases : {
+          name = db.name # Add role for each database
+          passwordSecret = {
+            name = "${db.name}-db-credentials"
+            key  = "password"
+          }
+        }]
       }
       backup = {
         barmanObjectStore = {
@@ -100,4 +106,13 @@ resource "kubernetes_manifest" "backup_schedule" {
       }
     }
   }
+}
+
+module "database" {
+  source = ".//database"
+
+  for_each = { for db in var.databases : db.name => db }
+
+  name      = each.value.name
+  namespace = each.value.namespace
 }
