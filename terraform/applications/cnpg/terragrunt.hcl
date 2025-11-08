@@ -7,15 +7,10 @@ include "env" {
   expose = true
 }
 
-dependencies {
-  paths = ["../cnpg"]
-}
-
 terraform {
   source = "."
 }
 
 inputs = {
-  env = include.env.locals.env
-  loadbalancer_ip = include.env.locals.network.ips.postgresql
+  env = include.env.locals.cluster
 }

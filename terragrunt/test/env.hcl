@@ -1,5 +1,6 @@
 locals {
   cluster = "test"
+  env     = "test"
   nodes = [
     {
       name            = "test-node-1",
@@ -34,6 +35,7 @@ locals {
       kubevip            = "10.10.20.10"
       ingress_controller = "10.11.20.11"
       monitoring         = "10.11.20.12"
+      postgresql         = "10.11.20.32"
     }
   }
 }

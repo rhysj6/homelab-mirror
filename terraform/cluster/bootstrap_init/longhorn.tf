@@ -45,7 +45,7 @@ resource "helm_release" "longhorn" {
   ]
 }
 
-resource "kubernetes_manifest" "longhorn_postgres" {
+resource "kubernetes_manifest" "longhorn_local_storage_class" {
   manifest = {
     apiVersion = "storage.k8s.io/v1"
     kind       = "StorageClass"
@@ -57,7 +57,6 @@ resource "kubernetes_manifest" "longhorn_postgres" {
     }
     provisioner          = "driver.longhorn.io"
     allowVolumeExpansion = true
-    volumeBindingMode    = "WaitForFirstConsumer"
     reclaimPolicy        = "Delete"
     parameters = {
       numberOfReplicas    = "1"
