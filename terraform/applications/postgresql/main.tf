@@ -65,6 +65,11 @@ resource "kubernetes_manifest" "cluster" {
           login = true
         }]
       }
+      affinity = {
+        nodeSelector = {
+          storage_enabled = "true"
+        }
+      }
       backup = {
         barmanObjectStore = {
           endpointURL     = "https://${local.s3_domain}/"
