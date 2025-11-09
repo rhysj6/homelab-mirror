@@ -14,3 +14,7 @@ dependencies {
 terraform {
   source = "."
 }
+
+inputs = {
+  env = include.env.locals.env
+}
