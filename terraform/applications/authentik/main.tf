@@ -25,7 +25,7 @@ resource "helm_release" "authentik" {
   repository  = "https://charts.goauthentik.io/"
   name        = "authentik"
   namespace   = kubernetes_namespace.authentik.id
-  version     = "2025.8.3"
+  version     = "2025.10.1"
   max_history = 2
   depends_on  = [kubernetes_namespace.authentik]
   values = [yamlencode({
@@ -99,14 +99,6 @@ resource "helm_release" "authentik" {
           enabled = true
         }
       },
-    },
-    redis = {
-      enabled = true,
-      master = {
-        nodeSelector = {
-          storage_enabled = "true"
-        }
-      }
     }
   })]
 }
