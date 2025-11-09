@@ -3,7 +3,7 @@ kind: VolumeConfig
 name: EPHEMERAL
 provisioning:
     grow: false
-    maxSize: 16GiB
+    maxSize: 32GiB
 
 ---
 
