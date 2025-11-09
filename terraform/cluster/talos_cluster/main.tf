@@ -48,7 +48,7 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
 
 
 data "talos_cluster_health" "final_health" {
-  depends_on = [data.talos_cluster_health.init_health, talos_cluster_kubeconfig.kubeconfig, helm_release.cilium]
+  depends_on = [data.talos_cluster_health.init_health, talos_cluster_kubeconfig.kubeconfig, helm_release.cilium, talos_machine_configuration_apply.worker]
 
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
   control_plane_nodes  = local.control_plane_endpoints
