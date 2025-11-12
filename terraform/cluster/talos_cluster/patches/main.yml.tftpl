@@ -1,0 +1,23 @@
+machine:
+  install:
+    diskSelector:
+        size: '>= 125GB' # Disk size.
+    wipe: true
+  controlPlane:
+    scheduler:
+      disabled: false
+  features:
+    kubePrism:
+      enabled: false
+  nodeLabels:
+%{ if storage_enabled ~}
+    storage_enabled: true
+%{ endif ~}
+
+cluster:
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+  allowSchedulingOnControlPlanes: true

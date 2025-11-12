@@ -1,0 +1,15 @@
+machine:
+  network:
+    hostname: ${hostname}
+    interfaces:
+      - deviceSelector:
+          physical: true
+        addresses:
+          - ${ip}/${subnet_size}
+        routes:
+          - network: 0.0.0.0/0
+            gateway: ${gateway}
+%{ if nodetype == "controlplane" ~}
+        vip:
+          ip: ${vip}
+%{ endif ~}

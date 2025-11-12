@@ -1,0 +1,1 @@
+This module creates the PostgreSQL databases manifests per the provided configuration, it also creates the necessary secrets for database users in the specified namespace if it exists.

@@ -1,0 +1,32 @@
+
+additionalArguments:
+  - --serversTransport.insecureSkipVerify=true
+
+ports:
+  websecure:
+    asDefault: true
+    tls:
+      enabled: true
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    allowExternalNameServices: true
+  kubernetesIngress:
+    enabled: true
+    allowExternalNameServices: true
+
+service:
+  annotations:
+    lbipam.cilium.io/ips: "${service_ip}"
+  spec:
+    externalTrafficPolicy: Local
+
+metrics:
+  prometheus:
+    service:
+      enabled: true
+    serviceMonitor:
+      enabled: true
+    addServicesLabels: true
+    addRouterLabels: true

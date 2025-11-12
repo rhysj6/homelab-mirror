@@ -1,0 +1,1 @@
+# Just here so that the terragrunt doesn't try to generate the kubernetes providers.tf file in this folder as that refers to secrets that don't exist yet.
