@@ -57,9 +57,9 @@ resource "kubernetes_manifest" "cluster" {
           ]
         }
         roles = [for db in var.databases : {
-          name = db.name # Add role for each database
+          name = db # Add role for each database
           passwordSecret = {
-            name = "${db.name}-db-credentials"
+            name = "${db}-db-credentials"
             key  = "password"
           }
           login = true
@@ -117,9 +117,9 @@ resource "kubernetes_manifest" "backup_schedule" {
 module "database" {
   source = ".//database"
 
-  for_each = { for db in var.databases : db.name => db }
+  for_each = var.databases
 
-  name = each.value.name
+  name = each.value
   env  = var.env
 }
 

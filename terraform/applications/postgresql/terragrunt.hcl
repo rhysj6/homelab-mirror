@@ -19,9 +19,6 @@ inputs = {
   env = include.env.locals.env
   loadbalancer_ip = include.env.locals.network.ips.postgresql
   databases = [
-    {
-      name      = "authentik"
-      namespace = "authentik"
-    }
+    "authentik"
   ]
 }

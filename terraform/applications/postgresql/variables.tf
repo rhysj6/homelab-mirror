@@ -10,11 +10,6 @@ variable "loadbalancer_ip" {
 
 variable "databases" {
   description = "List of databases to create"
-  type = list(
-    object({
-      name      = string
-      namespace = string
-    })
-  )
-  default = []
+  type        = set(string)
+  default     = []
 }
