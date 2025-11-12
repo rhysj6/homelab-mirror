@@ -35,15 +35,6 @@ resource "kubernetes_manifest" "management_ingress_route" {
           ]
         },
         {
-          match = "HostSNI(`secrets.homelab.example`)"
-          services = [
-            {
-              name = "management-cluster-ingress"
-              port = "https"
-            }
-          ]
-        },
-        {
           match = "HostSNI(`jenkins.homelab.example`)"
           services = [
             {
