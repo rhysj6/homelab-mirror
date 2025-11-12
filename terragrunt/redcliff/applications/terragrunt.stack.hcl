@@ -17,3 +17,8 @@ unit "authentik" {
   source = "${get_repo_root()}/terraform/applications/authentik"
   path   = "authentik"
 }
+
+unit "infisical" {
+  source = "${get_repo_root()}/terraform/applications/infisical"
+  path   = "infisical"
+}

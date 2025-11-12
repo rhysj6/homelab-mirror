@@ -1,7 +1,3 @@
-locals {
-  infisical_hostname     = "secrets.hl.${var.domain}"
-}
-
 resource "kubernetes_namespace" "infisical" {
   metadata {
     name = "infisical"
@@ -16,11 +12,11 @@ resource "kubernetes_service_account" "infisical" {
 }
 
 resource "random_password" "auth_secret" {
-  length  = 16
+  length = 16
 }
 
 resource "random_password" "encryption_key" {
-  length  = 32
+  length = 32
 }
 
 resource "kubernetes_secret" "infisical_secrets" {
@@ -29,12 +25,11 @@ resource "kubernetes_secret" "infisical_secrets" {
     namespace = kubernetes_namespace.infisical.id
   }
   data = {
-    AUTH_SECRET       = random_password.auth_secret.result
-    ENCRYPTION_KEY    = random_password.encryption_key.result
-    SITE_URL          = "https://${local.infisical_hostname}"
+    AUTH_SECRET    = random_password.auth_secret.result
+    ENCRYPTION_KEY = random_password.encryption_key.result
+    SITE_URL       = "https://${local.infisical_hostname}"
   }
 }
-
 
 resource "kubernetes_deployment" "infisical" {
   metadata {
@@ -57,20 +52,20 @@ resource "kubernetes_deployment" "infisical" {
       spec {
         service_account_name = kubernetes_service_account.infisical.metadata[0].name
         init_container {
-          name  = "migration"
-          image = "infisical/infisical:v0.146.0-postgres"
+          name    = "migration"
+          image   = "infisical/infisical:v0.146.0-postgres"
           command = ["npm", "run", "migration:latest"]
           env {
             name = "DB_CONNECTION_URI"
             value_from {
               secret_key_ref {
-                name = module.postgresql.secret_name
+                name = kubernetes_secret.postgres_creds.metadata[0].name
                 key  = "uri"
               }
             }
           }
           env {
-            name = "ALLOW_INTERNAL_IP_CONNECTIONS"
+            name  = "ALLOW_INTERNAL_IP_CONNECTIONS"
             value = "true"
           }
           env_from {
@@ -87,13 +82,13 @@ resource "kubernetes_deployment" "infisical" {
             name = "DB_CONNECTION_URI"
             value_from {
               secret_key_ref {
-                name = module.postgresql.secret_name
+                name = kubernetes_secret.postgres_creds.metadata[0].name
                 key  = "uri"
               }
             }
           }
           env {
-            name  = "REDIS_URL"
+            name = "REDIS_URL"
             value_from {
               secret_key_ref {
                 name = kubernetes_secret.redis_auth.metadata[0].name
@@ -113,10 +108,10 @@ resource "kubernetes_deployment" "infisical" {
               port = 8080
             }
             initial_delay_seconds = 10
-            period_seconds         = 5
+            period_seconds        = 5
           }
           port {
-            name = "http"
+            name           = "http"
             container_port = 8080
           }
         }
