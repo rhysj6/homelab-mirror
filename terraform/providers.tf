@@ -25,6 +25,20 @@ ephemeral "infisical_secret" "cloudflare_api_token" {
   folder_path  = "/providers"
 }
 
+ephemeral "infisical_secret" "authentik_url" {
+  name         = "AUTHENTIK_URL"
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/providers"
+}
+
+ephemeral "infisical_secret" "authentik_token" {
+  name         = "AUTHENTIK_TOKEN"
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/providers"
+}
+
 provider "minio" {
   minio_server   = ephemeral.infisical_secret.minio_endpoint.value
   minio_user     = ephemeral.infisical_secret.minio_access_key.value
@@ -34,4 +48,9 @@ provider "minio" {
 
 provider "cloudflare" {
   api_token = ephemeral.infisical_secret.cloudflare_api_token.value
+}
+
+provider "authentik" {
+  url   = ephemeral.infisical_secret.authentik_url.value
+  token = ephemeral.infisical_secret.authentik_token.value
 }

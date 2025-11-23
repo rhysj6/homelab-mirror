@@ -33,5 +33,9 @@ terraform {
       source  = "bpg/proxmox"
       version = "0.86.0"
     }
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "2025.10.0"
+    }
   }
 }

@@ -1,7 +1,7 @@
 resource "authentik_provider_proxy" "protected_services" {
   name                = "Protected Services"
-  external_host       = "https://hl.${var.domain}"
-  cookie_domain       = var.domain
+  external_host       = "https://hl.${local.domain}"
+  cookie_domain       = local.domain
   authorization_flow  = data.authentik_flow.authorization-flow.id
   authentication_flow = authentik_flow.authentication.uuid
   invalidation_flow   = data.authentik_flow.invalidation-flow.id

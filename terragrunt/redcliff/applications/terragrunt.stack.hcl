@@ -13,9 +13,14 @@ unit "gateway" {
   path   = "gateway"
 }
 
-unit "authentik" {
+unit "authentik_app" {
   source = "${get_repo_root()}/terraform/applications/authentik"
   path   = "authentik"
+}
+
+unit "authentik_config" {
+  source = "${get_repo_root()}/terraform/applications/authentik_config"
+  path   = "authentik_config"
 }
 
 unit "infisical" {
