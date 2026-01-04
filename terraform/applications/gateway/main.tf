@@ -40,14 +40,6 @@ module "paperless" {
   middleware = "local-only"
 }
 
-module "portainer" {
-  source     = "./pass_through_ingress"
-  name       = "portainer"
-  hostname   = "portainer.hl.${local.domain}"
-  ip_address = "10.10.1.10"
-  port       = 9000
-}
-
 module "actualbudget" {
   source     = "./pass_through_ingress"
   name       = "actual-budget"
