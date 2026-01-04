@@ -27,7 +27,7 @@ module "home_assistant" {
   source     = "./pass_through_ingress"
   name       = "home-assistant"
   hostname   = "ha.${local.domain}"
-  ip_address = "10.10.0.4"
+  ip_address = "10.10.1.10"
   port       = 8123
 }
 
