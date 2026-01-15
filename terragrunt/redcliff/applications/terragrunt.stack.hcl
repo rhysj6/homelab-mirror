@@ -27,3 +27,8 @@ unit "infisical" {
   source = "${get_repo_root()}/terraform/applications/infisical"
   path   = "infisical"
 }
+
+unit "technitium_dns" {
+  source = "${get_repo_root()}/terraform/applications/technitium_dns"
+  path   = "technitium_dns"
+}

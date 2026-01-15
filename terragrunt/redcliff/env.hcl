@@ -57,6 +57,7 @@ locals {
       ingress_controller = "10.11.10.11"
       monitoring         = "10.11.10.12"
       postgresql         = "10.11.10.32"
+      technitium_dns     = "10.11.10.53"
     }
   }
 }
