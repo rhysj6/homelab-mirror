@@ -32,3 +32,8 @@ unit "technitium_dns" {
   source = "${get_repo_root()}/terraform/applications/technitium_dns"
   path   = "technitium_dns"
 }
+
+unit "external_dns" {
+  source = "${get_repo_root()}/terraform/applications/external_dns"
+  path   = "external_dns"
+}

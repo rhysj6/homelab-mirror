@@ -133,6 +133,12 @@ resource "kubernetes_service_v1" "technitium_lb" {
       name        = "dns-udp"
     }
     port {
+      port        = 53
+      target_port = 53
+      protocol    = "TCP"
+      name        = "dns-tcp"
+    }
+    port {
       port        = 5380
       target_port = 5380
       protocol    = "TCP"
