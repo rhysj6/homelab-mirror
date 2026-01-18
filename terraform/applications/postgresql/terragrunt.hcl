@@ -20,6 +20,7 @@ inputs = {
   loadbalancer_ip = include.env.locals.network.ips.postgresql
   databases = [
     "authentik",
-    "infisical"
+    "infisical",
+    "netbox"
   ]
 }
