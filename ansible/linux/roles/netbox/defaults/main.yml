@@ -1,0 +1,26 @@
+netbox_install_dir: /opt/netbox
+netbox_version: v4.4-3.4.1
+
+netbox_db_host: "{{ lookup(vault_plugin,
+  project_id=kubernetes_infisical_project, env_slug='redcliff',
+  path='/db-creds', secret_name='HOST').value }}"
+
+netbox_db_password: "{{ lookup(vault_plugin,
+  project_id=kubernetes_infisical_project, env_slug='redcliff',
+  path='/db-creds', secret_name='NETBOX_PASSWORD').value }}"
+
+netbox_email_server: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/common/email', secret_name='host').value }}"
+
+netbox_email_username: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/common/email', secret_name='username').value }}"
+
+netbox_email_password: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/common/email', secret_name='password').value }}"
+
+netbox_email_port: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/common/email', secret_name='port').value }}"

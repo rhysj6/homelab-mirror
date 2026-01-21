@@ -1,4 +1,6 @@
 infisical_project: 962f409d-8e60-41b2-88c4-13d313546083
+iac_infisical_project: a313cae1-beb5-408e-be83-83fa189863b6
+kubernetes_infisical_project: 2ace56f5-d07e-455e-9009-e44dfce28566
 env: prod
 vault_plugin: infisical.vault.read_secrets
 
@@ -19,3 +21,7 @@ proxmox:
       env_slug=env, path='/proxmox', secret_name='ch_token_id').value }}"
   ch_secret: "{{ lookup(vault_plugin, project_id=infisical_project,
       env_slug=env, path='/proxmox', secret_name='ch_secret').value }}"
+
+domain_name: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/common', secret_name='domain').value }}"
