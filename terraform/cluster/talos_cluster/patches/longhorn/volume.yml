@@ -1,13 +1,4 @@
 apiVersion: v1alpha1
-kind: VolumeConfig
-name: EPHEMERAL
-provisioning:
-    grow: false
-    maxSize: 32GiB
-
----
-
-apiVersion: v1alpha1
 kind: UserVolumeConfig
 name: longhorn
 provisioning:

@@ -13,6 +13,11 @@ machine:
 %{ if storage_enabled ~}
     storage_enabled: true
 %{ endif ~}
+%{ if control_plane ~}
+  nodeLabels:
+    node.kubernetes.io/exclude-from-external-load-balancers:
+      $patch: delete
+%{ endif ~}
 
 cluster:
   network:

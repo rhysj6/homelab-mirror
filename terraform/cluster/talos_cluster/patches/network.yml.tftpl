@@ -1,6 +1,7 @@
 machine:
   network:
-    hostname: ${hostname}
+    nameservers:
+      - 10.0.0.1
     interfaces:
       - deviceSelector:
           physical: true
@@ -13,3 +14,10 @@ machine:
         vip:
           ip: ${vip}
 %{ endif ~}
+
+
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: ${hostname}
+auto: off

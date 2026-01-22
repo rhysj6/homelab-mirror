@@ -5,20 +5,29 @@ data "talos_machine_configuration" "this" {
   cluster_endpoint = "https://${var.kubevip}:6443"
   machine_type     = each.value.control_plane ? "controlplane" : "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
-  config_patches = [
-    templatefile("${path.module}/patches/main.yml.tftpl",{
-      storage_enabled = each.value.storage_enabled
+  docs             = true
+  examples         = true
+  config_patches = flatten([
+    templatefile("${path.module}/patches/main.yml.tftpl", {
+      storage_enabled = each.value.storage_enabled,
+      control_plane   = each.value.control_plane
     }),
-    each.value.control_plane ? file("${path.module}/patches/control-plane.yml") : "",
-    each.value.storage_enabled ? file("${path.module}/patches/longhorn.yml") : "",
+
+    templatefile("${path.module}/patches/custom_ca_certs.yml.tftpl", {
+      custom_ca_cert = yamlencode(data.infisical_secrets.common.secrets.trusted_cert_auths.value)
+    }),
+
+    each.value.storage_enabled ? [for file in fileset("${path.module}/patches/longhorn", "*.yml") : file("${path.module}/patches/longhorn/${file}")] : [],
+
     templatefile("${path.module}/patches/network.yml.tftpl", {
-      ip       = each.value.ip_address,
-      gateway  = var.network.node_gateway,
+      ip          = each.value.ip_address,
+      gateway     = var.network.node_gateway,
       subnet_size = var.network.node_subnet_size,
-      hostname = each.key,
-      vip      = var.kubevip,
-      nodetype = each.value.control_plane ? "controlplane" : "worker"
+      hostname    = each.key,
+      vip         = var.kubevip,
+      nodetype    = each.value.control_plane ? "controlplane" : "worker"
     }),
+    
     yamlencode({
       machine = {
         install = {
@@ -26,7 +35,7 @@ data "talos_machine_configuration" "this" {
         }
       }
     })
-  ]
+  ])
   talos_version = local.latest
 }
 
