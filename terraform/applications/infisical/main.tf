@@ -53,7 +53,7 @@ resource "kubernetes_deployment" "infisical" {
         service_account_name = kubernetes_service_account.infisical.metadata[0].name
         init_container {
           name    = "migration"
-          image   = "infisical/infisical:v0.155.5"
+          image   = "infisical/infisical:v0.156.3"
           command = ["npm", "run", "migration:latest"]
           env {
             name = "DB_CONNECTION_URI"
@@ -77,7 +77,7 @@ resource "kubernetes_deployment" "infisical" {
 
         container {
           name  = "infisical"
-          image = "infisical/infisical:v0.155.5"
+          image = "infisical/infisical:v0.156.3"
           env {
             name = "DB_CONNECTION_URI"
             value_from {
