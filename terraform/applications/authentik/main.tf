@@ -36,6 +36,13 @@ resource "helm_release" "authentik" {
         user     = "file:///postgres-creds/username"
         password = "file:///postgres-creds/password"
       }
+      email = {
+        host     = data.infisical_secrets.common.secrets.email_host.value
+        username = data.infisical_secrets.common.secrets.email_username.value
+        password = data.infisical_secrets.common.secrets.email_password.value
+        use_tls  = true
+        from     = "Authentik <${data.infisical_secrets.common.secrets.email_from.value}>"
+      }
     },
     global = {
       volumes = [
@@ -98,7 +105,7 @@ resource "helm_release" "authentik" {
         serviceMonitor = {
           enabled = true
         }
-      },
+      }
     }
   })]
 }
