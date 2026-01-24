@@ -25,9 +25,14 @@ resource "kubernetes_secret" "infisical_secrets" {
     namespace = kubernetes_namespace.infisical.id
   }
   data = {
-    AUTH_SECRET    = random_password.auth_secret.result
-    ENCRYPTION_KEY = random_password.encryption_key.result
-    SITE_URL       = "https://${local.infisical_hostname}"
+    AUTH_SECRET       = random_password.auth_secret.result
+    ENCRYPTION_KEY    = random_password.encryption_key.result
+    SITE_URL          = "https://${local.infisical_hostname}"
+    SMTP_HOST         = data.infisical_secrets.common.secrets.email_host.value
+    SMTP_USERNAME     = data.infisical_secrets.common.secrets.email_username.value
+    SMTP_PASSWORD     = data.infisical_secrets.common.secrets.email_password.value
+    SMTP_FROM_NAME    = "Infisical"
+    SMTP_FROM_ADDRESS = data.infisical_secrets.common.secrets.email_from.value
   }
 }
 
