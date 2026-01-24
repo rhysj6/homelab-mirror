@@ -11,16 +11,16 @@ netbox_db_password: "{{ lookup(vault_plugin,
 
 netbox_email_server: "{{ lookup(vault_plugin,
   project_id=iac_infisical_project, env_slug='main',
-  path='/common/email', secret_name='host').value }}"
+  path='/common', secret_name='email_host').value }}"
 
 netbox_email_username: "{{ lookup(vault_plugin,
   project_id=iac_infisical_project, env_slug='main',
-  path='/common/email', secret_name='username').value }}"
+  path='/common', secret_name='email_username').value }}"
 
 netbox_email_password: "{{ lookup(vault_plugin,
   project_id=iac_infisical_project, env_slug='main',
-  path='/common/email', secret_name='password').value }}"
+  path='/common', secret_name='email_password').value }}"
 
 netbox_email_port: "{{ lookup(vault_plugin,
   project_id=iac_infisical_project, env_slug='main',
-  path='/common/email', secret_name='port').value }}"
+  path='/common', secret_name='email_port').value }}"
