@@ -10,8 +10,10 @@ module "clifton" {
   hostname   = "clifton.hl.${local.domain}"
   ip_address = "10.0.0.20"
   port       = 8006
-  portname = "https"
-  middleware = "authentik"
+  portname   = "https"
+  extra-ingress-annotations = {
+    "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-authentik@kubernetescrd"
+  }
 }
 
 module "pbs" {
@@ -20,7 +22,8 @@ module "pbs" {
   hostname   = "pbs.hl.${local.domain}"
   ip_address = "10.10.0.25"
   port       = 8007
-  portname = "https"
+  portname   = "https"
+  local-only = true
 }
 
 module "home_assistant" {
@@ -37,7 +40,7 @@ module "paperless" {
   hostname   = "paperless.${local.domain}"
   ip_address = "10.10.1.4"
   port       = 8000
-  middleware = "local-only"
+  local-only = true
 }
 
 module "actualbudget" {
@@ -46,6 +49,6 @@ module "actualbudget" {
   hostname   = "budget.${local.domain}"
   ip_address = "10.10.1.5"
   port       = 5006
-  portname = "https"
-  middleware = "local-only"
+  portname   = "https"
+  local-only = true
 }

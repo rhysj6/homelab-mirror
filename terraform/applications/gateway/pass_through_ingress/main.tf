@@ -15,26 +15,23 @@ resource "kubernetes_service_v1" "service" {
 }
 
 locals {
-    base_annotations = {
-      "cert-manager.io/cluster-issuer" = "cert-manager"
-    }
-    optional_annotations = {
-        exists = {
-            "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-${var.middleware}@kubernetescrd"
-        }
-        not_exists = {}
-    }
-    annotations = "${merge(
-        local.base_annotations,
-        local.optional_annotations[var.middleware != "" ? "exists" : "not_exists"]
-    )}"
+  public_annotations = {
+    "cert-manager.io/cluster-issuer" = "cert-manager"
+  }
+  local_annotations = {
+    "cert-manager.io/cluster-issuer"                   = "infisical"
+    "cert-manager.io/common-name"                      = var.hostname
+    "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-local-only@kubernetescrd"
+  }
 }
 
 resource "kubernetes_ingress_v1" "ingress" {
   metadata {
     name      = var.name
     namespace = "external-hosts"
-    annotations = local.annotations
+    annotations = merge(
+      var.local-only ? local.local_annotations : local.public_annotations,
+    var.extra-ingress-annotations)
   }
   spec {
     rule {

@@ -1,6 +1,5 @@
 locals {
   domain = data.infisical_secrets.common.secrets.domain.value
-  windows_domain = data.infisical_secrets.common.secrets.windows_domain.value
 }
 
 data "infisical_secrets" "common" {

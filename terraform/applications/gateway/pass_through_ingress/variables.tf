@@ -24,8 +24,13 @@ variable "portname" {
   default     = "http"
 }
 
-variable "middleware" {
-  description = "The middleware to apply to the ingress resource."
-  type        = string
-  default     = ""
+variable "extra-ingress-annotations" {
+  description = "Extra annotations to apply to this ingress resource."
+  default = {}
+}
+
+variable "local-only" {
+  description = "Whether or not this endpoint is local access only"
+  default = false
+  type    = bool
 }
