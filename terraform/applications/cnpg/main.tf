@@ -9,6 +9,6 @@ resource "helm_release" "cloud_native_postgres" {
   name             = "cloud-native-postgres"
   namespace        = "cnpg-system"
   create_namespace = true
-  version          = "0.26.1"
+  version          = "0.27.0"
   max_history      = 2
 }
