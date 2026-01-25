@@ -52,3 +52,40 @@ resource "kubernetes_manifest" "cluster_issuer" {
 }
 
 
+resource "kubernetes_manifest" "infisical_cluster_issuer" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata = {
+      name = "infisical"
+    }
+    spec = {
+      acme = {
+        server = "${data.infisical_secrets.common.secrets.infisical_url.value}/api/v1/cert-manager/acme/profiles/5bd9a3f7-1673-48be-a30d-3d2670de4da0/directory"
+
+        # disableAccountKeyGeneration = true
+        externalAccountBinding = {
+          keyID = "5bd9a3f7-1673-48be-a30d-3d2670de4da0"
+          keySecretRef = {
+            name = "infisical-cluster-issuer"
+            key  = "clientSecret"
+          }
+        }
+        privateKeySecretRef = {
+          name = "infisical-acme-private-key"
+        }
+      }
+    }
+  }
+  depends_on = [kubernetes_secret_v1.infisical_cluster_issuer]
+}
+
+resource "kubernetes_secret_v1" "infisical_cluster_issuer" {
+  metadata {
+    name      = "infisical-cluster-issuer"
+    namespace = "cert-manager"
+  }
+  data = {
+    "clientSecret" = data.infisical_secrets.core.secrets.infisical_acme_client_secret.value
+  }
+}
