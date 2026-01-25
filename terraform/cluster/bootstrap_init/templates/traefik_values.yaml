@@ -5,8 +5,9 @@ additionalArguments:
 ports:
   websecure:
     asDefault: true
-    tls:
-      enabled: true
+    http:
+      tls:
+        enabled: true
 
 providers:
   kubernetesCRD:
