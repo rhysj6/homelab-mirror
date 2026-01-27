@@ -7,9 +7,8 @@ data "authentik_flow" "logout" {
 }
 
 data "authentik_flow" "authentication" {
-  slug = "main-authentication"
+  slug = "default-authentication-flow"
 }
-
 
 data "authentik_certificate_key_pair" "main" {
   name = "domain"

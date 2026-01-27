@@ -3,7 +3,7 @@ resource "authentik_provider_proxy" "protected_services" {
   external_host       = "https://hl.${local.domain}"
   cookie_domain       = local.domain
   authorization_flow  = data.authentik_flow.authorization-flow.id
-  authentication_flow = authentik_flow.authentication.uuid
+  authentication_flow = data.authentik_flow.authentication.id
   invalidation_flow   = data.authentik_flow.invalidation-flow.id
   mode                = "forward_domain"
   access_token_validity = "days=7"
