@@ -6,7 +6,6 @@ resource "random_password" "client_id" {
 resource "authentik_provider_oauth2" "main" {
   name               = "${var.name} - (Managed via Terraform)"
   authorization_flow = data.authentik_flow.authorization.id
-  authentication_flow = data.authentik_flow.authentication.id
   signing_key        = data.authentik_certificate_key_pair.main.id
   invalidation_flow   = data.authentik_flow.logout.id
   client_id          = random_password.client_id.result
