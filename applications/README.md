@@ -1,3 +1,6 @@
+# Update
+This folder is completely deprecated and will be removed in future. All applications are now configured via the `terraform/applications` folder.
+
 # Applications Folder
 This folder contains all applications deployed onto kubernetes clusters.
 
