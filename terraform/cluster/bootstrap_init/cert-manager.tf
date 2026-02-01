@@ -15,7 +15,15 @@ resource "helm_release" "cert_manager" {
     {
       name  = "crds.enabled"
       value = "true"
+    },
+    {
+      name  = "dns01RecursiveNameserversOnly"
+      value = "true"
+    },
+    {
+      name  = "dns01RecursiveNameservers"
+      value = "1.1.1.1:53"
     }
   ]
-  depends_on = [ helm_release.kube_prometheus_stack, kubernetes_namespace.cert_manager ]
+  depends_on = [helm_release.kube_prometheus_stack, kubernetes_namespace.cert_manager]
 }
