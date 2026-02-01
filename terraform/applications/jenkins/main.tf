@@ -1,5 +1,5 @@
 locals {
-  url = "build.hl.${data.infisical_secrets.common.secrets.domain.value}"
+  url = "jenkins.hl.${data.infisical_secrets.common.secrets.domain.value}"
 }
 
 resource "kubernetes_namespace" "jenkins" {
@@ -34,8 +34,8 @@ resource "helm_release" "jenkins" {
 
 module "authentik" {
   source = "git::https://github.com/rhysj6/homelab.git//terraform/modules/authentik_oauth?ref=main"
-  name   = "Jenkins Redcliff"
-  slug   = "jenkins-redcliff"
+  name   = "Jenkins"
+  slug   = "jenkins"
   group  = "Platform"
   url    = "https://${local.url}"
   allowed_redirect_uris = [{
@@ -53,7 +53,7 @@ resource "kubernetes_secret" "jenkins-security" {
   data = {
     client-id = module.authentik.client_id
     client-secret = module.authentik.client_secret
-    authentik-oic-well-known-url = "${data.infisical_secrets.common.secrets.authentik_url.value}/application/o/jenkins-redcliff/.well-known/openid-configuration"
+    authentik-oic-well-known-url = "${data.infisical_secrets.common.secrets.authentik_url.value}/application/o/jenkins/.well-known/openid-configuration"
   }
   depends_on = [
     kubernetes_namespace.jenkins,
