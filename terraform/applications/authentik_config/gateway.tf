@@ -9,17 +9,21 @@ module "clifton_authentik" {
   allowed_redirect_uris = [{
     url           = "https://clifton.hl.${local.domain}"
     matching_mode = "strict"
-  }] 
+  }]
+  allowed_group       = "pve-access"
+  secure_access = true
 }
 
 module "actual_budget_authentik" {
   source = "git::https://github.com/rhysj6/homelab.git//terraform/modules/authentik_oauth?ref=main"
   name   = "Actual Budget"
   slug   = "actual-budget"
-  group  = "Home"
+  group  = "Personal"
   url    = "https://budget.${local.domain}"
   allowed_redirect_uris = [{
     url           = "https://budget.${local.domain}/openid/callback"
     matching_mode = "strict"
-  }] 
+  }]
+  allowed_group       = "J6-personal"
+  local_only_access = true
 }
