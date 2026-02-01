@@ -1,5 +1,5 @@
 locals {
-  url = "jenkins.hl.${var.domain}"
+  url = "build.hl.${data.infisical_secrets.common.secrets.domain.value}"
 }
 
 resource "kubernetes_namespace" "jenkins" {
@@ -13,7 +13,7 @@ resource "helm_release" "jenkins" {
   repository  = "https://charts.jenkins.io"
   name        = "jenkins"
   namespace   = "jenkins"
-  version     = "5.8.99"
+  version     = "5.8.134"
   max_history = 2
     values = concat(
     [
@@ -33,15 +33,16 @@ resource "helm_release" "jenkins" {
 }
 
 module "authentik" {
-  source = "../../../modules/authentik_oauth"
-  name   = "Jenkins"
-  slug   = "jenkins"
+  source = "git::https://github.com/rhysj6/homelab.git//terraform/modules/authentik_oauth?ref=main"
+  name   = "Jenkins Redcliff"
+  slug   = "jenkins-redcliff"
   group  = "Platform"
   url    = "https://${local.url}"
   allowed_redirect_uris = [{
     url           = "https://${local.url}/securityRealm/finishLogin"
     matching_mode = "strict"
-  }] 
+  }]
+  secure_access = true
 }
 
 resource "kubernetes_secret" "jenkins-security" {
@@ -52,7 +53,7 @@ resource "kubernetes_secret" "jenkins-security" {
   data = {
     client-id = module.authentik.client_id
     client-secret = module.authentik.client_secret
-    authentik-oic-well-known-url = "https://hl.${var.domain}/application/o/jenkins/.well-known/openid-configuration"
+    authentik-oic-well-known-url = "${data.infisical_secrets.common.secrets.authentik_url.value}/application/o/jenkins-redcliff/.well-known/openid-configuration"
   }
   depends_on = [
     kubernetes_namespace.jenkins,

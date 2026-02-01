@@ -37,3 +37,8 @@ unit "external_dns" {
   source = "${get_repo_root()}/terraform/applications/external_dns"
   path   = "external_dns"
 }
+
+unit "jenkins" {
+  source = "${get_repo_root()}/terraform/applications/jenkins"
+  path   = "jenkins"
+}

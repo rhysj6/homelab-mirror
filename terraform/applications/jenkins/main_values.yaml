@@ -1,4 +1,6 @@
 controller:
+  nodeSelector:
+    storage_enabled: 'true'
   ingress:
     enabled: true
     hostName: ${jenkins_url}
@@ -25,3 +27,5 @@ agent:
     limits:
       cpu: "4096m"
       memory: "8192Mi"
+rbac:
+  readSecrets: true

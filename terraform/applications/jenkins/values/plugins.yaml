@@ -11,4 +11,4 @@ controller:
     - pipeline-utility-steps
     - dark-theme
     - ansible
-    - infisical
+    - kubernetes-credentials-provider
