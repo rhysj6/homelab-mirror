@@ -1,0 +1,9 @@
+controller:
+  JCasC:
+    configScripts:
+      environment-variables: |
+  globalNodeProperties:
+  - envVars:
+      env:
+      - key: "INFISICAL_URL"
+        value: ${infisical_url}

@@ -3,8 +3,8 @@ controller:
     defaultConfig: true
     securityRealm: |
       oic:
-        clientId: "${jenkins-security-client-id}"
-        clientSecret: "${jenkins-security-client-secret}"
+        clientId: "$${jenkins-security-client-id}"
+        clientSecret: "$${jenkins-security-client-secret}"
         emailFieldName: "email"
         fullNameFieldName: "name"
         groupsFieldName: "groups"
@@ -12,7 +12,7 @@ controller:
         serverConfiguration:
           wellKnown:
             scopesOverride: "openid profile email"
-            wellKnownOpenIDConfigurationUrl: ${authentik-oic-well-known-url}
+            wellKnownOpenIDConfigurationUrl: $${authentik-oic-well-known-url}
         userNameField: "preferred_username"
         userIdStrategy: "caseSensitive"
         groupIdStrategy: "caseSensitive"

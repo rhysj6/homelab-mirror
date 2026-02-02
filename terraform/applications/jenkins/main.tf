@@ -22,7 +22,9 @@ resource "helm_release" "jenkins" {
       })
     ],
     [
-      for f in fileset(path.module, "values/*.yaml") : file("${path.module}/${f}")
+      for f in fileset(path.module, "values/*.yaml*") : templatefile("${path.module}/${f}", {
+        infisical_url = data.infisical_secrets.common.secrets.infisical_url.value
+      })
     ]
   )
 
