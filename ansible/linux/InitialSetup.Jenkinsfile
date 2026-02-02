@@ -17,7 +17,6 @@ pipeline {
         stage('Playbook') {
             environment {
                 ANSIBLE_HOST_KEY_CHECKING = 'False'
-                INFISICAL_URL = credentials('infisical_url')
                 UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_ID = credentials('INFISICAL_CLIENT_ID')
                 UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_SECRET = credentials('INFISICAL_CLIENT_SECRET')
             }
