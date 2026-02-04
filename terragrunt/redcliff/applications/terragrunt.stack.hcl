@@ -42,3 +42,8 @@ unit "jenkins" {
   source = "${get_repo_root()}/terraform/applications/jenkins"
   path   = "jenkins"
 }
+
+unit "observability" {
+  source = "${get_repo_root()}/terraform/applications/observability"
+  path   = "observability"
+}

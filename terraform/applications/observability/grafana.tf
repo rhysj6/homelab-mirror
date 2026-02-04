@@ -1,5 +1,5 @@
 locals {
-  grafana_url = "grafana.hl.${var.domain}"
+  grafana_url = "grafana.hl.${data.infisical_secrets.common.secrets.domain.value}"
 }
 
 resource "helm_release" "grafana" {
@@ -11,7 +11,7 @@ resource "helm_release" "grafana" {
   values = [
     templatefile("${path.module}/templates/grafana_values.yaml", {
       domain    = local.grafana_url,
-      authentik = "hl.${var.domain}",
+      authentik = "hl.${data.infisical_secrets.common.secrets.domain.value}",
     })
   ]
 }
@@ -72,4 +72,3 @@ resource "kubernetes_config_map" "grafana_dashboards" {
     file => file("${path.module}/grafana_configs/dashboards/${file}")
   }
 }
-

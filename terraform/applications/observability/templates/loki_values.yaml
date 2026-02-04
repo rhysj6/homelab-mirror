@@ -38,8 +38,6 @@ loki:
   tenants:
     - name: onsite-production
       password: ${BASIC_AUTH_PASSWORD}
-    - name: test
-      password: ${BASIC_AUTH_PASSWORD}
 
 deploymentMode: SingleBinary
 
