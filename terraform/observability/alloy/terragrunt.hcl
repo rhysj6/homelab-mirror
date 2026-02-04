@@ -7,6 +7,10 @@ include "env" {
   expose = true
 }
 
+dependencies {
+  paths = ["../loki"]
+}
+
 terraform {
   source = "."
 }

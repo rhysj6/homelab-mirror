@@ -9,7 +9,7 @@ resource "helm_release" "grafana" {
   namespace  = "monitoring"
   version    = "10.5.15"
   values = [
-    templatefile("${path.module}/grafana_values.yaml", {
+    templatefile("${path.module}/values.yaml", {
       domain    = local.grafana_url,
       authentik = "hl.${data.infisical_secrets.common.secrets.domain.value}",
     })

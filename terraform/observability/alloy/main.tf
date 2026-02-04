@@ -5,7 +5,7 @@ resource "helm_release" "alloy" {
   namespace  = "monitoring"
   version    = "1.5.3"
   values = [
-    file("${path.module}/alloy_values.yaml")
+    file("${path.module}/values.yaml")
   ]
 }
 
