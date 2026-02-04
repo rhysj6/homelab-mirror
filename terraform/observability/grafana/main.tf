@@ -17,7 +17,7 @@ resource "helm_release" "grafana" {
 }
 
 module "grafana_authentik" {
-  source = "../../modules/authentik_oauth"
+  source = "git::https://github.com/rhysj6/homelab.git//terraform/modules/authentik_oauth?ref=main"
   name   = "Grafana"
   slug   = "grafana"
   group  = "Infrastructure"
