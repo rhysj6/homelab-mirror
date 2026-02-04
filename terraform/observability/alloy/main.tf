@@ -12,8 +12,8 @@ resource "helm_release" "alloy" {
 locals {
   alloy_files = { for file in fileset("${path.module}/configs", "*.alloy") :
     file => templatefile("${path.module}/configs/${file}", {
-      LOKI_URL            = var.loki_url
-      BASIC_AUTH_PASSWORD = var.loki_password
+      LOKI_URL            = data.infisical_secrets.loki.secrets.LOKI_URL.value
+      BASIC_AUTH_PASSWORD = data.infisical_secrets.loki.secrets.LOKI_PASSWORD.value
       TENANT              = "onsite-production"
       PROMETHEUS_URL      = "prometheus-prometheus.monitoring.svc.cluster.local:9090"
     })

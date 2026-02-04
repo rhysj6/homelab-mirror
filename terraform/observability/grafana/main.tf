@@ -52,8 +52,8 @@ resource "kubernetes_config_map_v1" "grafana_data_sources" {
   data = {
     for file in fileset("${path.module}/sources/", "*.yaml") :
     file => templatefile("${path.module}/sources/${file}", {
-      LOKI_URL      = var.loki_url
-      LOKI_PASSWORD = var.loki_password
+      LOKI_URL      = data.infisical_secrets.loki.secrets.LOKI_URL.value
+      LOKI_PASSWORD = data.infisical_secrets.loki.secrets.LOKI_PASSWORD.value
     })
   }
 }
