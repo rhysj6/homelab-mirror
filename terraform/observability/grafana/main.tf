@@ -9,7 +9,7 @@ resource "helm_release" "grafana" {
   namespace  = "monitoring"
   version    = "10.5.15"
   values = [
-    templatefile("${path.module}/templates/grafana_values.yaml", {
+    templatefile("${path.module}/grafana_values.yaml", {
       domain    = local.grafana_url,
       authentik = "hl.${data.infisical_secrets.common.secrets.domain.value}",
     })
@@ -50,10 +50,10 @@ resource "kubernetes_config_map_v1" "grafana_data_sources" {
   }
 
   data = {
-    for file in fileset("${path.module}/grafana_configs/sources/", "*.yaml") :
-    file => templatefile("${path.module}/grafana_configs/sources/${file}", {
-      LOKI_URL      = local.loki_url
-      LOKI_PASSWORD = random_password.loki_password.result
+    for file in fileset("${path.module}/sources/", "*.yaml") :
+    file => templatefile("${path.module}/sources/${file}", {
+      LOKI_URL      = var.loki_url
+      LOKI_PASSWORD = var.loki_password
     })
   }
 }
@@ -68,7 +68,7 @@ resource "kubernetes_config_map" "grafana_dashboards" {
   }
 
   data = {
-    for file in fileset("${path.module}/grafana_configs/dashboards/", "*.json") :
-    file => file("${path.module}/grafana_configs/dashboards/${file}")
+    for file in fileset("${path.module}/dashboards/", "*.json") :
+    file => file("${path.module}/dashboards/${file}")
   }
 }
