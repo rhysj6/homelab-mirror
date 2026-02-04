@@ -54,7 +54,7 @@ resource "minio_ilm_policy" "loki" {
   rule {
     id = "versioning"
     noncurrent_expiration {
-      days = "45d"
+      days = 45
     }
     expiration = "DeleteMarker"
   }
