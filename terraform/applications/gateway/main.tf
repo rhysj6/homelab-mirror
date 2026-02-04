@@ -26,6 +26,15 @@ module "pbs" {
   local-only = true
 }
 
+module "semaphore" {
+  source     = "./pass_through_ingress"
+  name       = "semaphore"
+  hostname   = "semaphore.hl.${local.domain}"
+  ip_address = "10.10.1.25"
+  port       = 80
+  local-only = true
+}
+
 module "home_assistant" {
   source     = "./pass_through_ingress"
   name       = "home-assistant"

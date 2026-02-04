@@ -1,0 +1,26 @@
+- name: Manage dependencies
+  ansible.builtin.include_tasks:
+    file: dependencies.yml
+
+- name: Ensure semaphore user exists
+  ansible.builtin.user:
+    name: semaphore
+    system: true
+    create_home: false
+    shell: /usr/sbin/nologin
+  become: true
+
+- name: Create semaphore directory
+  ansible.builtin.file:
+    path: /etc/semaphore
+    state: directory
+    owner: semaphore
+    mode: '0755'
+
+- name: Configure semaphore
+  ansible.builtin.include_tasks:
+    file: config.yml
+
+- name: Install semaphore
+  ansible.builtin.include_tasks:
+    file: install.yml

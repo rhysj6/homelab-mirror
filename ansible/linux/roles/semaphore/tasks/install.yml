@@ -1,0 +1,32 @@
+- name: Download semaphore deb package
+  ansible.builtin.get_url:
+    url: "https://github.com/semaphoreui/semaphore/releases/download/v{{ semaphore_version }}/semaphore_{{ semaphore_version }}_linux_amd64.deb"
+    dest: /tmp/semaphore-{{ semaphore_version }}.deb
+    mode: '0644'
+    force: false
+
+- name: Install semaphore deb package
+  ansible.builtin.apt:
+    deb: /tmp/semaphore-{{ semaphore_version }}.deb
+    state: present
+  become: true
+
+- name: Create service file for semaphore
+  ansible.builtin.template:
+    src: semaphore.service.j2
+    dest: /etc/systemd/system/semaphore.service
+    mode: '0644'
+    owner: root
+  register: semaphore_service_file
+  notify: Reload systemd
+  become: true
+
+- name: Flush handlers to reload systemd
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure semaphore service is enabled and started
+  ansible.builtin.systemd:
+    name: semaphore
+    enabled: true
+    state: started
+  become: true

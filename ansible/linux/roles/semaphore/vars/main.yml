@@ -1,0 +1,9 @@
+semaphore_version: "2.16.51"
+
+semaphore_oauth_client_id: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/applications/authentik_config/outputs/', secret_name='semaphore_CLIENT_ID').value }}"
+
+semaphore_oauth_client_secret: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/applications/authentik_config/outputs/', secret_name='semaphore_CLIENT_SECRET').value }}"

@@ -1,0 +1,36 @@
+- name: Check if config file already exists
+  ansible.builtin.stat:
+    path: /etc/semaphore/config.json
+  register: semaphore_config_stat
+
+
+- name: Read existing config file
+  ansible.builtin.slurp:
+    src: /etc/semaphore/config.json
+  register: semaphore_config_slurp
+  become: true
+  when: semaphore_config_stat.stat.exists
+
+- name: Load existing config values
+  ansible.builtin.set_fact:
+    semaphore_cookie_hash: "{{ (semaphore_config_slurp.content | b64decode | from_json).cookie_hash }}"
+    semaphore_cookie_encryption: "{{ (semaphore_config_slurp.content | b64decode | from_json).cookie_encryption }}"
+    semaphore_access_key_encryption: "{{ (semaphore_config_slurp.content | b64decode | from_json).access_key_encryption }}"
+  when: semaphore_config_stat.stat.exists
+
+
+- name: Generate new config values
+  ansible.builtin.set_fact:
+    semaphore_cookie_hash: "{{ lookup('ansible.builtin.password', '/dev/null length=64 chars=ascii_letters,digits') }}"
+    semaphore_cookie_encryption: "{{ lookup('ansible.builtin.password', '/dev/null length=32 chars=ascii_letters,digits') }}"
+    semaphore_access_key_encryption: "{{ lookup('ansible.builtin.password', '/dev/null length=32 chars=ascii_letters,digits') }}"
+  when: not semaphore_config_stat.stat.exists
+
+
+- name: Setup config file
+  ansible.builtin.template:
+    src: semaphore_config.json.j2
+    dest: /etc/semaphore/config.json
+    mode: '0644'
+    owner: semaphore
+  notify: Restart semaphore service

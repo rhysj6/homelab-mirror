@@ -1,0 +1,28 @@
+{
+    "sqlite": {
+        "host": "/etc/semaphore/database.sqlite"
+    },
+    "web_host": "https://semaphore.hl.{{ domain_name }}/",
+    "dialect": "sqlite",
+    "port": "80",
+    "password_login_disable": true,
+    "cookie_hash": "{{ semaphore_cookie_hash }}",
+    "cookie_encryption": "{{ semaphore_cookie_encryption }}",
+    "access_key_encryption": "{{ semaphore_access_key_encryption }}",
+    "oidc_providers": {
+        "authentik": {
+            "display_name": "Authentik",
+            "provider_url": "https://hl.{{ domain_name }}/application/o/semaphore/",
+            "client_id": "{{ semaphore_oauth_client_id }}",
+            "client_secret": "{{ semaphore_oauth_client_secret }}",
+            "redirect_url": "https://semaphore.hl.{{ domain_name }}/api/auth/oidc/authentik/redirect/",
+            "scopes": [
+                "openid",
+                "profile",
+                "email"
+            ],
+            "username_claim": "preferred_username",
+            "name_claim": "preferred_username"
+        }
+    }
+}
