@@ -1,5 +1,5 @@
 locals {
-  grafana_url = "grafana.hl.${var.domain}"
+  grafana_url = "grafana.hl.${data.infisical_secrets.common.secrets.domain.value}"
 }
 
 resource "helm_release" "grafana" {
@@ -9,15 +9,15 @@ resource "helm_release" "grafana" {
   namespace  = "monitoring"
   version    = "10.5.15"
   values = [
-    templatefile("${path.module}/templates/grafana_values.yaml", {
+    templatefile("${path.module}/values.yaml", {
       domain    = local.grafana_url,
-      authentik = "hl.${var.domain}",
+      authentik = "hl.${data.infisical_secrets.common.secrets.domain.value}",
     })
   ]
 }
 
 module "grafana_authentik" {
-  source = "../../modules/authentik_oauth"
+  source = "git::https://github.com/rhysj6/homelab.git//terraform/modules/authentik_oauth?ref=main"
   name   = "Grafana"
   slug   = "grafana"
   group  = "Infrastructure"
@@ -50,10 +50,10 @@ resource "kubernetes_config_map_v1" "grafana_data_sources" {
   }
 
   data = {
-    for file in fileset("${path.module}/grafana_configs/sources/", "*.yaml") :
-    file => templatefile("${path.module}/grafana_configs/sources/${file}", {
-      LOKI_URL      = local.loki_url
-      LOKI_PASSWORD = random_password.loki_password.result
+    for file in fileset("${path.module}/sources/", "*.yaml") :
+    file => templatefile("${path.module}/sources/${file}", {
+      LOKI_URL      = data.infisical_secrets.loki.secrets.LOKI_URL.value
+      LOKI_PASSWORD = data.infisical_secrets.loki.secrets.LOKI_PASSWORD.value
     })
   }
 }
@@ -68,8 +68,7 @@ resource "kubernetes_config_map" "grafana_dashboards" {
   }
 
   data = {
-    for file in fileset("${path.module}/grafana_configs/dashboards/", "*.json") :
-    file => file("${path.module}/grafana_configs/dashboards/${file}")
+    for file in fileset("${path.module}/dashboards/", "*.json") :
+    file => file("${path.module}/dashboards/${file}")
   }
 }
-

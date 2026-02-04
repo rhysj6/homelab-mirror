@@ -1,5 +1,5 @@
 locals {
-  loki_url = "loki.hl.${var.domain}"
+  loki_url = "loki.hl.${data.infisical_secrets.common.secrets.domain.value}"
   loki_buckets = [
     "chunks",
     "ruler",
@@ -24,9 +24,9 @@ resource "helm_release" "loki" {
   namespace  = "monitoring"
   version    = "6.51.0"
   values = [
-    templatefile("${path.module}/templates/loki_values.yaml", {
+    templatefile("${path.module}/values.yaml", {
       BUCKET_PREFIX        = local.loki_bucket_prefix
-      S3_ENDPOINT          = "s3.hl.${var.domain}"
+      S3_ENDPOINT          = "s3.hl.${data.infisical_secrets.common.secrets.domain.value}"
       S3_SECRET_ACCESS_KEY = minio_iam_service_account.loki.secret_key
       S3_ACCESS_KEY_ID     = minio_iam_service_account.loki.access_key
       INGRESS_HOST         = local.loki_url

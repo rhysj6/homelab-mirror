@@ -5,15 +5,15 @@ resource "helm_release" "alloy" {
   namespace  = "monitoring"
   version    = "1.5.3"
   values = [
-    file("${path.module}/templates/alloy_values.yaml")
+    file("${path.module}/values.yaml")
   ]
 }
 
 locals {
-  alloy_files = { for file in fileset("${path.module}/alloy_configs", "*.alloy") :
-    file => templatefile("${path.module}/alloy_configs/${file}", {
-      LOKI_URL            = local.loki_url
-      BASIC_AUTH_PASSWORD = random_password.loki_password.result
+  alloy_files = { for file in fileset("${path.module}/configs", "*.alloy") :
+    file => templatefile("${path.module}/configs/${file}", {
+      LOKI_URL            = data.infisical_secrets.loki.secrets.LOKI_URL.value
+      BASIC_AUTH_PASSWORD = data.infisical_secrets.loki.secrets.LOKI_PASSWORD.value
       TENANT              = "onsite-production"
       PROMETHEUS_URL      = "prometheus-prometheus.monitoring.svc.cluster.local:9090"
     })
