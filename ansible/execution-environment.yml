@@ -15,5 +15,5 @@ dependencies:
   system:
   - openssh-clients
   - sshpass
-  python: requirements.txt
-  galaxy: requirements.yml
+  python: linux/roles/semaphore/files/requirements.txt
+  galaxy: linux/requirements.yml

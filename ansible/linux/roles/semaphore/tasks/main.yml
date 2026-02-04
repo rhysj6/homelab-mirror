@@ -8,7 +8,6 @@
     system: true
     create_home: false
     shell: /usr/sbin/nologin
-  become: true
 
 - name: Create semaphore directory
   ansible.builtin.file:

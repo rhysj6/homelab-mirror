@@ -1,0 +1,36 @@
+- name: Install apt dependencies
+  ansible.builtin.apt:
+    name:
+      - python3
+      - git
+      - wget
+      - curl
+      - libssl-dev
+      - libffi-dev
+      - build-essential
+      - python3-dev
+      - python3-pip
+      - python3-venv
+    state: present
+    update_cache: true
+
+- name: Create Python venv for Semaphore
+  ansible.builtin.command:
+    cmd: python3 -m venv /opt/semaphore/venv
+    creates: /opt/semaphore/venv
+
+- name: Install ansible in venv
+  ansible.builtin.pip:
+    name: ansible
+    virtualenv: /opt/semaphore/venv
+
+- name: Copy requirements.txt file
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/requirements.txt"
+    dest: /etc/semaphore/requirements.txt
+    mode: '0644'
+
+- name: Install requirements.txt dependencies in venv
+  ansible.builtin.pip:
+    requirements: /etc/semaphore/requirements.txt
+    virtualenv: /opt/semaphore/venv

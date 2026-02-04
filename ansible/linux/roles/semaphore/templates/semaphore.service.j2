@@ -7,9 +7,12 @@ After=network-online.target
 [Service]
 Type=simple
 ExecReload=/bin/kill -HUP $MAINPID
-ExecStart=/usr/bin/semaphore server --config /etc/semaphore/config.json
+ExecStart=/bin/bash -c 'source /opt/semaphore/venv/bin/activate \
+                        && /usr/bin/semaphore server --config /etc/semaphore/config.json'
 SyslogIdentifier=semaphore
 Restart=always
+Environment="PATH=/opt/semaphore/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="VIRTUAL_ENV=/opt/semaphore/venv"
 
 [Install]
 WantedBy=multi-user.target

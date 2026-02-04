@@ -9,7 +9,6 @@
   ansible.builtin.apt:
     deb: /tmp/semaphore-{{ semaphore_version }}.deb
     state: present
-  become: true
 
 - name: Create service file for semaphore
   ansible.builtin.template:
@@ -17,9 +16,7 @@
     dest: /etc/systemd/system/semaphore.service
     mode: '0644'
     owner: root
-  register: semaphore_service_file
   notify: Reload systemd
-  become: true
 
 - name: Flush handlers to reload systemd
   ansible.builtin.meta: flush_handlers
@@ -29,4 +26,3 @@
     name: semaphore
     enabled: true
     state: started
-  become: true
