@@ -1,7 +1,3 @@
-- name: Manage dependencies
-  ansible.builtin.include_tasks:
-    file: dependencies.yml
-
 - name: Ensure semaphore user exists
   ansible.builtin.user:
     name: semaphore
@@ -15,6 +11,10 @@
     state: directory
     owner: semaphore
     mode: '0755'
+
+- name: Manage dependencies
+  ansible.builtin.include_tasks:
+    file: dependencies.yml
 
 - name: Configure semaphore
   ansible.builtin.include_tasks:
