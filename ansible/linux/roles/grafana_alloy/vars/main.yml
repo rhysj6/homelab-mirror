@@ -1,14 +1,14 @@
 grafana_alloy_loki:
-  url: "{{ lookup('infisical.vault.read_secrets',
-    project_id=infisical_project, env_slug=env,
-    path='/init/alloy', secret_name='loki_url').value }}"
-  tenant_id: "{{ lookup('infisical.vault.read_secrets',
+  url: "{{ lookup(vault_plugin,
+    project_id=iac_infisical_project, env_slug='main',
+    path='/applications/loki', secret_name='LOKI_URL').value }}/loki/api/v1/push"
+  tenant_id: "{{ lookup(vault_plugin,
     project_id=infisical_project, env_slug=env,
     path='/init/alloy', secret_name='loki_tenant').value }}"
-  password: "{{ lookup('infisical.vault.read_secrets',
-    project_id=infisical_project, env_slug=env,
-    path='/init/alloy', secret_name='loki_password').value }}"
+  password: "{{ lookup(vault_plugin,
+    project_id=iac_infisical_project, env_slug='main',
+    path='/applications/loki', secret_name='LOKI_PASSWORD').value }}"
 
-grafana_alloy_prometheus_url: "{{ lookup('infisical.vault.read_secrets',
-    project_id=infisical_project, env_slug=env,
-    path='/init/alloy', secret_name='prometheus_url').value }}"
+grafana_alloy_prometheus_url: "{{ lookup(vault_plugin,
+  project_id=infisical_project, env_slug=env,
+  path='/init/alloy', secret_name='prometheus_url').value }}"
