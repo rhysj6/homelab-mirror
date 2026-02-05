@@ -13,7 +13,7 @@ resource "helm_release" "jenkins" {
   repository  = "https://charts.jenkins.io"
   name        = "jenkins"
   namespace   = "jenkins"
-  version     = "5.8.134"
+  version     = "5.8.135"
   max_history = 2
     values = concat(
     [
