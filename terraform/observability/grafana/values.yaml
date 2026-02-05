@@ -37,7 +37,7 @@ grafana.ini:
       token_url: "https://${authentik}/application/o/token/"
       api_url: "https://${authentik}/application/o/userinfo/"
       # Optionally map user groups to Grafana roles
-      role_attribute_path: contains(groups, 'Infrastructure Admin') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor'
+      role_attribute_path: contains(groups, 'grafana_admin') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor'
 sidecar:
   dashboards:
     enabled: true
