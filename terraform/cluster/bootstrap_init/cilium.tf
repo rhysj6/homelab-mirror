@@ -1,6 +1,6 @@
 resource "kubernetes_manifest" "cilium_loadbalancer_ip_pool" {
   manifest = {
-    apiVersion = "cilium.io/v2alpha1"
+    apiVersion = "cilium.io/v2"
     kind       = "CiliumLoadBalancerIPPool"
     metadata = {
       name = "main-pool"
@@ -19,7 +19,7 @@ resource "kubernetes_manifest" "cilium_loadbalancer_ip_pool" {
 # resource "kubernetes_manifest" "cilium_l2_announcement_policy" {
 #   count = var.cilium_use_bgp ? 0 : 1
 #   manifest = {
-#     apiVersion = "cilium.io/v2alpha1"
+#     apiVersion = "cilium.io/v2"
 #     kind       = "CiliumL2AnnouncementPolicy"
 #     metadata = {
 #       name = "default-policy"
@@ -34,7 +34,7 @@ resource "kubernetes_manifest" "cilium_loadbalancer_ip_pool" {
 resource "kubernetes_manifest" "cilium_bgp_cluster_config" {
   # count = var.cilium_use_bgp ? 1 : 0
   manifest = {
-    apiVersion = "cilium.io/v2alpha1"
+    apiVersion = "cilium.io/v2"
     kind       = "CiliumBGPClusterConfig"
     metadata = {
       name = "cilium-bgp"
@@ -63,7 +63,7 @@ resource "kubernetes_manifest" "cilium_bgp_cluster_config" {
 resource "kubernetes_manifest" "cilium_bgp_peer_config" {
   # count = var.cilium_use_bgp ? 1 : 0
   manifest = {
-    apiVersion = "cilium.io/v2alpha1"
+    apiVersion = "cilium.io/v2"
     kind       = "CiliumBGPPeerConfig"
     metadata = {
       name = "opnsense-peer"
@@ -96,7 +96,7 @@ resource "kubernetes_manifest" "cilium_bgp_peer_config" {
 resource "kubernetes_manifest" "cilium_bgp_advertisement" {
   # count = var.cilium_use_bgp ? 1 : 0
   manifest = {
-    apiVersion = "cilium.io/v2alpha1"
+    apiVersion = "cilium.io/v2"
     kind       = "CiliumBGPAdvertisement"
     metadata = {
       name = "bgp-advertisements"
