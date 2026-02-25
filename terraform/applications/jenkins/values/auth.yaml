@@ -3,6 +3,7 @@ controller:
     defaultConfig: true
     securityRealm: |
       oic:
+        allowTokenAccessWithoutOicSession: true
         clientId: "$${jenkins-security-client-id}"
         clientSecret: "$${jenkins-security-client-secret}"
         emailFieldName: "email"
