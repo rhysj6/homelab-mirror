@@ -19,7 +19,7 @@ resource "helm_release" "traefik" {
   repository  = "https://traefik.github.io/charts"
   name        = "traefik"
   namespace   = kubernetes_namespace.traefik.id
-  version     = "39.0.0"
+  version     = "39.0.2"
   max_history = 2
   depends_on  = [helm_release.traefik_crds, kubernetes_namespace.traefik, helm_release.kube_prometheus_stack]
   values = [
