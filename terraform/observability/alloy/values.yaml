@@ -22,6 +22,6 @@ controller:
   type: deployment
   replicas: 1
   autoscaling:
-    enabled: true
+    enabled: false
 service:
   type: LoadBalancer
