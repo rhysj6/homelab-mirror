@@ -20,7 +20,7 @@ module "pbs" {
   source     = "./pass_through_ingress"
   name       = "pbs"
   hostname   = "pbs.hl.${local.domain}"
-  ip_address = "10.10.0.25"
+  ip_address = "10.0.0.25"
   port       = 8007
   portname   = "https"
   local-only = true
