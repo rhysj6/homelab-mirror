@@ -18,6 +18,7 @@ services:
       - netbox-media-files:/opt/netbox/netbox/media:rw
       - netbox-reports-files:/opt/netbox/netbox/reports:rw
       - netbox-scripts-files:/opt/netbox/netbox/scripts:rw
+    restart: unless-stopped
   netbox-worker:
     image: docker.io/netboxcommunity/netbox:{{ netbox_version }}
     env_file: .env
@@ -39,6 +40,7 @@ services:
       start_period: 20s
       timeout: 3s
       interval: 15s
+    restart: unless-stopped
 
   # redis
   redis:
@@ -57,6 +59,7 @@ services:
       - REDIS_PASSWORD={{ netbox_redis_mq_password }}
     volumes:
       - netbox-redis-data:/data
+    restart: unless-stopped
   redis-cache:
     image: docker.io/valkey/valkey:8.1-alpine
     command:
@@ -68,7 +71,7 @@ services:
       - REDIS_PASSWORD={{ netbox_redis_cache_password }}
     volumes:
       - netbox-redis-cache-data:/data
-
+    restart: unless-stopped
 volumes:
   netbox-media-files:
     driver: local
