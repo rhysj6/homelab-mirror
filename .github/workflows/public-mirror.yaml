@@ -9,10 +9,6 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      actions: write
-
     steps:
       - name: Install git-filter-repo
         run: pip install git-filter-repo
@@ -47,5 +43,5 @@ jobs:
 
           # Force push main's rewritten history to the public-mirror branch
           git push --force \
-            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} \
-            "${HEAD_SHA}:refs/heads/public-mirror"
+            https://x-access-token:${{ secrets.MIRROR_PAT }}@github.com/rhysj6/homelab-mirror.git \
+            "${HEAD_SHA}:refs/heads/main"
