@@ -7,7 +7,7 @@ resource "kubernetes_namespace" "external_hosts" {
 module "clifton" {
   source     = "./pass_through_ingress"
   name       = "clifton"
-  hostname   = "clifton.hl.${local.domain}"
+  hostname   = "clifton.homelab.example"
   ip_address = "10.0.0.20"
   port       = 8006
   portname   = "https"
@@ -19,7 +19,7 @@ module "clifton" {
 module "pbs" {
   source     = "./pass_through_ingress"
   name       = "pbs"
-  hostname   = "pbs.hl.${local.domain}"
+  hostname   = "pbs.homelab.example"
   ip_address = "10.0.0.25"
   port       = 8007
   portname   = "https"
@@ -29,7 +29,7 @@ module "pbs" {
 module "semaphore" {
   source     = "./pass_through_ingress"
   name       = "semaphore"
-  hostname   = "semaphore.hl.${local.domain}"
+  hostname   = "semaphore.homelab.example"
   ip_address = "10.10.1.25"
   port       = 80
   local-only = true
@@ -38,7 +38,7 @@ module "semaphore" {
 module "home_assistant" {
   source     = "./pass_through_ingress"
   name       = "home-assistant"
-  hostname   = "ha.${local.domain}"
+  hostname   = "ha.example.com"
   ip_address = "10.10.1.10"
   port       = 8123
 }
@@ -46,7 +46,7 @@ module "home_assistant" {
 module "paperless" {
   source     = "./pass_through_ingress"
   name       = "paperless"
-  hostname   = "paperless.${local.domain}"
+  hostname   = "paperless.example.com"
   ip_address = "10.10.1.4"
   port       = 8000
   local-only = true
@@ -55,7 +55,7 @@ module "paperless" {
 module "actualbudget" {
   source     = "./pass_through_ingress"
   name       = "actual-budget"
-  hostname   = "budget.${local.domain}"
+  hostname   = "budget.example.com"
   ip_address = "10.10.1.5"
   port       = 5006
   portname   = "https"

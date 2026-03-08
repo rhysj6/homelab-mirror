@@ -21,7 +21,3 @@ proxmox:
       env_slug=env, path='/proxmox', secret_name='ch_token_id').value }}"
   ch_secret: "{{ lookup(vault_plugin, project_id=infisical_project,
       env_slug=env, path='/proxmox', secret_name='ch_secret').value }}"
-
-domain_name: "{{ lookup(vault_plugin,
-  project_id=iac_infisical_project, env_slug='main',
-  path='/common', secret_name='domain').value }}"

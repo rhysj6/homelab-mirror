@@ -6,4 +6,4 @@ controller:
   - envVars:
       env:
       - key: "INFISICAL_URL"
-        value: ${infisical_url}
+        value: "https://secrets.homelab.example"

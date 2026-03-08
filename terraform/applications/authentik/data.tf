@@ -1,5 +1,5 @@
 locals {
-  url = "hl.${data.infisical_secrets.common.secrets.domain.value}"
+  url = "homelab.example"
 }
 
 data "infisical_secrets" "common" {

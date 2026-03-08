@@ -1,5 +1,5 @@
 locals {
-  url = "jenkins.hl.${data.infisical_secrets.common.secrets.domain.value}"
+  url = "jenkins.homelab.example"
 }
 
 resource "kubernetes_namespace" "jenkins" {
@@ -22,9 +22,7 @@ resource "helm_release" "jenkins" {
       })
     ],
     [
-      for f in fileset(path.module, "values/*.yaml*") : templatefile("${path.module}/${f}", {
-        infisical_url = data.infisical_secrets.common.secrets.infisical_url.value
-      })
+      for f in fileset(path.module, "values/*.yaml*") : file("${path.module}/${f}")
     ]
   )
 
@@ -55,7 +53,7 @@ resource "kubernetes_secret" "jenkins-security" {
   data = {
     client-id = module.authentik.client_id
     client-secret = module.authentik.client_secret
-    authentik-oic-well-known-url = "${data.infisical_secrets.common.secrets.authentik_url.value}/application/o/jenkins/.well-known/openid-configuration"
+    authentik-oic-well-known-url = "https://homelab.example/application/o/jenkins/.well-known/openid-configuration"
   }
   depends_on = [
     kubernetes_namespace.jenkins,

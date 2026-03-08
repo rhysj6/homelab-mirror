@@ -1,7 +1,7 @@
 resource "authentik_provider_proxy" "protected_services" {
   name                = "Protected Services"
-  external_host       = "https://hl.${local.domain}"
-  cookie_domain       = local.domain
+  external_host       = "https://homelab.example"
+  cookie_domain       = "example.com"
   authorization_flow  = data.authentik_flow.authorization-flow.id
   invalidation_flow   = data.authentik_flow.invalidation-flow.id
   mode                = "forward_domain"

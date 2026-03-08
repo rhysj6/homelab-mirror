@@ -72,7 +72,7 @@ resource "kubernetes_manifest" "cluster" {
       }
       backup = {
         barmanObjectStore = {
-          endpointURL     = "https://${local.s3_domain}/"
+          endpointURL     = "https://s3.homelab.example/"
           destinationPath = "s3://${var.env}-postgresql-backup"
           s3Credentials = {
             accessKeyId = {

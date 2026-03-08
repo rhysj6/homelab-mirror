@@ -5,9 +5,9 @@ module "clifton_authentik" {
   name   = "Clifton"
   slug   = "clifton"
   group  = "Infrastructure"
-  url    = "https://clifton.hl.${local.domain}"
+  url    = "https://clifton.homelab.example"
   allowed_redirect_uris = [{
-    url           = "https://clifton.hl.${local.domain}"
+    url           = "https://clifton.homelab.example"
     matching_mode = "strict"
   }]
   allowed_group = "pve-access"
@@ -19,9 +19,9 @@ module "actual_budget_authentik" {
   name   = "Actual Budget"
   slug   = "actual-budget"
   group  = "Personal"
-  url    = "https://budget.${local.domain}"
+  url    = "https://budget.example.com"
   allowed_redirect_uris = [{
-    url           = "https://budget.${local.domain}/openid/callback"
+    url           = "https://budget.example.com/openid/callback"
     matching_mode = "strict"
   }]
   allowed_group     = "J6-personal"
@@ -34,9 +34,9 @@ module "semaphore_authentik" {
   name   = "Semaphore"
   slug   = "semaphore"
   group  = "Infrastructure"
-  url    = "https://semaphore.hl.${local.domain}"
+  url    = "https://semaphore.homelab.example"
   allowed_redirect_uris = [{
-    url           = "https://semaphore.hl.${local.domain}/api/auth/oidc/authentik/redirect/"
+    url           = "https://semaphore.homelab.example/api/auth/oidc/authentik/redirect/"
     matching_mode = "strict"
   }]
   allowed_group     = "J6-personal"

@@ -1,9 +1,3 @@
-ephemeral "infisical_secret" "minio_endpoint" {
-  name         = "MINIO_ENDPOINT"
-  env_slug     = "main"
-  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/providers"
-}
 ephemeral "infisical_secret" "minio_access_key" {
   name         = "MINIO_ACCESS_KEY"
   env_slug     = "main"
@@ -25,13 +19,6 @@ ephemeral "infisical_secret" "cloudflare_api_token" {
   folder_path  = "/providers"
 }
 
-ephemeral "infisical_secret" "authentik_url" {
-  name         = "AUTHENTIK_URL"
-  env_slug     = "main"
-  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/providers"
-}
-
 ephemeral "infisical_secret" "authentik_token" {
   name         = "AUTHENTIK_TOKEN"
   env_slug     = "main"
@@ -40,7 +27,7 @@ ephemeral "infisical_secret" "authentik_token" {
 }
 
 provider "minio" {
-  minio_server   = ephemeral.infisical_secret.minio_endpoint.value
+  minio_server   = "s3.homelab.example"
   minio_user     = ephemeral.infisical_secret.minio_access_key.value
   minio_password = ephemeral.infisical_secret.minio_secret_key.value
   minio_ssl      = true
@@ -51,6 +38,6 @@ provider "cloudflare" {
 }
 
 provider "authentik" {
-  url   = ephemeral.infisical_secret.authentik_url.value
+  url   = "https://homelab.example"
   token = ephemeral.infisical_secret.authentik_token.value
 }

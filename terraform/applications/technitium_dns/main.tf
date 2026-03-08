@@ -1,5 +1,5 @@
 locals {
-  url = "technitium.hl.${data.infisical_secrets.common.secrets.domain.value}"
+  url = "technitium.homelab.example"
 }
 
 resource "kubernetes_namespace" "dns" {

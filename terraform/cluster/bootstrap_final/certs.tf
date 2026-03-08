@@ -61,7 +61,7 @@ resource "kubernetes_manifest" "infisical_cluster_issuer" {
     }
     spec = {
       acme = {
-        server = "${data.infisical_secrets.common.secrets.infisical_url.value}/api/v1/cert-manager/acme/profiles/5bd9a3f7-1673-48be-a30d-3d2670de4da0/directory"
+        server = "https://secrets.homelab.example/api/v1/cert-manager/acme/profiles/5bd9a3f7-1673-48be-a30d-3d2670de4da0/directory"
 
         # disableAccountKeyGeneration = true
         externalAccountBinding = {

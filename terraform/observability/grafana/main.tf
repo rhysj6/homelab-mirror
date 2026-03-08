@@ -1,5 +1,5 @@
 locals {
-  grafana_url = "grafana.hl.${data.infisical_secrets.common.secrets.domain.value}"
+  grafana_url = "grafana.homelab.example"
 }
 
 resource "helm_release" "grafana" {
@@ -11,7 +11,7 @@ resource "helm_release" "grafana" {
   values = [
     templatefile("${path.module}/values.yaml", {
       domain    = local.grafana_url,
-      authentik = "hl.${data.infisical_secrets.common.secrets.domain.value}",
+      authentik = "homelab.example",
     })
   ]
 }

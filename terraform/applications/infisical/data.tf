@@ -1,6 +1,5 @@
-# Ignore the circular dependency caused by using Infisical to store its own secrets, we need to define the locals and data sources here
 locals {
-  infisical_hostname = "secrets.hl.${data.infisical_secrets.common.secrets.domain.value}"
+  infisical_hostname = "secrets.homelab.example"
 }
 
 data "infisical_secrets" "common" {

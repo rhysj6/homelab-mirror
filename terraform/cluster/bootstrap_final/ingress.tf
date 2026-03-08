@@ -26,7 +26,7 @@ resource "kubernetes_manifest" "authentik_middleware" {
     }
     spec = {
       forwardAuth = {
-        address            = "${data.infisical_secrets.common.secrets.authentik_url.value}/outpost.goauthentik.io/auth/traefik"
+        address            = "https://homelab.example/outpost.goauthentik.io/auth/traefik"
         trustForwardHeader = true
         authResponseHeaders = [
           "X-authentik-username",

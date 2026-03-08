@@ -2,7 +2,7 @@
     "sqlite": {
         "host": "/etc/semaphore/database.sqlite"
     },
-    "web_host": "https://semaphore.hl.{{ domain_name }}/",
+    "web_host": "https://semaphore.homelab.example/",
     "dialect": "sqlite",
     "port": "80",
     "password_login_disable": true,
@@ -12,10 +12,10 @@
     "oidc_providers": {
         "authentik": {
             "display_name": "Authentik",
-            "provider_url": "https://hl.{{ domain_name }}/application/o/semaphore/",
+            "provider_url": "https://homelab.example/application/o/semaphore/",
             "client_id": "{{ semaphore_oauth_client_id }}",
             "client_secret": "{{ semaphore_oauth_client_secret }}",
-            "redirect_url": "https://semaphore.hl.{{ domain_name }}/api/auth/oidc/authentik/redirect/",
+            "redirect_url": "https://semaphore.homelab.example/api/auth/oidc/authentik/redirect/",
             "scopes": [
                 "openid",
                 "profile",
