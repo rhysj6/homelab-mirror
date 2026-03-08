@@ -1,0 +1,50 @@
+name: Update Public Mirror Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Install git-filter-repo
+        run: pip install git-filter-repo
+
+      - name: Clone repo (full history)
+        run: |
+          git clone --bare https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} repo.git
+          cd repo.git
+          git config --bool core.bare true
+
+      - name: Rewrite history with string replacements
+        run: |
+          cd repo.git
+
+          # Create replacements file - ORDER MATTERS, most specific first!
+          cat > /tmp/replacements.txt << 'EOF'
+          homelab.example==>homelab.example
+          example.com==>example.com
+          EOF
+
+          # Strip leading whitespace (heredoc indentation)
+          sed -i 's/^ *//' /tmp/replacements.txt
+
+          git filter-repo --force --replace-text /tmp/replacements.txt
+
+      - name: Push rewritten history to public-mirror branch
+        run: |
+          cd repo.git
+
+          # Grab the rewritten HEAD SHA
+          HEAD_SHA=$(git rev-parse HEAD)
+
+          # Force push main's rewritten history to the public-mirror branch
+          git push --force \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} \
+            "${HEAD_SHA}:refs/heads/public-mirror"
