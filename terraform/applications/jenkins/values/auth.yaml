@@ -4,8 +4,8 @@ controller:
     securityRealm: |
       oic:
         allowTokenAccessWithoutOicSession: true
-        clientId: "$${jenkins-security-client-id}"
-        clientSecret: "$${jenkins-security-client-secret}"
+        clientId: "${jenkins-security-client-id}"
+        clientSecret: "${jenkins-security-client-secret}"
         emailFieldName: "email"
         fullNameFieldName: "name"
         groupsFieldName: "groups"
@@ -13,8 +13,13 @@ controller:
         serverConfiguration:
           wellKnown:
             scopesOverride: "openid profile email"
-            wellKnownOpenIDConfigurationUrl: $${authentik-oic-well-known-url}
+            wellKnownOpenIDConfigurationUrl: https://homelab.example/application/o/jenkins/.well-known/openid-configuration
         userNameField: "preferred_username"
         userIdStrategy: "caseSensitive"
         groupIdStrategy: "caseSensitive"
 
+  additionalExistingSecrets:
+    - name: jenkins-security
+      keyName: client-id
+    - name: jenkins-security
+      keyName: client-secret

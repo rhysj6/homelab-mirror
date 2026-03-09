@@ -53,7 +53,6 @@ resource "kubernetes_secret" "jenkins-security" {
   data = {
     client-id = module.authentik.client_id
     client-secret = module.authentik.client_secret
-    authentik-oic-well-known-url = "https://homelab.example/application/o/jenkins/.well-known/openid-configuration"
   }
   depends_on = [
     kubernetes_namespace.jenkins,
