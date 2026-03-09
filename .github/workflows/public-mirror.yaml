@@ -7,7 +7,7 @@ on:
 
 jobs:
   mirror:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Install git-filter-repo
