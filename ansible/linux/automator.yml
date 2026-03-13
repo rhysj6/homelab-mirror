@@ -1,5 +1,5 @@
-- name: Setup Semaphore
-  hosts: semaphore
+- name: Setup Automator Server
+  hosts: automator
   become: true
   gather_facts: true
   roles:
