@@ -9,6 +9,8 @@
       - zlib1g
       - python3-pip
       - python3-venv
+      - gnupg
+      - software-properties-common
     state: present
     update_cache: true
 
@@ -27,3 +29,6 @@
     mode: '0644'
     owner: "{{ github_actions_runner_user }}"
     group: "{{ github_actions_runner_user }}"
+
+- name: Install Terraform
+  ansible.builtin.include_tasks: terraform.yml
