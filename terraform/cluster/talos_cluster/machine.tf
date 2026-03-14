@@ -31,12 +31,20 @@ data "talos_machine_configuration" "this" {
     yamlencode({
       machine = {
         install = {
-          image = "factory.talos.dev/metal-installer/${talos_image_factory_schematic.machine[each.key].id}:${local.latest}"
+          image = "factory.talos.dev/metal-installer/${talos_image_factory_schematic.machine[each.key].id}:${var.talos_version}"
         }
       }
     })
   ])
-  talos_version = local.latest
+  talos_version = var.talos_version
+  kubernetes_version = var.kubernetes_version
+}
+
+output "node_images" {
+  value = {
+    for node in local.nodes :
+    node.name => "factory.talos.dev/metal-installer/${talos_image_factory_schematic.machine[node.name].id}:${var.talos_version}"
+  }
 }
 
 resource "talos_machine_configuration_apply" "control_plane" {

@@ -3,6 +3,16 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "kubernetes_version" {
+  description = "The Kubernetes version to use for the cluster. Will automatically upgrade to this version if changed"
+  type        = string
+}
+
+variable "talos_version" {
+  description = "The Talos version to use for the cluster. Will not automatically upgrade to this version if changed, but will be used to validate configuration"
+  type        = string
+}
+
 variable "kubevip" {
   description = "The VIP address for the Kubernetes API server"
   type        = string
@@ -24,7 +34,6 @@ variable "nodes" {
   }
 
 }
-
 
 variable "network" {
   description = "Network configuration"
