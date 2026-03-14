@@ -4,3 +4,10 @@
   gather_facts: true
   roles:
     - role: semaphore
+    - role: github_actions_runner
+      vars:
+        github_actions_runner_repo_url: "https://github.com/rhysj6/homelab"
+        github_actions_runner_name: "homelab-runner"
+        github_actions_runner_labels:
+          - self-hosted
+          - homelab
