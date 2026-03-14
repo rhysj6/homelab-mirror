@@ -1,0 +1,34 @@
+- name: Get registration token
+  ansible.builtin.uri:
+    url: "{{ github_actions_runner_api_url }}/registration-token"
+    headers:
+      Authorization: "token {{ github_actions_runner_pat_token }}"
+      Accept: "application/vnd.github.v3+json"
+    method: POST
+    status_code: 201
+    force_basic_auth: true
+  register: github_actions_runner_registration
+  delegate_to: localhost
+  become: false
+  run_once: true
+
+- name: Register runner
+  environment:
+    ACTIONS_RUNNER_INPUT_TOKEN: "{{ github_actions_runner_registration.json.token }}"
+  ansible.builtin.command: "./config.sh \
+    --url '{{ github_actions_runner_url }}' \
+    --name '{{ github_actions_runner_name }}' \
+    --labels {{ github_actions_runner_labels | join(',') }} \
+    --unattended"
+  args:
+    chdir: "{{ github_actions_runner_home }}/actions-runner"
+  changed_when: true
+  become_user: "{{ github_actions_runner_user }}"
+  become: true
+
+- name: Install service
+  ansible.builtin.command: "./svc.sh install {{ github_actions_runner_user }}"
+  args:
+    chdir: "{{ github_actions_runner_home }}/actions-runner"
+  become: true
+  changed_when: true
