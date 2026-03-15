@@ -1,0 +1,49 @@
+- name: Assert github_actions_runner_repo_url is defined
+  ansible.builtin.assert:
+    that: github_actions_runner_repo_url is defined
+    fail_msg: "github_actions_runner_repo_url must be defined to register the runner with GitHub"
+
+- name: Construct GitHub Actions Runner URL
+  ansible.builtin.set_fact:
+    github_actions_runner_url: "{{ github_actions_runner_repo_url }}/actions/runners"
+    github_actions_runner_api_url: >-
+      https://api.github.com/repos/{{
+        github_actions_runner_repo_url
+        | regex_replace('https://github.com/', '')
+      }}/actions/runners
+
+- name: Check if GitHub Actions Runner is already installed
+  ansible.builtin.stat:
+    path: "{{ github_actions_runner_home }}/actions-runner"
+  register: github_actions_runner_stat
+
+- name: Ensure github_actions_runner user exists
+  ansible.builtin.user:
+    name: "{{ github_actions_runner_user }}"
+    system: true
+
+- name: Create github_actions_runner directory
+  ansible.builtin.file:
+    path: "{{ github_actions_runner_home }}"
+    state: directory
+    owner: "{{ github_actions_runner_user }}"
+    group: "{{ github_actions_runner_user }}"
+    mode: '0755'
+
+- name: Manage dependencies
+  ansible.builtin.include_tasks:
+    file: dependencies.yml
+
+- name: Install GitHub Actions Runner
+  ansible.builtin.include_tasks:
+    file: install.yml
+  when: not github_actions_runner_stat.stat.exists
+
+- name: Environment variables for runner
+  ansible.builtin.include_tasks:
+    file: environment.yml
+
+- name: Register GitHub Actions Runner
+  ansible.builtin.include_tasks:
+    file: register.yml
+  when: not github_actions_runner_stat.stat.exists

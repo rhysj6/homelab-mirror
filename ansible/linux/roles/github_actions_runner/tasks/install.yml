@@ -1,0 +1,53 @@
+- name: Download GitHub Actions Runner
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/actions/runner/releases/latest"
+    return_content: true
+  register: github_actions_runner_latest
+
+- name: Extract download URL from GitHub API response
+  ansible.builtin.set_fact:
+    github_actions_runner_download_url: >-
+      {{
+        github_actions_runner_latest.json.assets
+        | selectattr('name', 'match', 'actions-runner-linux-x64-.*.tar.gz')
+        | map(attribute='browser_download_url')
+        | first
+      }}
+
+- name: Download GitHub Actions Runner tarball
+  ansible.builtin.get_url:
+    url: "{{ github_actions_runner_download_url }}"
+    dest: "/tmp/github_actions_runner.tar.gz"
+    mode: '0644'
+
+- name: Create GitHub Actions Runner directory
+  ansible.builtin.file:
+    path: "{{ github_actions_runner_home }}/actions-runner"
+    state: directory
+    owner: "{{ github_actions_runner_user }}"
+    group: "{{ github_actions_runner_user }}"
+    mode: '0755'
+
+
+- name: Extract GitHub Actions Runner tarball
+  ansible.builtin.unarchive:
+    src: "/tmp/github_actions_runner.tar.gz"
+    dest: "{{ github_actions_runner_home }}/actions-runner"
+    remote_src: true
+    owner: "{{ github_actions_runner_user }}"
+    group: "{{ github_actions_runner_user }}"
+    mode: '0755'
+
+- name: Clean up GitHub Actions Runner tarball
+  ansible.builtin.file:
+    path: "/tmp/github_actions_runner.tar.gz"
+    state: absent
+
+- name: Copy cleanup script to runner home
+  ansible.builtin.copy:
+    src: cleanup.sh
+    dest: "{{ github_actions_runner_home }}/actions-runner/cleanup.sh"
+    mode: '0755'
+    owner: "{{ github_actions_runner_user }}"
+    group: "{{ github_actions_runner_user }}"
+  become: true

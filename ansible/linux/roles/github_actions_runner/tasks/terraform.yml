@@ -1,0 +1,56 @@
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /usr/share/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download HashiCorp GPG key
+  ansible.builtin.get_url:
+    url: https://apt.releases.hashicorp.com/gpg
+    dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
+    mode: '0644'
+    force: false
+
+- name: Add HashiCorp apt repository
+  ansible.builtin.apt_repository:
+    repo: >-
+      deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc]
+      https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main
+    state: present
+    filename: hashicorp
+
+- name: Install Terraform
+  ansible.builtin.apt:
+    name: terraform
+    state: present
+    update_cache: true
+
+- name: Check if Terragrunt is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/terragrunt
+  register: github_actions_runner_terragrunt_stat
+
+- name: Install Terragrunt
+  when: (not github_actions_runner_terragrunt_stat.stat.exists) or (reinstall_terragrunt | default(false) | bool)
+  block:
+    - name: Download latest Terragrunt release info from GitHub API
+      ansible.builtin.uri:
+        url: "https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest"
+        return_content: true
+      register: github_actions_runner_terragrunt_latest
+
+    - name: Extract download URL from GitHub API response
+      ansible.builtin.set_fact:
+        github_actions_runner_terragrunt_download_url: >-
+          {{
+            github_actions_runner_terragrunt_latest.json.assets
+            | selectattr('name', 'match', 'terragrunt_linux_amd64')
+            | map(attribute='browser_download_url')
+            | first
+          }}
+
+    - name: Download Terragrunt binary
+      ansible.builtin.get_url:
+        url: "{{ github_actions_runner_terragrunt_download_url }}"
+        dest: "/usr/local/bin/terragrunt"
+        mode: '0755'

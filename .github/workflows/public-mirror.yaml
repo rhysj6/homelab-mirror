@@ -3,6 +3,7 @@ name: Update Public Mirror Branch
 on:
   schedule:
     - cron: '0 02 * * *'
+  workflow_dispatch:
 
 
 jobs:

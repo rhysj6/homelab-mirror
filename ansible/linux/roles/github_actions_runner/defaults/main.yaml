@@ -1,0 +1,11 @@
+github_actions_runner_name: self-hosted-runner
+
+github_actions_runner_user: gha-{{ github_actions_runner_name }}
+github_actions_runner_home: /opt/github_actions_runner/{{ github_actions_runner_name }} # Allow for multiple runners on the same host
+github_actions_runner_labels:
+  - self-hosted
+  - linux
+
+github_actions_runner_pat_token: "{{ lookup(vault_plugin,
+  project_id=iac_infisical_project, env_slug='main',
+  path='/applications/github_actions/', secret_name='github_pat').value }}"

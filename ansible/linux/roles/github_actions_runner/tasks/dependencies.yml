@@ -1,0 +1,34 @@
+- name: Install apt dependencies
+  ansible.builtin.apt:
+    name:
+      - python3
+      - git
+      - acl
+      - liblttng-ust1
+      - libkrb5-3
+      - zlib1g
+      - python3-pip
+      - python3-venv
+      - gnupg
+      - software-properties-common
+    state: present
+    update_cache: true
+
+- name: Create Python venv for GitHub Actions Runner
+  ansible.builtin.command:
+    cmd: python3 -m venv {{ github_actions_runner_home }}/venv
+    creates: "{{ github_actions_runner_home }}/venv"
+  become_user: "{{ github_actions_runner_user }}"
+  become: true
+
+- name: Add venv bin activation to .bashrc
+  ansible.builtin.lineinfile:
+    path: "/home/{{ github_actions_runner_user }}/.bashrc"
+    line: "source {{ github_actions_runner_home }}/venv/bin/activate"
+    create: true
+    mode: '0644'
+    owner: "{{ github_actions_runner_user }}"
+    group: "{{ github_actions_runner_user }}"
+
+- name: Install Terraform
+  ansible.builtin.include_tasks: terraform.yml

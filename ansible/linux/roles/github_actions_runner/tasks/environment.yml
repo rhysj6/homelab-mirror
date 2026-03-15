@@ -1,0 +1,25 @@
+- name: Configure custom env file if required
+  ansible.builtin.blockinfile:
+    path: "{{ github_actions_runner_home }}/actions-runner/.env"
+    block: "{{ custom_env }}"
+    owner: "{{ github_actions_runner_user }}"
+    create: true
+    mode: "0755"
+    marker_begin: "# BEGIN CUSTOM ANSIBLE MANAGED BLOCK"
+    marker_end: "# END CUSTOM ANSIBLE MANAGED BLOCK"
+  become: true
+  when: custom_env is defined
+
+- name: Configure built-in env vars for GitHub Actions Runner
+  ansible.builtin.blockinfile:
+    path: "{{ github_actions_runner_home }}/actions-runner/.env"
+    block: |
+      VIRTUAL_ENV={{ github_actions_runner_home }}/venv
+      PATH={{ github_actions_runner_home }}/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ACTIONS_RUNNER_HOOK_JOB_COMPLETED={{ github_actions_runner_home }}/actions-runner/cleanup.sh
+    owner: "{{ github_actions_runner_user }}"
+    create: true
+    mode: "0755"
+    marker_begin: "# BEGIN ANSIBLE MANAGED BLOCK"
+    marker_end: "# END ANSIBLE MANAGED BLOCK"
+  become: true

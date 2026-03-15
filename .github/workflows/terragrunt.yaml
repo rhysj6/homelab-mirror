@@ -1,0 +1,118 @@
+name: Redcliff Terragrunt
+
+on:
+  pull_request:
+    paths:
+      - "terraform/**"
+      - "terragrunt/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+      - "terragrunt/**"
+  workflow_dispatch:
+
+# Prevent concurrent applies to the same environment, but allow concurrent plans
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('redcliff-terragrunt-pr-{0}', github.event.pull_request.number) || 'redcliff-terragrunt-main' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  INFISICAL_URL: "https://secrets.homelab.example"
+  UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+  UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+
+  AWS_ENDPOINT_URL_S3: "https://s3.homelab.example"
+  AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY_SECRET }}
+  TG_PROVIDER_CACHE: 1 
+
+jobs:
+  detect:
+    runs-on: self-hosted
+    outputs:
+      all: ${{ steps.filter.outputs.all }}
+      cluster: ${{ steps.filter.outputs.cluster }}
+      observability: ${{ steps.filter.outputs.observability }}
+      applications: ${{ steps.filter.outputs.applications }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect changed sections
+        id: filter
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            all:
+              - "terragrunt/redcliff/env.hcl"
+              - "terragrunt/root.hcl"
+              - "terraform/providers.tf"
+              - "terraform/versions.tf"
+            cluster:
+              - "terraform/cluster/**"
+              - "terragrunt/redcliff/cluster/**"
+            observability:
+              - "terraform/observability/**"
+              - "terragrunt/redcliff/observability/**"
+            applications:
+              - "terraform/applications/**"
+              - "terragrunt/redcliff/applications/**"
+
+  cluster:
+    needs: detect
+    if: needs.detect.outputs.cluster == 'true' || needs.detect.outputs.all == 'true'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run cluster stack
+        working-directory: terragrunt/redcliff/cluster
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            terragrunt stack run plan -- -input=false
+          else
+            terragrunt -non-interactive stack run apply -- -input=false -auto-approve
+          fi
+
+  observability:
+    needs:
+      - detect
+      - cluster
+    if: |
+      always() &&
+      (needs.detect.outputs.observability == 'true' || needs.detect.outputs.all == 'true') &&
+      (needs.cluster.result == 'success' || needs.cluster.result == 'skipped')
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run observability stack
+        working-directory: terragrunt/redcliff/observability
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            terragrunt stack run plan -- -input=false
+          else
+            terragrunt -non-interactive stack run apply -- -input=false -auto-approve
+          fi
+
+  applications:
+    needs:
+      - detect
+      - cluster
+    if: |
+      always() &&
+      (needs.detect.outputs.applications == 'true' || needs.detect.outputs.all == 'true') &&
+      (needs.cluster.result == 'success' || needs.cluster.result == 'skipped')
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run applications stack
+        working-directory: terragrunt/redcliff/applications
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            terragrunt stack run plan -- -input=false
+          else
+            terragrunt -non-interactive stack run apply -- -input=false -auto-approve
+          fi
