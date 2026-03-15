@@ -55,7 +55,16 @@ jobs:
               - "terragrunt/redcliff/applications/**"
 
       - name: Setup git auth
-        run: git config --global url."https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Remove any existing insteadOf entry for this URL (token changes each run so match on the value side)
+          git config --global --get-regexp 'url\..*\.insteadOf' \
+            | grep 'https://github.com/rhysj6/' \
+            | awk '{print $1}' \
+            | xargs -r -I{} git config --global --unset-all "{}" || true
+          # Set fresh entry for this run
+          git config --global "url.https://oauth2:${TOKEN}@github.com/rhysj6/.insteadOf" "https://github.com/rhysj6/"
 
       - name: Select Terragrunt command
         id: tg
