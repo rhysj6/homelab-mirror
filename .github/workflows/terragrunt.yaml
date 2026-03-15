@@ -38,6 +38,19 @@ jobs:
       applications: ${{ steps.filter.outputs.applications }}
     steps:
       - uses: actions/checkout@v4
+      - name: Debug credential fingerprints
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for var in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY INFISICAL_TOKEN INFISICAL_UNIVERSAL_AUTH_CLIENT_ID INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET; do
+            value="${!var:-}"
+            if [ -n "$value" ]; then
+              printf "%s sha256 %s\n" "$var" "$(printf "%s" "$value" | shasum -a 256 | awk '{print $1}')"
+            else
+              echo "$var is NOT set"
+            fi
+          done
 
       - name: Detect changed sections
         id: filter
