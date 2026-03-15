@@ -29,15 +29,10 @@ env:
   TG_PROVIDER_CACHE: 1
 
 jobs:
-  detect:
+  run:
     runs-on: self-hosted
-    outputs:
-      all: ${{ steps.filter.outputs.all }}
-      cluster: ${{ steps.filter.outputs.cluster }}
-      observability: ${{ steps.filter.outputs.observability }}
-      applications: ${{ steps.filter.outputs.applications }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Detect changed sections
         id: filter
@@ -59,12 +54,6 @@ jobs:
               - "terraform/applications/**"
               - "terragrunt/redcliff/applications/**"
 
-  run:
-    needs: detect
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
-
       - name: Setup git auth
         run: git config --global url."https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
 
@@ -79,16 +68,15 @@ jobs:
           fi
 
       - name: Cluster
-        if: needs.detect.outputs.cluster == 'true' || needs.detect.outputs.all == 'true'
+        if: steps.filter.outputs.cluster == 'true' || steps.filter.outputs.all == 'true'
         working-directory: terragrunt/redcliff/cluster
         run: ${{ steps.tg.outputs.cmd }}
-
-      - name: Observability
-        if: needs.detect.outputs.observability == 'true' || needs.detect.outputs.all == 'true'
-        working-directory: terragrunt/redcliff/observability
-        run: ${{ steps.tg.outputs.cmd }}
-
       - name: Applications
-        if: needs.detect.outputs.applications == 'true' || needs.detect.outputs.all == 'true'
+        if: steps.filter.outputs.applications == 'true' || steps.filter.outputs.all == 'true'
         working-directory: terragrunt/redcliff/applications
+        run: ${{ steps.tg.outputs.cmd }}
+        
+      - name: Observability
+        if: steps.filter.outputs.observability == 'true' || steps.filter.outputs.all == 'true'
+        working-directory: terragrunt/redcliff/observability
         run: ${{ steps.tg.outputs.cmd }}
