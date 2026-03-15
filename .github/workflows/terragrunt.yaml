@@ -59,60 +59,36 @@ jobs:
               - "terraform/applications/**"
               - "terragrunt/redcliff/applications/**"
 
-  cluster:
+  run:
     needs: detect
-    if: needs.detect.outputs.cluster == 'true' || needs.detect.outputs.all == 'true'
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - name: Run cluster stack
+      - name: Setup git auth
+        run: git config --global url."https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com".insteadOf "https://github.com"
+
+      - name: Select Terragrunt command
+        id: tg
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "cmd=terragrunt stack run plan -- -input=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "cmd=terragrunt --non-interactive stack run apply -- -input=false -auto-approve" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Cluster
+        if: needs.detect.outputs.cluster == 'true' || needs.detect.outputs.all == 'true'
         working-directory: terragrunt/redcliff/cluster
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            terragrunt stack run plan -- -input=false
-          else
-            terragrunt -non-interactive stack run apply -- -input=false -auto-approve
-          fi
+        run: ${{ steps.tg.outputs.cmd }}
 
-  observability:
-    needs:
-      - detect
-      - cluster
-    if: |
-      always() &&
-      (needs.detect.outputs.observability == 'true' || needs.detect.outputs.all == 'true') &&
-      (needs.cluster.result == 'success' || needs.cluster.result == 'skipped')
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Run observability stack
+      - name: Observability
+        if: needs.detect.outputs.observability == 'true' || needs.detect.outputs.all == 'true'
         working-directory: terragrunt/redcliff/observability
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            terragrunt stack run plan -- -input=false
-          else
-            terragrunt -non-interactive stack run apply -- -input=false -auto-approve
-          fi
+        run: ${{ steps.tg.outputs.cmd }}
 
-  applications:
-    needs:
-      - detect
-      - cluster
-    if: |
-      always() &&
-      (needs.detect.outputs.applications == 'true' || needs.detect.outputs.all == 'true') &&
-      (needs.cluster.result == 'success' || needs.cluster.result == 'skipped')
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Run applications stack
+      - name: Applications
+        if: needs.detect.outputs.applications == 'true' || needs.detect.outputs.all == 'true'
         working-directory: terragrunt/redcliff/applications
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            terragrunt stack run plan -- -input=false
-          else
-            terragrunt -non-interactive stack run apply -- -input=false -auto-approve
-          fi
+        run: ${{ steps.tg.outputs.cmd }}
