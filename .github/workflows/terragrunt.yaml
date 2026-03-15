@@ -37,7 +37,7 @@ jobs:
       observability: ${{ steps.filter.outputs.observability }}
       applications: ${{ steps.filter.outputs.applications }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Detect changed sections
         id: filter
@@ -64,7 +64,7 @@ jobs:
     if: needs.detect.outputs.cluster == 'true' || needs.detect.outputs.all == 'true'
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run cluster stack
         working-directory: terragrunt/redcliff/cluster
@@ -85,7 +85,7 @@ jobs:
       (needs.cluster.result == 'success' || needs.cluster.result == 'skipped')
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run observability stack
         working-directory: terragrunt/redcliff/observability
@@ -106,7 +106,7 @@ jobs:
       (needs.cluster.result == 'success' || needs.cluster.result == 'skipped')
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run applications stack
         working-directory: terragrunt/redcliff/applications
