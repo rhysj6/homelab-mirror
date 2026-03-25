@@ -2,5 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "ignorePaths": [
+    // Ignore updates to Jenkins as it's not being used at the moment
+    "terraform/applications/jenkins/**"
   ]
 }
