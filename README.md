@@ -22,6 +22,7 @@ This section describes the core components of my homelab, which are used to prov
 - **Kubernetes**: Container orchestration platform for deploying and managing containers. A lot of my homelab and interests revolve around Kubernetes.
 - **Authentik**: Identity provider for single sign-on (SSO) and access control.
 - **Traefik**: Reverse proxy and Kubernetes Ingress Controller for routing traffic to services.
+- **Infisical**: Secrets management tool for securely storing and managing sensitive information. Used extensively in my IaC to avoid hardcoding secrets in Terraform and Ansible.
 - **Cloud Native PostgreSQL**: Managed PostgreSQL clusters in Kubernetes, providing high availability and backups.
 - **MinIO**: Self-hosted S3 alternative for backups, mass application storage, and Terraform state storage. I'm looking to replace this soon as it's end of life.
 - **Semaphore UI**: A web-based UI for running and scheduling Ansible playbooks.

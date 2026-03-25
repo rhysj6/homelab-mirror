@@ -1,3 +1,4 @@
+# This playbook is used to setup the automator server, which is used to run Ansible playbooks and Github Actions runners.
 - name: Setup Automator Server
   hosts: automator
   become: true

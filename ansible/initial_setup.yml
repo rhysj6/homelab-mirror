@@ -1,3 +1,4 @@
+# Initial setup handles any sensible defaults that I want to apply to all of my servers, such as observability and trusted CA certificates.
 - name: Initial linux setup
   hosts: all
   become: true

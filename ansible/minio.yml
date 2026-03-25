@@ -1,3 +1,6 @@
+# DEPRECATED: This playbook is used to create the VMs for MinIO, and then setup MinIO on those VMs.
+# I'm looking to replace MinIO soon as it's end of life, so this playbook is no longer being maintained.
+
 - name: Create VMs
   hosts: localhost
   gather_facts: false
