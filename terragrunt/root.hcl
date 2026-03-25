@@ -36,7 +36,7 @@ generate "providers" {
 
 generate "proxmox_providers" {
   path      = "proxmox_providers.tf"
-  if_exists = "skip" # The talos modules generate the secrets so we skip this file there
+  if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 ephemeral "infisical_secret" "grh_proxmox_host" {
   name         = "GRH_HOST"
