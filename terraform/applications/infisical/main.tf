@@ -56,30 +56,6 @@ resource "kubernetes_deployment" "infisical" {
       }
       spec {
         service_account_name = kubernetes_service_account.infisical.metadata[0].name
-        init_container {
-          name    = "migration"
-          image   = "infisical/infisical:v0.159.0"
-          command = ["npm", "run", "migration:latest"]
-          env {
-            name = "DB_CONNECTION_URI"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret.postgres_creds.metadata[0].name
-                key  = "uri"
-              }
-            }
-          }
-          env {
-            name  = "ALLOW_INTERNAL_IP_CONNECTIONS"
-            value = "true"
-          }
-          env_from {
-            secret_ref {
-              name = kubernetes_secret.infisical_secrets.metadata[0].name
-            }
-          }
-        }
-
         container {
           name  = "infisical"
           image = "infisical/infisical:v0.159.0"
