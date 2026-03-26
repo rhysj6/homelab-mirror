@@ -48,6 +48,7 @@ resource "kubernetes_deployment" "infisical" {
         app = "infisical"
       }
     }
+    revision_history_limit = 2
     template {
       metadata {
         labels = {
