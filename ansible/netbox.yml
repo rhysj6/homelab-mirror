@@ -1,3 +1,5 @@
+# Sets up NetBox on the netbox host - used as the source of truth for network documentation,
+# IP address management (IPAM) and device inventory for the homelab.
 - name: Setup NetBox
   hosts: netbox
   become: true
