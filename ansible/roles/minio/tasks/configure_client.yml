@@ -1,5 +1,0 @@
-- name: Set existing aliases
-  ansible.builtin.shell: >
-    mc alias set {{ item.name }} https://{{ item.ip_address }}:9000 {{ minio_root_user }} {{ minio_root_password }}
-  loop: "{{ aliases }}"
-  changed_when: false
