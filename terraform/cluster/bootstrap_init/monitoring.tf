@@ -9,7 +9,7 @@ resource "helm_release" "kube_prometheus_stack" {
   chart      = "kube-prometheus-stack"
   name       = "kube-prometheus-stack"
   namespace  = kubernetes_namespace.monitoring.metadata[0].name
-  version    = "82.16.1"
+  version    = "83.0.1"
   values = [
     templatefile("${path.module}/templates/monitoring_values.yaml", {
       ip_addrs   = var.cluster_node_ips,
