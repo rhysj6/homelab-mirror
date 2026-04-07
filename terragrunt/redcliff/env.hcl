@@ -1,7 +1,7 @@
 locals {
   cluster = "redcliff"
   env     = "redcliff"
-  talos_version = "v1.12.4"
+  talos_version = "v1.12.6"
   kubernetes_version = "1.35.2"
   nodes = [
     {
