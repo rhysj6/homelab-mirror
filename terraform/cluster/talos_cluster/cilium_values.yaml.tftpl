@@ -7,9 +7,17 @@ externalIPs:
 
 bgpControlPlane:
   enabled: true
-
+bpf:
+  masquerade: true
 ipam:
-  mode: kubernetes
+  mode: multi-pool
+  operator:
+    autoCreateCiliumPodIPPools:
+      default:
+        ipv4:
+          cidrs:
+            - 10.42.0.0/17
+          maskSize: 24
 
 securityContext:
   capabilities:
