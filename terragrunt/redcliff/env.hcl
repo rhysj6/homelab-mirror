@@ -1,7 +1,7 @@
 locals {
-  cluster = "redcliff"
-  env     = "redcliff"
-  talos_version = "v1.12.6"
+  cluster            = "redcliff"
+  env                = "redcliff"
+  talos_version      = "v1.12.6"
   kubernetes_version = "1.35.2"
   nodes = [
     {
@@ -49,9 +49,11 @@ locals {
   ]
 
   network = {
-    node_gateway             = "10.10.10.1"
-    node_subnet_size         = "24"
+    node_gateway              = "10.10.10.1"
+    node_subnet_size          = "24"
     node_netmask              = "255.255.0.0"
+    main_pod_cidr             = "10.42.0.0/17"
+    native_routing_enabled    = true
     loadbalancer_ip_pool_cidr = "10.11.10.1/24"
     loadbalancer_bgp_asn      = 65555
     ips = {

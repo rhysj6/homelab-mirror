@@ -123,6 +123,18 @@ resource "kubernetes_manifest" "cilium_bgp_advertisement" {
               }
             ]
           }
+        },
+        {
+          advertisementType = "CiliumPodIPPool"
+          selector = {
+            matchExpressions = [
+              {
+                key      = "bgp"
+                operator = "NotIn"
+                values   = ["false"]
+              }
+            ]
+          }
         }
       ]
     }
