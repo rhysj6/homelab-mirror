@@ -2,7 +2,7 @@ locals {
   cluster            = "redcliff"
   env                = "redcliff"
   talos_version      = "v1.13.0"
-  kubernetes_version = "1.35.2"
+  kubernetes_version = "1.36.0"
   nodes = [
     {
       name            = "redcliff-node-1",
