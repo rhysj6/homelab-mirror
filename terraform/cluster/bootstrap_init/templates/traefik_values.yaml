@@ -2,6 +2,9 @@
 additionalArguments:
   - --serversTransport.insecureSkipVerify=true
 
+deployment:
+  replicas: 2
+
 ports:
   websecure:
     asDefault: true
