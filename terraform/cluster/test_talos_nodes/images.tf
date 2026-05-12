@@ -24,13 +24,13 @@ resource "talos_image_factory_schematic" "vm_schematic" {
   })
 }
 
-resource "proxmox_virtual_environment_download_file" "talos_installer" {
+resource "proxmox_download_file" "talos_installer" {
   provider     = proxmox.grh
   for_each = local.vms
   content_type = "iso"
-  datastore_id = "${each.value.host == "clifton" ? "BX-2TB-1" : "Datastore_2"}"
-  node_name    = each.value.host
+  datastore_id = "BX-2TB-1"
+  node_name    = "clifton"
   file_name    = "talos-${each.key}-installer.iso"
-  url          = "https://factory.talos.dev/image/${talos_image_factory_schematic.vm_schematic[each.key].id}/${local.latest}/metal-amd64.iso"
+  url          = "https://factory.talos.dev/image/${talos_image_factory_schematic.vm_schematic[each.key].id}/v1.13.0/metal-amd64.iso"
   overwrite    = false
 }
