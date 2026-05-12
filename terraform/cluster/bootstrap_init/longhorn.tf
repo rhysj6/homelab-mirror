@@ -23,6 +23,7 @@ resource "helm_release" "longhorn" {
         nodeDrainPolicy                             = "always-allow"
         storageReservedPercentageForDefaultDisk     = "1"
         defaultDataPath                             = "/var/mnt/longhorn"
+        deletingConfirmationFlag                     = var.cluster_name == "test" ? false : true
       }
       persistence = {
         defaultClassReplicaCount = var.number_of_nodes
