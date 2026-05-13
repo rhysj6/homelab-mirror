@@ -26,7 +26,7 @@ resource "proxmox_virtual_environment_vm" "node" {
   }
 
   cdrom {
-    file_id   = proxmox_download_file.talos_installer[each.key].id
+    file_id   = "BX-2TB-1:iso/talos-${each.key}-installer.iso"
     interface = "ide2"
   }
 

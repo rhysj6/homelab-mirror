@@ -1,15 +1,9 @@
-data "talos_image_factory_versions" "this" {
-  filters = {
-    stable_versions_only = true
-  }
-}
-
 locals {
-  latest = element(data.talos_image_factory_versions.this.talos_versions, length(data.talos_image_factory_versions.this.talos_versions) - 1)
+  nodes = { for n in var.nodes : n.name => n }
 }
 
 resource "talos_image_factory_schematic" "vm_schematic" {
-  for_each = local.vms
+  for_each = local.nodes
   schematic = yamlencode({
     customization = {
       systemExtensions = {
@@ -25,12 +19,15 @@ resource "talos_image_factory_schematic" "vm_schematic" {
 }
 
 resource "proxmox_download_file" "talos_installer" {
-  provider     = proxmox.grh
-  for_each = local.vms
+  for_each = local.nodes
   content_type = "iso"
   datastore_id = "BX-2TB-1"
   node_name    = "clifton"
   file_name    = "talos-${each.key}-installer.iso"
   url          = "https://factory.talos.dev/image/${talos_image_factory_schematic.vm_schematic[each.key].id}/v1.13.0/metal-amd64.iso"
   overwrite    = false
+}
+
+output "image-ids" {
+  value = { for k, v in proxmox_download_file.talos_installer : k => v.id }
 }
