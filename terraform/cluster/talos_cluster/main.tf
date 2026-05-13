@@ -39,9 +39,13 @@ data "talos_cluster_health" "init_health" {
   skip_kubernetes_checks = true
 }
 
+resource "time_sleep" "kubevip_wait" {
+  depends_on = [talos_machine_bootstrap.bootstrap, data.talos_cluster_health.init_health]
+  create_duration = "15s"
+}
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
-  depends_on = [data.talos_cluster_health.init_health]
+  depends_on = [time_sleep.kubevip_wait]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = local.control_plane_endpoints[0]
 }
