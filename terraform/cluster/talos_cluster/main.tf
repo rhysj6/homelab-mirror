@@ -22,15 +22,15 @@ data "talos_client_configuration" "talosconfig" {
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on = [talos_machine_configuration_apply.control_plane]
+  depends_on = [talos_machine_configuration_apply.control_plane, talos_machine_configuration_apply.worker]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = local.control_plane_endpoints[0]
 }
 
 
-ephemeral "talos_cluster_health" "init_health" {
-  depends_on = [talos_machine_configuration_apply.control_plane]
+data "talos_cluster_health" "init_health" {
+  depends_on = [talos_machine_configuration_apply.control_plane, talos_machine_configuration_apply.worker]
 
   client_configuration   = data.talos_client_configuration.talosconfig.client_configuration
   control_plane_nodes    = local.control_plane_endpoints
@@ -39,16 +39,20 @@ ephemeral "talos_cluster_health" "init_health" {
   skip_kubernetes_checks = true
 }
 
+resource "time_sleep" "kubevip_wait" {
+  depends_on = [talos_machine_bootstrap.bootstrap, data.talos_cluster_health.init_health]
+  create_duration = "15s"
+}
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
-  depends_on = [ephemeral.talos_cluster_health.init_health]
+  depends_on = [time_sleep.kubevip_wait]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = local.control_plane_endpoints[0]
 }
 
 
-ephemeral "talos_cluster_health" "final_health" {
-  depends_on = [ephemeral.talos_cluster_health.init_health, talos_cluster_kubeconfig.kubeconfig, helm_release.cilium, talos_machine_configuration_apply.worker]
+data "talos_cluster_health" "final_health" {
+  depends_on = [data.talos_cluster_health.init_health, talos_cluster_kubeconfig.kubeconfig, helm_release.cilium, talos_machine_configuration_apply.worker]
 
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
   control_plane_nodes  = local.control_plane_endpoints

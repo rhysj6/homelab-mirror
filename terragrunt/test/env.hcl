@@ -1,6 +1,8 @@
 locals {
   cluster = "test"
   env     = "test"
+  talos_version      = "v1.12.0"
+  kubernetes_version = "1.35.0"
   nodes = [
     {
       name            = "test-node-1",
@@ -15,13 +17,6 @@ locals {
       control_plane   = false
       storage_enabled = true
       vm              = true
-    },
-    {
-      name            = "test-node-3",
-      ip_address      = "10.10.20.13",
-      control_plane   = false
-      storage_enabled = true
-      vm              = true
     }
   ]
 
@@ -29,6 +24,8 @@ locals {
     node_gateway             = "10.10.20.1"
     node_subnet_size         = "24"
     node_netmask              = "255.255.0.0"
+    main_pod_cidr             = "10.41.0.0/17"
+    native_routing_enabled    = true
     loadbalancer_ip_pool_cidr = "10.11.20.1/24"
     loadbalancer_bgp_asn      = 65553
     ips = {

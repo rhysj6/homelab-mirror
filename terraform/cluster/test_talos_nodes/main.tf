@@ -4,7 +4,7 @@ resource "proxmox_virtual_environment_vm" "node" {
   description = "Test cluster node Managed by Terraform"
   tags        = ["kubernetes", "test-cluster"]
 
-  node_name = each.value.host
+  node_name = "clifton"
   vm_id     = each.value.vmid
 
   agent {
@@ -22,11 +22,11 @@ resource "proxmox_virtual_environment_vm" "node" {
   }
 
   memory {
-    dedicated = 12288
+    dedicated = 8096
   }
 
   cdrom {
-    file_id   = proxmox_virtual_environment_download_file.talos_installer[each.key].id
+    file_id   = "BX-2TB-1:iso/talos-${each.key}-installer.iso"
     interface = "ide2"
   }
 
@@ -38,8 +38,7 @@ resource "proxmox_virtual_environment_vm" "node" {
   }
 
   network_device {
-    bridge      = "vmbr0"
-    vlan_id     = 41
+    bridge      = "testk8s"
   }
 
   operating_system {

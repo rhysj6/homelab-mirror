@@ -10,14 +10,17 @@ machine:
         routes:
           - network: 0.0.0.0/0
             gateway: ${gateway}
-%{ if nodetype == "controlplane" ~}
-        vip:
-          ip: ${vip}
-%{ endif ~}
-
 
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: ${hostname}
 auto: off
+
+---
+%{ if nodetype == "controlplane" ~}
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: ${vip}
+link: ${interface}
+%{ endif ~}

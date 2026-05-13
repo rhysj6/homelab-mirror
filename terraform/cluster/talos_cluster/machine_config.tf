@@ -44,6 +44,7 @@ data "talos_machine_configuration" "this" {
       hostname    = each.key,
       vip         = var.kubevip,
       nodetype    = each.value.control_plane ? "controlplane" : "worker"
+      interface    = each.value.vm ? "ens18" : "eno1"
     }),
     
     yamlencode({
