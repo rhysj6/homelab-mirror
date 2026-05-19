@@ -23,7 +23,7 @@ terraform {
     }
     infisical = {
       source  = "Infisical/infisical"
-      version = "0.16.23"
+      version = "0.16.25"
     }
     talos = {
       source  = "siderolabs/talos"
