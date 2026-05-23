@@ -5,6 +5,14 @@ locals {
   k8s_client_key             = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_key)
 }
 
+resource "infisical_secret" "k8s_kubeconfig" {
+  name         = "${upper(var.cluster_name)}_KUBECONFIG"
+  value        = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/providers/kubeconfigs"
+}
+
 resource "infisical_secret" "k8s_host" {
   name         = "${upper(var.cluster_name)}_HOST"
   value        = local.k8s_host
