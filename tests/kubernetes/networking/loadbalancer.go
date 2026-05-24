@@ -1,14 +1,15 @@
-package kubernetes_test
+package networking_test
 
 import (
 	"testing"
 
+	"github.com/rhysj6/homelab/tests/kubernetes/helpers"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func (s *Suite) TestLoadBalancers() {
+func testLoadBalancers(s *helpers.Suite) {
 	// Tests that the automatically provisioned load balancers have IP addresses assigned to them
-	s.t.Run("TestLoadBalancersGetIPs", func(t *testing.T) {
+	s.T.Run("TestLoadBalancersGetIPs", func(t *testing.T) {
 		// Get the list of load balancers in the cluster in all namespaces
 		lbs, err := s.ClientSet.CoreV1().Services("").List(t.Context(), metav1.ListOptions{
 			FieldSelector: "spec.type=LoadBalancer",

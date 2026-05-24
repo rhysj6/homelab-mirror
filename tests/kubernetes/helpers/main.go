@@ -1,21 +1,22 @@
-package kubernetes_test
+package helpers
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
+	"github.com/gruntwork-io/terratest/modules/k8s"
 	"github.com/gruntwork-io/terratest/modules/terragrunt"
 	infisical "github.com/infisical/go-sdk"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 const tgDir = "../../terragrunt/test/cluster"
 
 type Suite struct {
-	ClientSet *kubernetes.Clientset
-	t         *testing.T
+	ClientSet         *kubernetes.Clientset
+	KubeConfigOptions *k8s.KubectlOptions
+	T                 *testing.T
 }
 
 func SetupCluster(t *testing.T) {
@@ -57,65 +58,36 @@ func getInfisicalClient(t *testing.T) infisical.InfisicalClientInterface {
 	)
 
 	if err != nil {
-		fmt.Printf("Authentication failed: %v", err)
-		os.Exit(1)
+		t.Fatalf("Authentication failed: %v", err)
 	}
 	return client
 }
 
-func getKubeClientSet(t *testing.T) *kubernetes.Clientset {
+func getKubeconfig(t *testing.T) string {
 	client := getInfisicalClient(t)
 
-	host, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
+	kubeconfig, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
 		ProjectSlug: "iac",
 		Environment: "main",
 		SecretPath:  "/providers/kubeconfigs",
-		SecretKey:   "TEST_HOST",
+		SecretKey:   "TEST_KUBECONFIG",
 	})
+
 	if err != nil {
-		t.Fatalf("Failed to retrieve kubernetes host secret from Infisical: %v", err)
+		t.Fatalf("Failed to retrieve kubeconfig secret from Infisical: %v", err)
 	}
 
-	ca_cert, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
-		ProjectSlug: "iac",
-		Environment: "main",
-		SecretPath:  "/providers/kubeconfigs",
-		SecretKey:   "TEST_CLUSTER_CA_CERTIFICATE",
-	})
-	if err != nil {
-		t.Fatalf("Failed to retrieve CA certificate secret from Infisical: %v", err)
-	}
+	return kubeconfig.SecretValue
+}
 
-	client_cert, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
-		ProjectSlug: "iac",
-		Environment: "main",
-		SecretPath:  "/providers/kubeconfigs",
-		SecretKey:   "TEST_CLIENT_CERTIFICATE",
-	})
-	if err != nil {
-		t.Fatalf("Failed to retrieve client certificate secret from Infisical: %v", err)
-	}
-
-	client_key, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
-		ProjectSlug: "iac",
-		Environment: "main",
-		SecretPath:  "/providers/kubeconfigs",
-		SecretKey:   "TEST_CLIENT_KEY",
-	})
-	if err != nil {
-		t.Fatalf("Failed to retrieve client key secret from Infisical: %v", err)
-	}
-
+func getKubeClientSet(t *testing.T, kubeconfig string) *kubernetes.Clientset {
 	// Make clientset using the retrieved secrets
-	cs, err := kubernetes.NewForConfig(&rest.Config{
-		Host: host.SecretValue,
-		TLSClientConfig: rest.TLSClientConfig{
-			CAData:   []byte(ca_cert.SecretValue),
-			CertData: []byte(client_cert.SecretValue),
-			KeyData:  []byte(client_key.SecretValue),
-		},
-	})
+	config, err := clientcmd.RESTConfigFromKubeConfig([]byte(kubeconfig))
+	if err != nil {
+		t.Fatalf("Failed to create REST config from kubeconfig: %v", err)
+	}
 
+	cs, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		t.Fatalf("Failed to create Kubernetes clientset: %v", err)
 	}
@@ -129,9 +101,27 @@ func getKubeClientSet(t *testing.T) *kubernetes.Clientset {
 	return cs
 }
 
+func getKubeConfigOptions(t *testing.T, kubeconfig string) *k8s.KubectlOptions {
+	kubeconfigPath := t.TempDir() + "/kubeconfig"
+
+	err := os.WriteFile(kubeconfigPath, []byte(kubeconfig), 0600)
+
+	if err != nil {
+		t.Fatalf("Failed to write kubeconfig to temporary file: %v", err)
+	}
+
+	return &k8s.KubectlOptions{
+		ConfigPath: kubeconfigPath,
+		Namespace:  "default",
+	}
+}
+
 func NewSuite(t *testing.T) *Suite {
+	kubeconfig := getKubeconfig(t)
+
 	return &Suite{
-		ClientSet: getKubeClientSet(t),
-		t:         t,
+		ClientSet:         getKubeClientSet(t, kubeconfig),
+		KubeConfigOptions: getKubeConfigOptions(t, kubeconfig),
+		T:                 t,
 	}
 }
