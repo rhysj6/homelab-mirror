@@ -1,6 +1,7 @@
 package networking
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/rhysj6/homelab/tests/kubernetes/helpers"
@@ -25,9 +26,32 @@ func testLoadBalancers(s *helpers.Suite) {
 		for _, lb := range lbs.Items {
 			if len(lb.Status.LoadBalancer.Ingress) == 0 {
 				t.Errorf("Load balancer %s in namespace %s does not have an IP address assigned", lb.Name, lb.Namespace)
-			} else {
-				t.Logf("Load balancer %s in namespace %s has IP address: %s", lb.Name, lb.Namespace, lb.Status.LoadBalancer.Ingress[0].IP)
 			}
+		}
+	})
+
+	s.T.Run("TestLoadBalancersAreRoutable", func(t *testing.T) {
+		service, err := s.ClientSet.CoreV1().Services("default").Get(t.Context(), "nginx-external", metav1.GetOptions{})
+		if err != nil {
+			t.Fatalf("Failed to get service: %v", err)
+		}
+		lpbIP := service.Status.LoadBalancer.Ingress[0].IP
+
+		url := "http://" + lpbIP
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			t.Fatalf("Failed to create HTTP request: %v", err)
+		}
+
+		client := &http.Client{}
+		response, err := client.Do(req)
+
+		if err != nil {
+			t.Fatalf("Failed to send HTTP request to %s: %v", url, err)
+		}
+
+		if response.StatusCode != 200 {
+			t.Errorf("Expected HTTP status code 200 but got %d", response.StatusCode)
 		}
 	})
 }
