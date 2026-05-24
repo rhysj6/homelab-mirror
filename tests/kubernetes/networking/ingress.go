@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/rhysj6/homelab/tests/kubernetes/helpers"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -61,6 +62,40 @@ func testIngress(s *helpers.Suite) {
 			t.Errorf("Expected HTTP status code 200 but got %d", response.StatusCode)
 		} else {
 			t.Logf("Successfully received HTTP 200 response from ingress at %s", url)
+		}
+	})
+
+	s.T.Run("TestIngressCertificate", func(t *testing.T) {
+		ingressIP := ingress.Status.LoadBalancer.Ingress[0].IP
+		url := ingressIP + ":443"
+
+		conn, err := tls.Dial("tcp", url, &tls.Config{
+			InsecureSkipVerify: true,
+			ServerName:         "ingress.test.homelab.example",
+		})
+		if err != nil {
+			t.Fatalf("Failed to connect to ingress at %s: %v", url, err)
+		}
+		defer conn.Close()
+
+		certs := conn.ConnectionState().PeerCertificates
+		if len(certs) == 0 {
+			t.Fatal("No TLS certificates found for ingress")
+		}
+
+		cert := certs[0]
+		if cert.Subject.CommonName != "ingress.test.homelab.example" {
+			t.Errorf("Expected certificate common name 'ingress.test.homelab.example' but got '%s'", cert.Subject.CommonName)
+		}
+
+		// Check all certs in chain have valid expiry dates
+		for _, cert := range certs {
+			if cert.NotBefore.After(time.Now()) {
+				t.Errorf("Certificate is not valid yet: NotBefore %v is in the future", cert.NotBefore)
+			}
+			if cert.NotAfter.Before(time.Now()) {
+				t.Errorf("Certificate has expired: NotAfter %v is in the past", cert.NotAfter)
+			}
 		}
 	})
 
