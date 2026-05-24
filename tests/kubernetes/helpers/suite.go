@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/k8s"
-	"github.com/gruntwork-io/terratest/modules/terragrunt"
 	infisical "github.com/infisical/go-sdk"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -17,31 +16,6 @@ type Suite struct {
 	ClientSet         *kubernetes.Clientset
 	KubeConfigOptions *k8s.KubectlOptions
 	T                 *testing.T
-}
-
-func SetupCluster(t *testing.T) {
-	ctx := t.Context()
-
-	tgStackOpts := &terragrunt.Options{
-		TerragruntDir: tgDir,
-		TerraformArgs: []string{"apply"},
-	}
-
-	// Clean and generate the terragrunt stack before running the test
-	terragrunt.StackCleanContext(t, ctx, tgStackOpts)
-	terragrunt.StackGenerateContext(t, ctx, tgStackOpts)
-
-	terragrunt.StackRunContext(t, ctx, tgStackOpts)
-}
-
-func TeardownCluster(t *testing.T) {
-	ctx := t.Context()
-
-	// Ensure the stack is destroyed at the end of the test
-	terragrunt.StackRunContext(t, ctx, &terragrunt.Options{
-		TerragruntDir: tgDir,
-		TerraformArgs: []string{"destroy"},
-	})
 }
 
 func getInfisicalClient(t *testing.T) infisical.InfisicalClientInterface {
