@@ -10,7 +10,7 @@ import (
 )
 
 func testPodNetworking(s *helpers.Suite) {
-	manifestPath := helpers.GetFixturePath(s.T, "networking", "client.yaml")
+	manifestPath := helpers.FixturePath(s.T, "networking", "client.yaml")
 	k8s.KubectlApplyContext(s.T, s.T.Context(), s.KubeConfigOptions, manifestPath)
 	defer k8s.KubectlDeleteContext(s.T, s.T.Context(), s.KubeConfigOptions, manifestPath)
 

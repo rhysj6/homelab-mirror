@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func GetFixturePath(t *testing.T, parts ...string) string {
+func FixturePath(t *testing.T, parts ...string) string {
 	t.Helper()
 
 	_, file, _, ok := runtime.Caller(0)

@@ -7,7 +7,7 @@ import (
 	"github.com/rhysj6/homelab/tests/kubernetes/networking"
 )
 
-func TestMain(t *testing.T) {
+func TestKubernetesSuite(t *testing.T) {
 	// SetupCluster(t)
 	// Commented out during development to speed up test runs, but should be re-enabled to ensure proper cleanup of resources after tests are complete
 	// defer TeardownCluster(t)
