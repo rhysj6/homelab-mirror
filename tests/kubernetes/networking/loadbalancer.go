@@ -8,9 +8,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func testLoadBalancers(s *helpers.Suite) {
+func testLoadBalancer(t *testing.T, s *helpers.Suite) {
 	// Tests that the automatically provisioned load balancers have IP addresses assigned to them
-	s.T.Run("TestLoadBalancersGetIPs", func(t *testing.T) {
+	t.Run("hasIP", func(t *testing.T) {
 		// Get the list of load balancers in the cluster in all namespaces
 		lbs, err := s.ClientSet.CoreV1().Services("").List(t.Context(), metav1.ListOptions{
 			FieldSelector: "spec.type=LoadBalancer",
@@ -30,7 +30,7 @@ func testLoadBalancers(s *helpers.Suite) {
 		}
 	})
 
-	s.T.Run("TestLoadBalancersAreRoutable", func(t *testing.T) {
+	t.Run("isRoutable", func(t *testing.T) {
 		service, err := s.ClientSet.CoreV1().Services("default").Get(t.Context(), "nginx-external", metav1.GetOptions{})
 		if err != nil {
 			t.Fatalf("Failed to get service: %v", err)

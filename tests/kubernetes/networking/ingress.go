@@ -16,26 +16,26 @@ const (
 	testDomain = "ingress.test.homelab.example"
 )
 
-func testIngress(s *helpers.Suite) {
-	ingresses, err := s.ClientSet.NetworkingV1().Ingresses("default").List(s.T.Context(), metav1.ListOptions{FieldSelector: "metadata.name=nginx"})
+func testIngress(t *testing.T, s *helpers.Suite) {
+	ingresses, err := s.ClientSet.NetworkingV1().Ingresses("default").List(t.Context(), metav1.ListOptions{FieldSelector: "metadata.name=nginx"})
 	if err != nil {
-		s.T.Fatalf("Failed to list ingresses: %v", err)
+		t.Fatalf("Failed to list ingresses: %v", err)
 	}
 
 	if len(ingresses.Items) == 0 {
-		s.T.Fatal("No nginx ingress found in the cluster")
+		t.Fatal("No nginx ingress found in the cluster")
 	}
 
 	ingress := ingresses.Items[0]
 	ingressIP := ingress.Status.LoadBalancer.Ingress[0].IP
 
-	s.T.Run("TestIngressGetIPs", func(t *testing.T) {
+	t.Run("hasIP", func(t *testing.T) {
 		if len(ingress.Status.LoadBalancer.Ingress) == 0 {
 			t.Errorf("Ingress %s does not have an IP address assigned", ingress.Name)
 		}
 	})
 
-	s.T.Run("TestIngressIsRoutable", func(t *testing.T) {
+	t.Run("isRoutable", func(t *testing.T) {
 
 		// Using a custom HTTP client with a custom DialContext to bypass DNS resolution and route traffic directly to the ingress IP address, since the test domain won't resolve in the test environment
 		url := "https://" + testDomain
@@ -65,7 +65,7 @@ func testIngress(s *helpers.Suite) {
 		}
 	})
 
-	s.T.Run("TestIngressCertificate", func(t *testing.T) {
+	t.Run("certificateValid", func(t *testing.T) {
 		url := ingressIP + ":443"
 
 		conn, err := tls.Dial("tcp", url, &tls.Config{

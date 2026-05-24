@@ -15,7 +15,6 @@ const tgDir = "../../terragrunt/test/cluster"
 type Suite struct {
 	ClientSet         *kubernetes.Clientset
 	KubeConfigOptions *k8s.KubectlOptions
-	T                 *testing.T
 }
 
 func getInfisicalClient(t *testing.T) infisical.InfisicalClientInterface {
@@ -96,6 +95,5 @@ func NewSuite(t *testing.T) *Suite {
 	return &Suite{
 		ClientSet:         getKubeClientSet(t, kubeconfig),
 		KubeConfigOptions: getKubeConfigOptions(t, kubeconfig),
-		T:                 t,
 	}
 }
