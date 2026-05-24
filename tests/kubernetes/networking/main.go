@@ -17,4 +17,5 @@ func TestNetworking(s *helpers.Suite) {
 
 	testLoadBalancers(s)
 	testIngress(s)
+	testPodNetworking(s)
 }
