@@ -1,0 +1,54 @@
+name: Kubernetes Tests
+
+# Run manually and have option for branch
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run tests on'
+        required: true
+        default: 'main'
+      teardown:
+        description: 'Whether to teardown the cluster after tests (true/false)'
+        required: false
+        default: 'true'
+jobs:
+  test-kubernetes:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: tests/kubernetes/go.mod
+          cache: true
+
+      - name: Install Terratest Log Parser
+        run: |
+          go install github.com/gruntwork-io/terratest-log-parser@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Run Kubernetes tests
+        run: |
+          cd tests
+          if [ "${{ github.event.inputs.teardown }}" = "false" ]; then
+            make test-kubernetes-no-teardown
+          else
+            make test-kubernetes
+          fi
+
+      - name: Generate test report
+        if: always()
+        run: |
+          cd tests
+          make report-kubernetes
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+            paths: "tests/kubernetes/test_output/report.xml"
+        if: always()
