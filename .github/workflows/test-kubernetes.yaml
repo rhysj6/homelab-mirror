@@ -5,13 +5,19 @@ on:
   workflow_dispatch:
     inputs:
       teardown:
-        description: 'Whether to teardown the cluster after tests (true/false)'
+        description: Whether to teardown the cluster after tests
+        type: boolean
         required: false
-        default: 'true'
+        default: true
 jobs:
   test-kubernetes:
     runs-on: self-hosted
     steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
@@ -21,7 +27,7 @@ jobs:
       - name: Run Kubernetes tests
         run: |
           cd tests
-          if [ "${{ github.event.inputs.teardown }}" = "false" ]; then
+          if [ "${{ inputs.teardown }}" = "false" ]; then
             make test-kubernetes-no-teardown
           else
             make test-kubernetes
