@@ -54,3 +54,31 @@
         url: "{{ github_actions_runner_terragrunt_download_url }}"
         dest: "/usr/local/bin/terragrunt"
         mode: '0755'
+
+- name: Check if terratest-log-parser is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/terratest-log-parser
+  register: github_actions_runner_terratest_log_parser_stat
+
+- name: Install terratest-log-parser
+  when: (not github_actions_runner_terratest_log_parser_stat.stat.exists) or (reinstall_terratest_log_parser | default(false) | bool)
+  block:
+    - name: Download latest terratest-log-parser release info from GitHub API
+      ansible.builtin.uri:
+        url: "https://api.github.com/repos/gruntwork-io/terratest/releases/latest"
+        return_content: true
+      register: github_actions_runner_terratest_log_parser_latest
+    - name: Extract download URL from GitHub API response
+      ansible.builtin.set_fact:
+        github_actions_runner_terratest_log_parser_download_url: >-
+          {{
+            github_actions_runner_terratest_log_parser_latest.json.assets
+            | selectattr('name', 'match', 'terratest_log_parser_linux_amd64')
+            | map(attribute='browser_download_url')
+            | first
+          }}
+    - name: Download terratest-log-parser binary
+      ansible.builtin.get_url:
+        url: "{{ github_actions_runner_terratest_log_parser_download_url }}"
+        dest: "/usr/local/bin/terratest-log-parser"
+        mode: '0755'
