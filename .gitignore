@@ -42,3 +42,6 @@ terraform.rc
 backend.hcl
 **kubeconfig**
 .lock
+
+test_output.log
+test_output/
