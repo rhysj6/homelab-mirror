@@ -16,6 +16,17 @@ module "clifton" {
   }
 }
 
+module "pve-internal" {
+  source     = "./pass_through_ingress"
+  name       = "pve-internal"
+  hostname   = "pve.homelab.example"
+  ip_address = "10.0.0.20"
+  port       = 8006
+  portname   = "https"
+  local-only = true
+}
+
+
 module "pbs" {
   source     = "./pass_through_ingress"
   name       = "pbs"
