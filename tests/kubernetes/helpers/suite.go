@@ -20,14 +20,14 @@ type Suite struct {
 func getInfisicalClient(t *testing.T) infisical.InfisicalClientInterface {
 	ctx := t.Context()
 	client := infisical.NewInfisicalClient(ctx, infisical.Config{
-		SiteUrl:          os.Getenv("INFISICAL_URL"),
+		SiteUrl:          os.Getenv("INFISICAL_HOST"),
 		AutoTokenRefresh: true,
 	})
 
 	// Using the same environment variables for authentication as the Terraform provider
 	_, err := client.Auth().UniversalAuthLogin(
-		os.Getenv("UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_ID"),
-		os.Getenv("UNIVERSAL_AUTH_MACHINE_IDENTITY_CLIENT_SECRET"),
+		os.Getenv("INFISICAL_UNIVERSAL_AUTH_CLIENT_ID"),
+		os.Getenv("INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET"),
 	)
 
 	if err != nil {
