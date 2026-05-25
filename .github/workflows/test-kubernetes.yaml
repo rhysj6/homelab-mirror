@@ -5,10 +5,25 @@ on:
   workflow_dispatch:
     inputs:
       teardown:
-        description: Whether to teardown the cluster after tests
+        description: Teardown the cluster after tests
         type: boolean
         required: false
         default: true
+
+# Prevent concurrent runs of this workflow to avoid conflicts, but allow concurrent runs of other workflows
+concurrency:
+  group: 'test-terragrunt-main'
+
+env:
+  INFISICAL_HOST: "https://secrets.homelab.example"
+  INFISICAL_UNIVERSAL_AUTH_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+  INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+
+  AWS_ENDPOINT_URL_S3: "https://s3.homelab.example"
+  AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY_SECRET }}
+  TG_PROVIDER_CACHE: 1
+
 jobs:
   test-kubernetes:
     runs-on: self-hosted
