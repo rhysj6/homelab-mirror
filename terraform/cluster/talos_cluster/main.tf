@@ -41,7 +41,7 @@ data "talos_cluster_health" "init_health" {
 
 resource "time_sleep" "kubevip_wait" {
   depends_on = [talos_machine_bootstrap.bootstrap, data.talos_cluster_health.init_health]
-  create_duration = "15s"
+  create_duration = "25s"
 }
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
