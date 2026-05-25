@@ -8,9 +8,8 @@ import (
 )
 
 func TestKubernetesSuite(t *testing.T) {
-	// SetupCluster(t)
-	// Commented out during development to speed up test runs, but should be re-enabled to ensure proper cleanup of resources after tests are complete
-	// defer TeardownCluster(t)
+	helpers.SetupCluster(t)
+	defer helpers.TeardownCluster(t)
 	s := helpers.NewSuite(t)
 	t.Run("networking", func(t *testing.T) {
 		networking.TestNetworking(t, s)
