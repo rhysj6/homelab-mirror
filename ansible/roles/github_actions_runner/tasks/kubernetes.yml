@@ -1,0 +1,39 @@
+- name: Download kubectl
+  ansible.builtin.get_url:
+    url: "https://dl.k8s.io/release/v{{ github_actions_runner_kubectl_version }}/bin/linux/amd64/kubectl"
+    dest: "/usr/local/bin/kubectl"
+    mode: '0755'
+    owner: "{{ github_actions_runner_user }}"
+    group: "{{ github_actions_runner_user }}"
+  become: true
+  become_user: root
+
+- name: Check if Talosctl is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/talosctl
+  register: github_actions_runner_talosctl_stat
+
+- name: Install Talosctl
+  when: (not github_actions_runner_talosctl_stat.stat.exists) or (reinstall_talosctl | default(false) | bool)
+  block:
+    - name: Download latest Talosctl release info from GitHub API
+      ansible.builtin.uri:
+        url: "https://api.github.com/repos/siderolabs/talos/releases/latest"
+        return_content: true
+      register: github_actions_runner_talosctl_latest
+
+    - name: Extract download URL from GitHub API response
+      ansible.builtin.set_fact:
+        github_actions_runner_talosctl_download_url: >-
+          {{
+            github_actions_runner_talosctl_latest.json.assets
+            | selectattr('name', 'match', 'talosctl-linux-amd64')
+            | map(attribute='browser_download_url')
+            | first
+          }}
+
+    - name: Download Talosctl binary
+      ansible.builtin.get_url:
+        url: "{{ github_actions_runner_talosctl_download_url }}"
+        dest: "/usr/local/bin/talosctl"
+        mode: '0755'

@@ -11,6 +11,9 @@
       - python3-venv
       - gnupg
       - software-properties-common
+      - apt-transport-https
+      - ca-certificates
+      - curl
     state: present
     update_cache: true
 
@@ -29,6 +32,9 @@
     mode: '0644'
     owner: "{{ github_actions_runner_user }}"
     group: "{{ github_actions_runner_user }}"
+
+- name: Kubernetes dependencies
+  ansible.builtin.include_tasks: kubernetes.yml
 
 - name: Install Terraform
   ansible.builtin.include_tasks: terraform.yml
