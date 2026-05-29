@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	github.com/gruntwork-io/terratest v1.0.0
-	github.com/infisical/go-sdk v0.7.1
+	github.com/infisical/go-sdk v0.8.0
 	k8s.io/apimachinery v0.36.1
 	k8s.io/client-go v0.36.1
 )
