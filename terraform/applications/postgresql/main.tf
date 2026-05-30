@@ -123,10 +123,10 @@ module "database" {
   env  = var.env
 }
 
-resource "infisical_secret" "password" {
+resource "infisical_secret" "db_host" {
   name         = "HOST"
   value        = var.loadbalancer_ip
-  env_slug     = var.env
-  workspace_id = "2ace56f5-d07e-455e-9009-e44dfce28566"
-  folder_path  = "/db-creds/"
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/db-creds/${var.env}/"
 }

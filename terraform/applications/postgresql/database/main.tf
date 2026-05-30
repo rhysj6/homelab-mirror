@@ -41,15 +41,15 @@ resource "kubernetes_manifest" "database" {
 resource "infisical_secret" "username" {
   name         = "${upper(var.name)}_USERNAME"
   value        = var.name
-  env_slug     = var.env
-  workspace_id = "2ace56f5-d07e-455e-9009-e44dfce28566"
-  folder_path  = "/db-creds/"
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/db-creds/${var.env}/"
 }
 
 resource "infisical_secret" "password" {
   name         = "${upper(var.name)}_PASSWORD"
   value        = random_string.db_password.result
-  env_slug     = var.env
-  workspace_id = "2ace56f5-d07e-455e-9009-e44dfce28566"
-  folder_path  = "/db-creds/"
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/db-creds/${var.env}/"
 }
