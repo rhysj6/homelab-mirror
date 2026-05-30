@@ -1,5 +1,5 @@
 netbox_install_dir: /opt/netbox
-netbox_version: v4.4-3.4.1
+netbox_version: v4.6-5.0.1
 
 netbox_db_host: "{{ lookup(vault_plugin,
   project_id=iac_infisical_project, env_slug='main',

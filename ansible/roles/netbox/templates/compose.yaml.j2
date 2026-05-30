@@ -5,7 +5,6 @@ services:
       - redis
       - redis-cache
     env_file: .env
-    user: "unit:root"
     ports:
       - "8080:8080"
     healthcheck:
@@ -22,7 +21,6 @@ services:
   netbox-worker:
     image: docker.io/netboxcommunity/netbox:{{ netbox_version }}
     env_file: .env
-    user: "unit:root"
     volumes:
       - ./config:/etc/netbox/config:z,ro
       - netbox-media-files:/opt/netbox/netbox/media:rw
