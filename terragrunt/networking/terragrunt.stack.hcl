@@ -1,6 +1,6 @@
-unit "general" {
-  source = "${get_repo_root()}/terraform/networking/general"
-  path   = "general"
+unit "netbox" {
+  source = "${get_repo_root()}/terraform/networking/netbox"
+  path   = "netbox"
 }
 
 unit "gh_proxmox_sdn" {

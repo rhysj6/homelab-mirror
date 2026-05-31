@@ -11,5 +11,5 @@ terraform {
 }
 
 dependencies {
-  paths = ["../general"]
+  paths = ["../netbox"]
 }

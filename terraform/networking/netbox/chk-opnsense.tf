@@ -8,6 +8,7 @@ resource "netbox_cluster" "chk_cluster" {
 resource "netbox_virtual_machine" "chk_opnsense_01" {
   cluster_id = netbox_cluster.chk_cluster.id
   name       = "chk-opnsense-01"
+  site_id    = netbox_site.chk.id
 }
 
 resource "netbox_interface" "chk_opnsense_01_wan" {
