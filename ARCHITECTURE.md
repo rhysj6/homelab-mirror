@@ -1,152 +1,204 @@
 # Network Architecture
-## Physical Network & Subnets
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│  OPNSense Router (HP ProDesk 400 G3)                             │
-│                                                                  │
-│  VLANs / Subnets:                                                │
-│    10.10.10.0/24  – Redcliff cluster nodes (VLAN, all 6 nodes)   │
-│    10.11.10.0/24  – LoadBalancer IP pool (BGP advertised)        │
-│    10.48.0.0/12   – Proxmox SDN (EVPN, BGP advertised)           │
-│      ├── 10.10.0.136/29  – MinIO VMs (to be decommissioned)      │
-│      ├── 10.10.1.0/24    – Personal VMs                          │
-│      └── ... future cross-site subnets                           │
-└──────┬──────────────────────────────────┬────────────────────────┘
-       │ BGP peering (ASN 65551)          │ BGP peering (SDN routes)
-       │ Learns LB pool via Cilium        │ Learns 10.48.0.0/12 subnets
-       │ (10.11.10.0/24)                  │ via Proxmox EVPN zone
-       │                                  ▼
-       │                     ┌────────────────────────────────────┐
-       │                     │  Proxmox SDN (EVPN Zone)           │
-       │                     │                                    │
-       │                     │  10.48.0.0/12 prefix               │
-       │                     │  – Cross-site L3 routing between   │
-       │                     │    Clifton and Filton without      │
-       │                     │    hairpinning via OPNSense        │
-       │                     │  – Future: cross-site subnets for  │
-       │                     │    multi-site workload placement   │
-       │                     │                                    │
-       │                     │     Not yet IaC'd — configured     │
-       │                     │     manually in Proxmox            │
-       ▼                     └────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────────┐
-│  Redcliff Kubernetes Cluster (Talos Linux)                      │
-│                                                                 │
-│  Nodes (10.10.10.11–16, OPNSense VLAN):                         │
-│    .11, .12  – Control plane VMs (on Clifton + Filton)          │
-│    .13       – Control plane bare metal                         │
-│    .14, .15, .16  – Workers with Longhorn storage (bare metal)  │
-│                                                                 │
-│  Cilium CNI (kube-proxy replacement, BGP control plane)         │
-│    – Peers with OPNSense (ASN 65555 local, 65551 peer)          │
-│    – Advertises LoadBalancer IPs from pool 10.11.10.0/24        │
-│    – KubeVIP holds the control plane VIP at 10.10.10.10         │
-│                                                                 │
-│  Key LoadBalancer IPs:                                          │
-│    10.11.10.11  – Traefik (ingress, all HTTP/HTTPS traffic)     │
-│    10.11.10.12  – Prometheus / monitoring                       │
-│    10.11.10.53  – Technitium DNS                                │
-└─────────────────────────────────────────────────────────────────┘
+## High-Level Topology Diagram
+
+```mermaid
+flowchart LR
+  Internet[Internet / External Clients] --> OPN[OPNSense Router\nASN 65551]
+
+  subgraph K8s[Redcliff Kubernetes Cluster]
+    direction TB
+    CP[Control Plane\n10.10.10.11-13\nVIP 10.10.10.10]
+    WK[Workers\n10.10.10.14-16]
+    Cilium[Cilium CNI\nNative Routing + BGP\nASN 65555]
+
+    Cilium --> LB[LoadBalancer Pool\n10.11.10.0/24]
+    Cilium --> Pods[Pod CIDR\n10.42.0.0/17]
+    
+    LB --> DNS[Technitium DNS\n10.11.10.53]
+    LB --> Traefik[Traefik Ingress\n10.11.10.11]
+    LB --> PG[CNPG PostgreSQL\n10.11.10.32]
+    LB --> Obs[Prometheus / Grafana / Loki / Alloy]
+  end
+
+  subgraph Test[Test Cluster]
+    direction TB
+    TNodes[Nodes\n10.10.20.11-12]
+    TCilium[Cilium\nASN 65553]
+    TLB[LB Pool\n10.11.20.0/24]
+    TPod[Pod CIDR\n10.41.0.0/17]
+    TCilium --> TLB
+    TCilium --> TPod
+  end
+
+  subgraph SDN[Proxmox SDN / EVPN]
+    direction TB
+    VParoxos[paroxos\n10.48.0.0/24]
+    VNoTrust[notrust\n10.48.17.0/24]
+    VPersonal[personal\n10.10.1.0/24]
+    VMinio[minio\n10.10.0.136/29]
+  end
+
+  OPN <-- BGP: Service + Pod Routes --> Cilium
+  OPN <-- BGP: Validation Routes --> TCilium
+
+  Traefik --> VPersonal
+  Traefik --> VMinio
+  PG --> VMinio
+  Obs --> VMinio
+
+  GoTests[Go Terratest Suite\ntests/kubernetes] --> Test
+  GoTests -. promote validated changes .-> K8s
 ```
 
-## How a Request Reaches a Service
+## Core Networks And Routing
+
+- OPNSense is the main router/firewall and BGP peer for Kubernetes service routes.
+- Redcliff Kubernetes nodes are on `10.10.10.0/24`.
+- Test Kubernetes nodes are on `10.10.20.0/24`.
+- Redcliff LoadBalancer pool is `10.11.10.1/24`.
+- Test LoadBalancer pool is `10.11.20.1/24`.
+- Cilium uses native routing and advertises both service IPs and pod CIDRs over BGP.
+- Proxmox SDN resources are managed in IaC under `terraform/networking/proxmox_sdn` and orchestrated via `terragrunt/networking`.
+
+## NetBox And Proxmox SDN From IaC
+
+Networking metadata and SDN are codified in Terraform:
+
+- NetBox manages sites, prefixes, VLAN metadata, ASN/VRF definitions, and key IP addresses.
+- Proxmox EVPN controller/zone and multiple VNets are managed from code.
+
+Implemented SDN VNets include:
+
+- `paroxos`: `10.48.0.0/24`
+- `notrust`: `10.48.17.0/24`
+- `personal`: `10.10.1.0/24`
+- `minio`: `10.10.0.136/29`
+
+## Kubernetes Cluster Architecture
+
+### Redcliff Cluster
+
+- Nodes: `10.10.10.11` to `10.10.10.16`.
+- KubeVIP control plane endpoint: `10.10.10.10`.
+- Cilium native routing pod CIDR: `10.42.0.0/17`.
+- Cilium BGP ASN: `65555`.
+- OPNSense peer ASN: `65551`.
+- Talos and Kubernetes versions are configured in `terragrunt/redcliff/env.hcl`.
+
+Key Redcliff LoadBalancer IP allocations:
+
+- `10.11.10.11`: ingress controller.
+- `10.11.10.12`: monitoring endpoint.
+- `10.11.10.32`: PostgreSQL service.
+- `10.11.10.53`: Technitium DNS.
+
+### Test Cluster
+
+- Nodes: `10.10.20.11` and `10.10.20.12`.
+- KubeVIP: `10.10.20.10`.
+- Pod CIDR: `10.41.0.0/17`.
+- LoadBalancer pool: `10.11.20.1/24`.
+- Cilium BGP ASN: `65553`.
+- This is an ephemeral validation cluster used with the Go-based test suite before promoting changes to redcliff (production).
+- Talos and Kubernetes versions are configured in `terragrunt/test/env.hcl`.
+
+## Request Flow
 
 ```
 External request (HTTPS)
-        │
-        ▼
-OPNSense (port 443 forwarded to 10.11.10.11)
-        │
-        ▼
-Traefik (LoadBalancer IP: 10.11.10.11)
-        │  routes by hostname via Kubernetes Ingress rules
-        ├──► authentik.homelab.example  ──► Authentik (SSO)
-        ├──► grafana.homelab.example    ──► Grafana
-        ├──► s3.homelab.example         ──► MinIO (via ExternalName svc)
-        └──► *                        ──► other apps
-
-Internal DNS (Technitium at 10.11.10.53)
-        – External DNS operator auto-creates records for new services
-        – Also handles local-only services not exposed externally
+  |
+  v
+OPNSense forwards traffic to the ingress LoadBalancer IP
+  |
+  v
+Traefik routes by host/path using Kubernetes ingress resources
+  |
+  +--> authentik.homelab.example
+  +--> grafana.homelab.example
+  +--> other hostnames for non-Kubernetes services
 ```
 
-## How BGP LoadBalancer IPs Work
+Local DNS flow:
+
+- Technitium DNS serves internal records.
+- External DNS updates records for Kubernetes services.
+
+## How BGP Routing Works For Services And Pods
 
 ```
-  New LoadBalancer Service created in Kubernetes
-              │
-              ▼
-  Cilium assigns IP from pool (10.11.10.0/24)
-              │
-              ▼
-  Cilium BGP control plane advertises the IP to OPNSense peer
-              │
-              ▼
-  OPNSense installs route: 10.11.10.x ──► node running the pod
-              │
-              ▼
-  Traffic arrives directly at the correct node (no extra hop)
+Service of type LoadBalancer is created or pod CIDR is allocated
+  |
+  v
+Cilium allocates service IPs from the cluster pool and pod IPs from the pod CIDR
+  |
+  v
+Cilium advertises both route types via BGP to OPNSense
+  |
+  v
+OPNSense installs route toward the active node
+  |
+  v
+Traffic reaches service without L2 announcer dependency
 ```
 
-## Storage & State
+## Storage, State, And Secrets
 
-```
-  Longhorn (distributed block storage across worker nodes)
-    ├──► PersistentVolumes for stateful apps
-    ├──► Loki log ingest storage
-    └──► CNPG PostgreSQL data storage
+- Longhorn provides persistent volumes for stateful Kubernetes workloads.
+- CNPG PostgreSQL provides shared databases for platform applications.
+- MinIO remains active for:
+  - Terragrunt S3 backend state.
+  - Loki object storage.
+  - CNPG backups.
+  - Longhorn backup target.
+- Infisical is the central secret source for Terraform providers and application credentials.
 
-  MinIO (3 VMs on Clifton + Filton + Offsite, 10.10.0.141–142 + Offsite IP)
-    ├──► Terraform state backend  (s3.homelab.example)
-    ├──► Loki log storage
-    ├──► Longhorn backup target
-    └──► CNPG PostgreSQL backups
+## Terragrunt Stack Orchestration
 
-  PostgreSQL (CNPG, LoadBalancer IP: 10.11.10.32)
-    └──► Shared DB cluster used by Authentik, Infisical, NetBox etc.
-```
+### Redcliff
 
-## Physical Hosts & VM Layout
+- `terragrunt/redcliff/cluster`: `talos_cluster` -> `bootstrap_init` -> `bootstrap_final`
+- `terragrunt/redcliff/applications`: CNPG/PostgreSQL, gateway, Authentik, Infisical, Technitium, External DNS
+- `terragrunt/redcliff/observability`: Loki, Grafana, Alloy
 
-```
-  Clifton (Ryzen 9, 64GB)          Filton (i5, 64GB)
-  ├── Redcliff node-1 (VM, CP)     ├── Redcliff node-2 (VM, CP)
-  ├── MinIO node 1                 ├── MinIO node 2
-  ├── Automator LXC                └── other VMs and LXCs
-  └── other VMs and LXCs
+### Additional Stacks
 
-  Bare metal nodes (not on Proxmox):
-  ├── Redcliff node-3 (CP)
-  ├── Redcliff node-4 (worker + storage)
-  ├── Redcliff node-5 (worker + storage)
-  └── Redcliff node-6 (worker + storage)
-```
+- `terragrunt/networking`: NetBox and Proxmox SDN resources
+- `terragrunt/test/cluster`: test cluster lifecycle for integration tests
 
-# Github actions Architecture
+# GitHub Actions Architecture
 
-All actions run on the self-hosted GitHub Actions runner `automator`, this is because the pipeline needs access to the private infrastructure in order to run the terragrunt commands. The `automator` server is setup in `ansible/automator.yml`.
+All workflows run on a self-hosted runner to access private network dependencies.
 
-## Public mirror of the repository
-One of my goals since creating this homelab repository was to make it public so that others can learn from it and use it as a reference for their own homelabs. However, I didn't want to expose access to my private infrastructure by having the URLs and software versions publicly visible in the code. Initially, to solve this problem I used inifisical to store the domains as secrets and then referenced these secrets in the Terraform code, but this became messy. The solution I settled on was to have a public mirror of the repository that has the sensitive information removed.
+## Terragrunt Workflow
 
-This public mirror is automatically kept in sync with the private repository using a GitHub action that runs regularly and pushes any changes from the private repository to the public mirror, it uses `git filter-repo` to remove the sensitive information from the commit history so that it's not visible in the public mirror. This allows me to have a public repository that others can learn from, without exposing any sensitive information about my infrastructure.
+` .github/workflows/terragrunt.yaml `:
 
-## Terragrunt CI and CD pipeline
-In order to automate the deployment of my infrastructure and applications, I have set up a CI/CD pipeline using GitHub Actions. When it runs on a pull request, it will run the applicable terragrunt stacks in plan mode based on the files changed.
+- Pull requests run stack `plan`.
+- Pushes to `main` run stack `apply`.
+- Path filters target `cluster`, `applications`, and `observability` independently.
+- Concurrency prevents overlapping runs for the same PR or main branch apply lane.
 
-When it runs on a push to main, it will run the applicable terragrunt stacks in apply mode based on the files changed. It has a concurrency group to prevent multiple runs from happening at the same time and also means that if I push multiple commits in quick succession, it will only run the pipeline for the latest commit, which is useful for when I'm merging multiple update pull requests at the same time.
+## Kubernetes Test Workflow
+Used for running integration tests against the test cluster:
+` .github/workflows/test-kubernetes.yaml `:
 
-The pipeline uses path filtering to only run the stacks affected by a given change:
+- Manual dispatch with boolean `teardown` input.
+- Uses targets from `tests/Makefile`.
+- `teardown=false` runs without teardown for debugging.
+- Always produces a test report summary.
 
-- Changes to `terraform/applications/**` or `terragrunt/redcliff/applications/**` → runs the applications stack
-- Changes to `terraform/cluster/**` or `terragrunt/redcliff/cluster/**` → runs the cluster stack
-- Changes to `terraform/observability/**` or `terragrunt/redcliff/observability/**` → runs the observability stack
-- Changes to root files (`root.hcl`, `env.hcl`, `providers.tf`, `versions.tf`) → runs all stacks, as these affect every module
+## Public Mirror Workflow
+
+` .github/workflows/public-mirror.yaml `:
+
+- Runs on schedule and manual dispatch.
+- Uses `git filter-repo` string replacements.
+- Pushes rewritten history to the public mirror repository, with sensitive strings scrubbed.
 
 # Observability Architecture
-For monitoring and observability, I use a combination of Prometheus, Grafana and Loki. Prometheus is used for metrics collection, Grafana is used for visualisation and Loki is used for log aggregation. These are all deployed in Kubernetes and are exposed via LoadBalancer IPs or Ingress rules.
 
-Metrics within the cluster are collected using the prometheus operator, which automatically discovers and scrapes metrics from Kubernetes components and applications and logs are collected using Grafana Alloy, which runs on the cluster and forwards all pod logs to Loki.
-
-On individual servers, I use Grafana Alloy to collect logs and metrics and forward them to Loki and Prometheus respectively, this allows me to have a single location for all of my observability data, and also allows me to use the same Grafana instance to visualise both cluster and server metrics and logs.
+- Prometheus stack is deployed during cluster bootstrap.
+- Grafana and Loki are deployed from `terraform/observability`.
+- Alloy is deployed in-cluster and also installed on all non-Kubernetes hosts via Ansible for centralized logging and monitoring.
+- Grafana uses Authentik for SSO and integrates Prometheus/Loki data sources.
