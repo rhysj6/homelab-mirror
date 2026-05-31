@@ -37,5 +37,9 @@ terraform {
       source  = "goauthentik/authentik"
       version = "2026.2.0"
     }
+    netbox = {
+      source  = "e-breuninger/netbox"
+      version = "5.4.0"
+    }
   }
 }

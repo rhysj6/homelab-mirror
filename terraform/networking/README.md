@@ -1,0 +1,2 @@
+# Networking
+Whilst I use opnsense as my firewall/router, and most of it has to be click-opsed. I have IaC for proxmox SDN and the netbox configuration, netbox is also used as an ansible inventory source.

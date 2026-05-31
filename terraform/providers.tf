@@ -26,6 +26,13 @@ ephemeral "infisical_secret" "authentik_token" {
   folder_path  = "/providers"
 }
 
+ephemeral "infisical_secret" "netbox_token" {
+  name         = "NETBOX_TOKEN"
+  env_slug     = "main"
+  workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
+  folder_path  = "/providers"
+}
+
 provider "minio" {
   minio_server   = "s3.homelab.example"
   minio_user     = ephemeral.infisical_secret.minio_access_key.value
@@ -40,4 +47,9 @@ provider "cloudflare" {
 provider "authentik" {
   url   = "https://homelab.example"
   token = ephemeral.infisical_secret.authentik_token.value
+}
+
+provider "netbox" {
+  server_url = "http://10.0.0.166:8080"
+  api_token  = ephemeral.infisical_secret.netbox_token.value
 }
