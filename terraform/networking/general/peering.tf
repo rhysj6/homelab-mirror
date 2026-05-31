@@ -29,3 +29,20 @@ resource "netbox_asn" "chk_asn" {
   description = "CHK opnsense ASN"
   comments    = "CHK ASN for peering with GH ASN."
 }
+
+resource "netbox_tag" "proxmox_evpn" {
+  name        = "proxmox-evpn"
+  description = "Tag for Proxmox EVPN-related objects."
+}
+
+resource "netbox_asn" "proxmox_evpn_asn" {
+  asn         = 64990
+  rir_id      = netbox_rir.internal.id
+  description = "Proxmox EVPN ASN"
+  tags        = [netbox_tag.proxmox_evpn.name]
+}
+
+resource "netbox_vrf" "proxmox_evpn_vrf" {
+  name = "Proxmox EVPN VRF"
+  tags = [netbox_tag.proxmox_evpn.name]
+}
