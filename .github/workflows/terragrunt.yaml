@@ -4,13 +4,15 @@ on:
   pull_request:
     paths:
       - "terraform/**"
-      - "terragrunt/**"
+      - "terragrunt/root.hcl"
+      - "terragrunt/redcliff/**"
   push:
     branches:
       - main
     paths:
       - "terraform/**"
-      - "terragrunt/**"
+      - "terragrunt/root.hcl"
+      - "terragrunt/redcliff/**"
   workflow_dispatch:
 
 # Prevent concurrent applies to the same environment, but allow concurrent plans
