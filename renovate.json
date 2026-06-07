@@ -6,5 +6,34 @@
   "ignorePaths": [
     // Ignore updates to Jenkins as it's not being used at the moment
     "terraform/applications/jenkins/**"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "kube-prometheus-stack"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "enabled": false,
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "matchDatasources": [
+        "helm"
+      ],
+      "matchPackageNames": [
+        "kube-prometheus-stack"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": true,
+      "minimumReleaseAge": "7 days"
+    }
   ]
 }
