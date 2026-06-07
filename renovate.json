@@ -35,5 +35,10 @@
       "enabled": true,
       "minimumReleaseAge": "7 days"
     }
-  ]
+  ],
+  "terragrunt": {
+    "fileMatch": [
+      "(^|/).*\\.hcl$"
+    ]
+  }
 }
