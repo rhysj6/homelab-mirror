@@ -36,9 +36,14 @@
       "minimumReleaseAge": "7 days"
     }
   ],
-  "terragrunt": {
-    "managerFilePatterns": [
-      "/(^|/).*\\.hcl$/"
-    ]
-  }
+    "regexManagers": [
+    {
+      "fileMatch": ["(^|/)env\\.hcl$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*\\w+\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "{{datasource}}",
+      "depNameTemplate": "{{depName}}"
+    }
+  ]
 }
