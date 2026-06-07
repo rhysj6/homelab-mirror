@@ -37,8 +37,8 @@
     }
   ],
   "terragrunt": {
-    "fileMatch": [
-      "(^|/).*\\.hcl$"
+    "managerFilePatterns": [
+      "/(^|/).*\\.hcl$/"
     ]
   }
 }
