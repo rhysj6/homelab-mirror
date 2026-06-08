@@ -3,3 +3,4 @@ infisicalsdk
 proxmoxer
 requests
 httpx
+kubernetes
