@@ -40,7 +40,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["/(^|/)cluster_versions\\.yaml$/"],
-      "matchStrings": ["# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*\\w+\\s*=\\s*\"(?<currentValue>[^\"]+)\""],
+      "matchStrings": ["# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*[A-Za-z_][A-Za-z0-9_]*\\s*:\\s*[\"']?(?<currentValue>[^\\s\"'#]+)[\"']?"],
       "datasourceTemplate": "{{datasource}}",
       "depNameTemplate": "{{depName}}"
     }
