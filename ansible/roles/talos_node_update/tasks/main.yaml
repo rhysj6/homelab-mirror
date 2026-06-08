@@ -1,6 +1,6 @@
-- name: Read versions.yaml
+- name: Read cluster_versions.yaml
   ansible.builtin.slurp:
-    src: "{{ playbook_dir }}/../terragrunt/{{ cluster }}/versions.yaml"
+    src: "{{ playbook_dir }}/../terragrunt/{{ cluster }}/cluster_versions.yaml"
   register: talos_node_update_versions_file
 
 - name: Get nodes from kubernetes cluster
