@@ -36,12 +36,11 @@
       "minimumReleaseAge": "7 days"
     }
   ],
-    "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["(^|/)env\\.hcl$"],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*\\w+\\s*=\\s*\"(?<currentValue>[^\"]+)\""
-      ],
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)cluster_versions\\.yaml$/"],
+      "matchStrings": ["# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*\\w+\\s*=\\s*\"(?<currentValue>[^\"]+)\""],
       "datasourceTemplate": "{{datasource}}",
       "depNameTemplate": "{{depName}}"
     }
