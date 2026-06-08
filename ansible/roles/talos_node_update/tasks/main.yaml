@@ -1,7 +1,7 @@
 - name: Read cluster_versions.yaml
-  ansible.builtin.slurp:
-    src: "{{ playbook_dir }}/../terragrunt/{{ cluster }}/cluster_versions.yaml"
-  register: talos_node_update_versions_file
+  ansible.builtin.include_vars:
+    file: "{{ playbook_dir }}/../terragrunt/{{ cluster }}/cluster_versions.yaml"
+    name: talos_node_update_versions
 
 - name: Get nodes from kubernetes cluster
   kubernetes.core.k8s_info:
@@ -12,7 +12,7 @@
 
 - name: Set fact for target talos version
   ansible.builtin.set_fact:
-    talos_node_update_target_version: "{{ (talos_node_update_versions_file.content | b64decode | from_yaml).talos }}"
+    talos_node_update_target_version: "{{ talos_node_update_versions.talos }}"
 
 ## Gets all nodes that aren't on the correct version and orders them with control plane nodes first.
 - name: Set fact for nodes requiring talos update
