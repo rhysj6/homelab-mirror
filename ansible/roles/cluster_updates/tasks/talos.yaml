@@ -1,0 +1,30 @@
+## Gets all nodes that aren't on the correct version and orders them with control plane nodes first.
+- name: Set fact for nodes requiring talos update
+  ansible.builtin.set_fact:
+    cluster_updates_nodes_to_update: >-
+      {{
+        (
+          cluster_updates_nodes.resources
+          | selectattr('status.nodeInfo.osImage', 'defined')
+          | rejectattr('status.nodeInfo.osImage', 'search', cluster_updates_versions.talos)
+          | selectattr('metadata.labels', 'defined')
+          | selectattr('metadata.labels["node-role.kubernetes.io/control-plane"]', 'defined')
+          | list
+        ) + (
+          cluster_updates_nodes.resources
+          | selectattr('status.nodeInfo.osImage', 'defined')
+          | rejectattr('status.nodeInfo.osImage', 'search', cluster_updates_versions.talos)
+          | rejectattr('metadata.labels["node-role.kubernetes.io/control-plane"]', 'defined')
+          | list
+        )
+      }}
+
+- name: Update Talos node
+  ansible.builtin.command: >-
+    talosctl --talosconfig /tmp/talos_config.yaml upgrade --wait \
+    -n {{ item.status.addresses | selectattr('type', 'equalto', 'InternalIP') | map(attribute='address') | list | first }} \
+    --image factory.talos.dev/metal-installer/{{ item.metadata.annotations['extensions.talos.dev/schematic'] }}:{{ cluster_updates_versions.talos }}
+  changed_when: true
+  loop: "{{ cluster_updates_nodes_to_update }}"
+  loop_control:
+    label: "{{ item.metadata.name }}"

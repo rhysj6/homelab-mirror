@@ -1,0 +1,14 @@
+- name: Read cluster_versions.yaml
+  ansible.builtin.include_vars:
+    file: "{{ playbook_dir }}/../terragrunt/{{ cluster }}/cluster_versions.yaml"
+    name: cluster_updates_versions
+
+- name: Get nodes from kubernetes cluster
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Node
+    kubeconfig: "/tmp/kube_config.yaml"
+  register: cluster_updates_nodes
+
+- name: Update Talos version
+  ansible.builtin.include_tasks: talos.yaml

@@ -11,7 +11,4 @@
         fail_msg: "The 'cluster' variable is required to run this playbook. Please provide the cluster name as an extra variable."
   roles:
     - role: cluster_client_config
-    - role: talos_node_update
-
-# - name: Kubernetes cluster update
-#   hosts: localhost
+    - role: cluster_updates
