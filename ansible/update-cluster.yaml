@@ -1,0 +1,17 @@
+# Update cluster runs both talos node updates and kubernetes cluster updates.
+# This is the main playbook for updating the cluster all roles are idempotent.
+# Input: cluster
+
+- name: Talos node update
+  hosts: localhost
+  pre_tasks:
+    - name: Validate cluster variable
+      ansible.builtin.assert:
+        that: cluster is defined
+        fail_msg: "The 'cluster' variable is required to run this playbook. Please provide the cluster name as an extra variable."
+  roles:
+    - role: cluster_client_config
+    - role: talos_node_update
+
+# - name: Kubernetes cluster update
+#   hosts: localhost

@@ -1,0 +1,17 @@
+- name: Write talosctl config to file
+  ansible.builtin.copy:
+    content: "{{ lookup('infisical.vault.read_secrets',
+      project_id=iac_infisical_project, env_slug='main',
+      path='/providers/kubeconfigs', secret_name=(cluster | upper) ~ '_TALOS_CONFIG'
+      ).value }}"
+    dest: "/tmp/talos_config.yaml"
+    mode: '0600'
+
+- name: Write kubeconfig to file
+  ansible.builtin.copy:
+    content: "{{ lookup('infisical.vault.read_secrets',
+      project_id=iac_infisical_project, env_slug='main',
+      path='/providers/kubeconfigs', secret_name=(cluster | upper) ~ '_KUBECONFIG'
+      ).value }}"
+    dest: "/tmp/kube_config.yaml"
+    mode: '0600'

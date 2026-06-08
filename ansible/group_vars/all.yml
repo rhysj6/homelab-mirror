@@ -1,4 +1,4 @@
-infisical_project: 962f409d-8e60-41b2-88c4-13d313546083
+infisical_project: 962f409d-8e60-41b2-88c4-13d313546083 # Deprecated, use iac_infisical_project instead
 iac_infisical_project: a313cae1-beb5-408e-be83-83fa189863b6
 env: prod
 vault_plugin: infisical.vault.read_secrets
