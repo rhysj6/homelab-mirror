@@ -38,7 +38,7 @@
   ],
     "regexManagers": [
     {
-      "fileMatch": ["(^|/)env\\.hcl$"],
+      "fileMatch": ["(^|/)cluster_versions\\.yaml$"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s*\\w+\\s*=\\s*\"(?<currentValue>[^\"]+)\""
       ],
