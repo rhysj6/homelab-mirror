@@ -17,10 +17,14 @@ terraform {
   source = "."
 }
 
+locals {
+  versions = yamldecode(file(find_in_parent_folders("cluster_versions.yaml")))
+}
+
 inputs = {
   cluster_name = include.env.locals.cluster
-  talos_version = include.env.locals.talos_version
-  kubernetes_version = include.env.locals.kubernetes_version
+  talos_version = local.versions.talos
+  kubernetes_version = local.versions.applied_kubernetes_version
   nodes        = include.env.locals.nodes
   kubevip      = include.env.locals.network.ips.kubevip
   network      = include.env.locals.network

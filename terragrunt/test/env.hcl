@@ -1,10 +1,6 @@
 locals {
   cluster = "test"
   env     = "test"
-  # renovate: datasource=github-releases depName=siderolabs/talos
-  talos_version      = "v1.12.0"
-  # renovate: datasource=github-releases depName=kubernetes/kubernetes
-  kubernetes_version = "1.35.0"
   nodes = [
     {
       name            = "test-node-1",
