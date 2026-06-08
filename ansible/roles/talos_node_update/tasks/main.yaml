@@ -35,26 +35,6 @@
         )
       }}
 
-- name: Debug nodes to update
-  ansible.builtin.debug:
-    var: talos_node_update_nodes_to_update
-
-- name: Debug nodes to not update
-  ansible.builtin.debug:
-    var: talos_node_update_nodes.resources | difference(talos_node_update_nodes_to_update)
-
-# - name: Dry run update node
-#   ansible.builtin.command: >-
-#     talosctl --talosconfig /tmp/talos_config.yaml
-#     -n {{ item.status.addresses | selectattr('type', 'equalto', 'InternalIP') | map(attribute='address') | list | first }}
-#     upgrade
-#     --image factory.talos.dev/metal-installer/{{ item.metadata.annotations['extensions.talos.dev/schematic'] }}:{{ talos_node_update_target_version }}
-#     --dry-run
-#   changed_when: true
-#   loop: "{{ talos_node_update_nodes_to_update }}"
-#   loop_control:
-#     label: "{{ item.metadata.name }}"
-
 - name: Update Talos node
   ansible.builtin.command: >-
     talosctl --talosconfig /tmp/talos_config.yaml upgrade --wait \
