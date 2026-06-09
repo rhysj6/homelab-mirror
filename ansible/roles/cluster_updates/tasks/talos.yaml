@@ -8,13 +8,13 @@
           | selectattr('status.nodeInfo.osImage', 'defined')
           | rejectattr('status.nodeInfo.osImage', 'search', cluster_updates_versions.talos)
           | selectattr('metadata.labels', 'defined')
-          | selectattr('metadata.labels["node-role.kubernetes.io/control-plane"]', 'defined')
+          | selectattr('metadata.labels', 'contains', 'node-role.kubernetes.io/control-plane')
           | list
         ) + (
           cluster_updates_nodes.resources
           | selectattr('status.nodeInfo.osImage', 'defined')
           | rejectattr('status.nodeInfo.osImage', 'search', cluster_updates_versions.talos)
-          | rejectattr('metadata.labels["node-role.kubernetes.io/control-plane"]', 'defined')
+          | rejectattr('metadata.labels', 'contains', 'node-role.kubernetes.io/control-plane')
           | list
         )
       }}
