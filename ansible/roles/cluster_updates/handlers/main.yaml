@@ -1,0 +1,3 @@
+- name: Kubernetes cluster updated
+  ansible.builtin.include_tasks:
+    file: apply_version_change.yaml

@@ -12,3 +12,18 @@
 
 - name: Update Talos version
   ansible.builtin.include_tasks: talos.yaml
+
+- name: Check if Kubernetes cluster update is needed
+  ansible.builtin.set_fact:
+    cluster_updates_kubernetes_update_needed: >-
+      {{ cluster_updates_nodes.resources
+          | selectattr('status.nodeInfo.kubeletVersion', 'defined')
+          | rejectattr('status.nodeInfo.kubeletVersion', 'match', 'v' ~ cluster_updates_versions.kubernetes)
+          | selectattr('metadata.labels', 'defined')
+          | selectattr('metadata.labels', 'contains', 'node-role.kubernetes.io/control-plane')
+          | list | length > 0
+      }}
+
+- name: Update Kubernetes cluster
+  when: cluster_updates_kubernetes_update_needed
+  ansible.builtin.include_tasks: kubernetes.yaml

@@ -1,0 +1,25 @@
+- name: Get IP address for control plane node
+  ansible.builtin.set_fact:
+    cluster_updates_control_plane_ip: >-
+      {{ cluster_updates_nodes.resources
+          | selectattr('metadata.labels', 'contains', 'node-role.kubernetes.io/control-plane')
+          | map(attribute='status.addresses') | map('selectattr', 'type', 'equalto', 'InternalIP') |
+          map('map', attribute='address') | map('first') | list | first
+      }}
+
+# Dry run the kubernetes update to download all the necessary images before we cordon and drain any nodes for the talos update.
+- name: Dry run - Update Kubernetes cluster
+  ansible.builtin.command: >-
+    talosctl --talosconfig /tmp/talos_config.yaml
+    -n {{ cluster_updates_control_plane_ip }}
+    upgrade-k8s --to {{ cluster_updates_versions.kubernetes }} --dry-run
+  changed_when: true
+
+- name: Update Kubernetes cluster
+  ansible.builtin.command: >-
+    talosctl --talosconfig /tmp/talos_config.yaml
+    -n {{ cluster_updates_control_plane_ip }}
+    upgrade-k8s --to {{ cluster_updates_versions.kubernetes }}
+  changed_when: true
+  notify:
+    - Kubernetes cluster updated

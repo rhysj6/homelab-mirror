@@ -1,0 +1,2 @@
+cluster_updates_git_remote_url: "git@github.com:rhysj6/homelab.git"
+cluster_updates_repo_path: "/tmp/homelab_repo"

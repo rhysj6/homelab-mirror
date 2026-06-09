@@ -1,0 +1,53 @@
+# This file updates the cluster_versions.yaml file to set the applied version of kubernetes
+# This is needed because the kubernetes version is taken in via the terraform
+# If the terraform apply runs with a different version than what is deployed it will update all nodes at once.
+
+- name: Save SSH key for git remote
+  ansible.builtin.copy:
+    dest: "/tmp/homelab_ssh_key"
+    content: "{{ lookup('infisical.vault.read_secrets',
+              project_id=iac_infisical_project, env_slug='main',
+              path='/providers/github', secret_name='homelab_ssh_key').value }}"
+    mode: '0700'
+
+- name: Clone repository to update cluster_versions.yaml
+  ansible.builtin.git:
+    repo: "{{ cluster_updates_git_remote_url }}"
+    dest: "{{ cluster_updates_repo_path }}"
+    version: main
+    key_file: "/tmp/homelab_ssh_key"
+    accept_hostkey: true
+    force: true
+
+- name: Update applied kubernetes version in cluster_versions.yaml
+  ansible.builtin.lineinfile:
+    path: "{{ cluster_updates_repo_path }}/terragrunt/{{ cluster }}/cluster_versions.yaml"
+    regexp: '^applied_kubernetes_version:'
+    line: "applied_kubernetes_version: {{ cluster_updates_versions.kubernetes }}"
+  register: cluster_updates_update_version
+
+# noqa: command-instead-of-module
+- name: Configure git user
+  ansible.builtin.shell:
+    cmd: >-
+      git config user.email "semaphore@deploy" &&
+      git config user.name "Semaphore"
+    chdir: "{{ cluster_updates_repo_path }}"
+  changed_when: false
+
+# noqa: command-instead-of-module
+- name: Commit and push changes
+  ansible.builtin.shell:
+    cmd: >-
+      git add . &&
+      git commit -m "Update applied kubernetes version to {{ cluster_updates_versions.kubernetes }}" &&
+      git push origin main
+    chdir: "{{ cluster_updates_repo_path }}"
+  environment:
+    GIT_SSH_COMMAND: "ssh -i /tmp/homelab_ssh_key -o StrictHostKeyChecking=no"
+  changed_when: true
+
+- name: Remove SSH key from disk
+  ansible.builtin.file:
+    path: "/tmp/homelab_ssh_key"
+    state: absent
