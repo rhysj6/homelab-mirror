@@ -59,7 +59,7 @@ resource "kubernetes_deployment" "infisical" {
         service_account_name = kubernetes_service_account.infisical.metadata[0].name
         container {
           name  = "infisical"
-          image = "infisical/infisical:v0.160.12"
+          image = "infisical/infisical:v0.161.0"
           env {
             name = "DB_CONNECTION_URI"
             value_from {
