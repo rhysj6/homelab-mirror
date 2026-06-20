@@ -43,7 +43,7 @@ resource "infisical_secret" "username" {
   value        = var.name
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/db-creds/${var.env}/"
+  folder_path  = "/db-creds/${var.env}"
 }
 
 resource "infisical_secret" "password" {
@@ -51,5 +51,5 @@ resource "infisical_secret" "password" {
   value        = random_string.db_password.result
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/db-creds/${var.env}/"
+  folder_path  = "/db-creds/${var.env}"
 }

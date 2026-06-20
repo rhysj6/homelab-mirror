@@ -48,12 +48,12 @@ resource "infisical_secret" "semaphore_client_id" {
   value        = module.semaphore_authentik.client_id
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/applications/authentik_config/outputs/"
+  folder_path  = "/applications/authentik_config/outputs"
 }
 resource "infisical_secret" "semaphore_client_secret" {
   name         = "semaphore_CLIENT_SECRET"
   value        = module.semaphore_authentik.client_secret
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
-  folder_path  = "/applications/authentik_config/outputs/"
+  folder_path  = "/applications/authentik_config/outputs"
 }
