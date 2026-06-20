@@ -36,6 +36,7 @@ resource "kubernetes_ingress_v1" "minio_ingress" {
     namespace = "external-hosts"
     annotations = {
       "cert-manager.io/cluster-issuer" = "cert-manager"
+      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-local-only@kubernetescrd"
     }
   }
   spec {
