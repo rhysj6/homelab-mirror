@@ -14,6 +14,7 @@ resource "helm_release" "kube_prometheus_stack" {
     templatefile("${path.module}/templates/monitoring_values.yaml", {
       ip_addrs   = var.cluster_node_ips,
       service_ip = var.monitoring_ip,
+      cluster_name = var.cluster_name,
     })
   ]
 }

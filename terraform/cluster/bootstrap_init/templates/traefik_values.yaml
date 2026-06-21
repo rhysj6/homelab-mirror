@@ -23,6 +23,7 @@ providers:
 service:
   annotations:
     lbipam.cilium.io/ips: "${service_ip}"
+    "external-dns.alpha.kubernetes.io/hostname": "traefik-public.${cluster_name}.k8s.local"
   spec:
     externalTrafficPolicy: Local
 

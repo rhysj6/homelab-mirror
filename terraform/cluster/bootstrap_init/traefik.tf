@@ -14,7 +14,8 @@ resource "helm_release" "traefik" {
   depends_on  = [kubernetes_namespace.traefik, helm_release.kube_prometheus_stack]
   values = [
     templatefile("${path.module}/templates/traefik_values.yaml", {
-      service_ip  = var.ingress_controller_ip
+      service_ip  = var.ingress_controller_ip,
+      cluster_name = var.cluster_name,
     })
   ]
 }

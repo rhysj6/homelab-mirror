@@ -13,4 +13,5 @@ terraform {
 
 inputs = {
   loadbalancer_ip = include.env.locals.network.ips.technitium_dns
+  env = include.env.locals.env
 }

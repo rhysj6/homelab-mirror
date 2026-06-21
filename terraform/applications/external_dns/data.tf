@@ -12,6 +12,7 @@ data "kubernetes_namespace" "dns" {
 
 locals {
   dns_zones = [
-    "example.com"
+    "example.com",
+    "local",
   ]
 }

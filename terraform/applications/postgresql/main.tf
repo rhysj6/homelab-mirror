@@ -1,3 +1,7 @@
+locals {
+  hostname = "postgresql.${var.env}.k8s.local"
+}
+
 resource "kubernetes_manifest" "cluster" {
   manifest = {
     apiVersion = "postgresql.cnpg.io/v1"
@@ -46,7 +50,7 @@ resource "kubernetes_manifest" "cluster" {
                 metadata = {
                   name = "postgresql-rw-loadbalancer"
                   annotations = {
-                    "lbipam.cilium.io/ips" = "${var.loadbalancer_ip}"
+                    "external-dns.alpha.kubernetes.io/hostname" = "${local.hostname}"
                   }
                 }
                 spec = {
@@ -125,7 +129,7 @@ module "database" {
 
 resource "infisical_secret" "db_host" {
   name         = "HOST"
-  value        = var.loadbalancer_ip
+  value        = local.hostname
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
   folder_path  = "/db-creds/${var.env}"
