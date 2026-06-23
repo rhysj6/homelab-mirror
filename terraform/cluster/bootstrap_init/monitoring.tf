@@ -12,9 +12,9 @@ resource "helm_release" "kube_prometheus_stack" {
   version    = "86.1.1"
   values = [
     templatefile("${path.module}/templates/monitoring_values.yaml", {
-      ip_addrs   = var.cluster_node_ips,
-      service_ip = var.monitoring_ip,
-      cluster_name = var.cluster_name,
+      ip_addrs   = [for node in var.nodes : node.ip_address],
+      service_ip = var.network.ips.monitoring,
+      cluster_name = var.cluster,
     })
   ]
 }

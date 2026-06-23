@@ -1,12 +1,12 @@
 locals {
-  k8s_host                   = "https://${var.kubevip}:6443"
+  k8s_host                   = "https://${var.network.ips.kubevip}:6443"
   k8s_cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.ca_certificate)
   k8s_client_certificate     = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_certificate)
   k8s_client_key             = base64decode(talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_key)
 }
 
 resource "infisical_secret" "k8s_kubeconfig" {
-  name         = "${upper(var.cluster_name)}_KUBECONFIG"
+  name         = "${upper(var.cluster)}_KUBECONFIG"
   value        = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
@@ -14,7 +14,7 @@ resource "infisical_secret" "k8s_kubeconfig" {
 }
 
 resource "infisical_secret" "k8s_host" {
-  name         = "${upper(var.cluster_name)}_HOST"
+  name         = "${upper(var.cluster)}_HOST"
   value        = local.k8s_host
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
@@ -22,7 +22,7 @@ resource "infisical_secret" "k8s_host" {
 }
 
 resource "infisical_secret" "k8s_cluster_ca_certificate" {
-  name         = "${upper(var.cluster_name)}_CLUSTER_CA_CERTIFICATE"
+  name         = "${upper(var.cluster)}_CLUSTER_CA_CERTIFICATE"
   value        = local.k8s_cluster_ca_certificate
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
@@ -30,7 +30,7 @@ resource "infisical_secret" "k8s_cluster_ca_certificate" {
 }
 
 resource "infisical_secret" "k8s_client_certificate" {
-  name         = "${upper(var.cluster_name)}_CLIENT_CERTIFICATE"
+  name         = "${upper(var.cluster)}_CLIENT_CERTIFICATE"
   value        = local.k8s_client_certificate
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
@@ -38,7 +38,7 @@ resource "infisical_secret" "k8s_client_certificate" {
 }
 
 resource "infisical_secret" "k8s_client_key" {
-  name         = "${upper(var.cluster_name)}_CLIENT_KEY"
+  name         = "${upper(var.cluster)}_CLIENT_KEY"
   value        = local.k8s_client_key
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
@@ -46,7 +46,7 @@ resource "infisical_secret" "k8s_client_key" {
 }
 
 resource "infisical_secret" "talos_config" {
-  name         = "${upper(var.cluster_name)}_TALOS_CONFIG"
+  name         = "${upper(var.cluster)}_TALOS_CONFIG"
   value        = data.talos_client_configuration.talosconfig.talos_config
   env_slug     = "main"
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"

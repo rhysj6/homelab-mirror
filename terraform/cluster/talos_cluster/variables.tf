@@ -1,4 +1,4 @@
-variable "cluster_name" {
+variable "cluster" {
   description = "The name of the Talos cluster"
   type        = string
 }
@@ -10,11 +10,6 @@ variable "kubernetes_version" {
 
 variable "talos_version" {
   description = "The Talos version to use for the cluster. Will not automatically upgrade to this version if changed, but will be used to validate configuration"
-  type        = string
-}
-
-variable "kubevip" {
-  description = "The VIP address for the Kubernetes API server"
   type        = string
 }
 
@@ -42,5 +37,8 @@ variable "network" {
     node_subnet_size       = string,
     native_routing_enabled = bool, # Disable this when initially setting up the cluster, then enable it after if you want to use native routing with Cilium.
     main_pod_cidr          = string
+    ips = object({
+      kubevip            = string
+    }),
   })
 }

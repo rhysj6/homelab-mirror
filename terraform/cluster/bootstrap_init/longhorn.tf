@@ -1,3 +1,7 @@
+locals{
+  longhorn_replica_count =  length([for node in var.nodes : node if node.storage_enabled == true])
+}
+
 resource "kubernetes_namespace" "longhorn" {
   metadata {
     name = "longhorn-system"
@@ -23,10 +27,10 @@ resource "helm_release" "longhorn" {
         nodeDrainPolicy                             = "always-allow"
         storageReservedPercentageForDefaultDisk     = "1"
         defaultDataPath                             = "/var/mnt/longhorn"
-        deletingConfirmationFlag                     = var.cluster_name == "test"
+        deletingConfirmationFlag                     = var.cluster == "test"
       }
       persistence = {
-        defaultClassReplicaCount = var.number_of_nodes
+        defaultClassReplicaCount = local.longhorn_replica_count
       }
       backupTarget = {
         backupTarget                 = "s3://${minio_s3_bucket.longhorn_backup.bucket}@us-east-1/"
@@ -84,7 +88,7 @@ resource "kubernetes_secret" "longhorn_backup" {
 }
 
 resource "minio_s3_bucket" "longhorn_backup" {
-  bucket = "${var.cluster_name}-longhorn-backup"
+  bucket = "${var.cluster}-longhorn-backup"
   acl    = "private"
 }
 
@@ -102,7 +106,7 @@ resource "minio_ilm_policy" "longhorn_backup" {
 }
 
 resource "minio_iam_policy" "longhorn_backup" {
-  name = "${var.cluster_name}-longhorn-backup-full-access-policy"
+  name = "${var.cluster}-longhorn-backup-full-access-policy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -116,7 +120,7 @@ resource "minio_iam_policy" "longhorn_backup" {
 }
 
 resource "minio_iam_user" "longhorn_backup" {
-  name = "${var.cluster_name}-longhorn-backup"
+  name = "${var.cluster}-longhorn-backup"
 }
 
 resource "minio_iam_user_policy_attachment" "longhorn_backup" {

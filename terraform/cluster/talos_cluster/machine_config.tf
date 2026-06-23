@@ -19,8 +19,8 @@ resource "talos_image_factory_schematic" "machine" {
 
 data "talos_machine_configuration" "this" {
   for_each         = local.nodes
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.kubevip}:6443"
+  cluster_name     = var.cluster
+  cluster_endpoint = "https://${var.network.ips.kubevip}:6443"
   machine_type     = each.value.control_plane ? "controlplane" : "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
   docs             = true
@@ -42,7 +42,7 @@ data "talos_machine_configuration" "this" {
       gateway     = var.network.node_gateway,
       subnet_size = var.network.node_subnet_size,
       hostname    = each.key,
-      vip         = var.kubevip,
+      vip         = var.network.ips.kubevip,
       nodetype    = each.value.control_plane ? "controlplane" : "worker"
       interface    = each.value.vm ? "ens18" : "eno1"
     }),

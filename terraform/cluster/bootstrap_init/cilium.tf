@@ -8,7 +8,7 @@ resource "kubernetes_manifest" "cilium_loadbalancer_ip_pool" {
     spec = {
       blocks = [
         {
-          cidr = var.cilium_loadbalancer_ip_pool_cidr
+          cidr = var.network.loadbalancer_ip_pool_cidr
         }
       ]
       allowFirstLastIPs = "No"
@@ -43,7 +43,7 @@ resource "kubernetes_manifest" "cilium_bgp_cluster_config" {
       bgpInstances = [
         {
           name     = "management-1"
-          localASN = var.cilium_bgp_asn
+          localASN = var.network.loadbalancer_bgp_asn
           peers = [
             {
               name        = "opnsense"

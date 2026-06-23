@@ -8,7 +8,7 @@ resource "helm_release" "cilium" {
   max_history = 2
   values = [
     templatefile("${path.module}/cilium_values.yaml.tftpl", {
-      control_plane_ip = var.kubevip
+      control_plane_ip = var.network.ips.kubevip
       native_routing_enabled = coalesce(var.network.native_routing_enabled, false)
       main_pod_cidr = coalesce(var.network.main_pod_cidr, "10.240.0.0/16")
     })

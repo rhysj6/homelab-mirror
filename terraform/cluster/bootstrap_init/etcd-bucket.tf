@@ -1,11 +1,11 @@
 ## Create a Minio bucket for etcd with applicable IAM policies
 resource "minio_s3_bucket" "etcd" {
-  bucket = "${var.cluster_name}-cluster-etcd"
+  bucket = "${var.cluster}-cluster-etcd"
   acl    = "private"
 }
 
 resource "minio_iam_policy" "etcd" {
-  name = "${var.cluster_name}-etcd-full-access-policy"
+  name = "${var.cluster}-etcd-full-access-policy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -19,7 +19,7 @@ resource "minio_iam_policy" "etcd" {
 }
 
 resource "minio_iam_user" "etcd" {
-  name = "${var.cluster_name}-etcd"
+  name = "${var.cluster}-etcd"
 }
 
 resource "minio_iam_user_policy_attachment" "etcd" {

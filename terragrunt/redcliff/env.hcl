@@ -1,4 +1,4 @@
-locals {
+inputs = {
   cluster            = "redcliff"
   env                = "redcliff"
   nodes = [

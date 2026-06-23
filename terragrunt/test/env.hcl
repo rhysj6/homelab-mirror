@@ -1,4 +1,4 @@
-locals {
+inputs = {
   cluster = "test"
   env     = "test"
   nodes = [

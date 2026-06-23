@@ -16,7 +16,7 @@ locals {
 resource "talos_machine_secrets" "machine_secrets" {}
 
 data "talos_client_configuration" "talosconfig" {
-  cluster_name         = var.cluster_name
+  cluster_name         = var.cluster
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   endpoints            = local.control_plane_endpoints
 }
