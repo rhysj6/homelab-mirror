@@ -1,5 +1,6 @@
 locals{
   longhorn_replica_count =  length([for node in var.nodes : node if node.storage_enabled == true])
+  backup_bucket_name     = "${var.cluster}-longhorn-backup"
 }
 
 resource "kubernetes_namespace" "longhorn" {
@@ -33,8 +34,8 @@ resource "helm_release" "longhorn" {
         defaultClassReplicaCount = local.longhorn_replica_count
       }
       backupTarget = {
-        backupTarget                 = "s3://${minio_s3_bucket.longhorn_backup.bucket}@us-east-1/"
-        backupTargetCredentialSecret = kubernetes_secret.longhorn_backup.metadata[0].name
+        backupTarget                 = "s3://${local.backup_bucket_name}@us-east-1/"
+        backupTargetCredentialSecret = kubernetes_secret_v1.longhorn_backup.metadata[0].name
       }
       longhornManager = {
         nodeSelector = {
@@ -74,60 +75,37 @@ resource "kubernetes_manifest" "longhorn_local_storage_class" {
 }
 
 
-resource "kubernetes_secret" "longhorn_backup" {
+resource "kubernetes_secret_v1" "longhorn_backup" {
   metadata {
-    name      = "longhorn-minio-backup"
+    name      = "longhorn-b2-backup"
     namespace = kubernetes_namespace.longhorn.id
   }
   data = {
-    "AWS_ACCESS_KEY_ID"     = minio_iam_service_account.longhorn_backup.access_key
-    "AWS_SECRET_ACCESS_KEY" = minio_iam_service_account.longhorn_backup.secret_key
-    "AWS_ENDPOINTS"         = "https://s3.homelab.example/"
+    "AWS_ACCESS_KEY_ID"     = b2_application_key.longhorn_backup.application_key_id
+    "AWS_SECRET_ACCESS_KEY" = b2_application_key.longhorn_backup.application_key
+    "AWS_ENDPOINTS"         = "https://s3.eu-central-003.backblazeb2.com"
   }
   type = "Opaque"
 }
 
-resource "minio_s3_bucket" "longhorn_backup" {
-  bucket = "${var.cluster}-longhorn-backup"
-  acl    = "private"
-}
 
+resource "b2_bucket" "longhorn_backup" {
+  bucket_name = local.backup_bucket_name
+  bucket_type = "allPrivate"
 
-resource "minio_ilm_policy" "longhorn_backup" {
-  bucket = minio_s3_bucket.longhorn_backup.bucket
+  default_server_side_encryption {
+    mode      = "SSE-B2"
+    algorithm = "AES256"
+  }
 
-  rule {
-    id = "versioning"
-    noncurrent_expiration {
-      days = "15d" ## 15 days since chances of data loss that isn't found in 15 days is very low
-    }
-    expiration = "DeleteMarker"
+  lifecycle_rules {
+    file_name_prefix             = "*"
+    days_from_hiding_to_deleting = 30
   }
 }
 
-resource "minio_iam_policy" "longhorn_backup" {
-  name = "${var.cluster}-longhorn-backup-full-access-policy"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action   = ["s3:*"]
-        Effect   = "Allow"
-        Resource = ["arn:aws:s3:::${minio_s3_bucket.longhorn_backup.bucket}/*"]
-      }
-    ]
-  })
-}
-
-resource "minio_iam_user" "longhorn_backup" {
-  name = "${var.cluster}-longhorn-backup"
-}
-
-resource "minio_iam_user_policy_attachment" "longhorn_backup" {
-  user_name   = minio_iam_user.longhorn_backup.name
-  policy_name = minio_iam_policy.longhorn_backup.name
-}
-
-resource "minio_iam_service_account" "longhorn_backup" {
-  target_user = minio_iam_user.longhorn_backup.name
+resource "b2_application_key" "longhorn_backup" {
+  key_name     = "${var.cluster}-longhorn-backup"
+  capabilities = ["listBuckets", "listAllBucketNames", "listFiles", "writeFiles", "readFiles", "deleteFiles", "readBucketEncryption"]
+  bucket_ids   = [b2_bucket.longhorn_backup.id]
 }
