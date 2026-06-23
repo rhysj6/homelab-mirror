@@ -13,6 +13,10 @@ terraform {
       source  = "aminueza/minio"
       version = "3.38.1"
     }
+    b2 = {
+      source  = "Backblaze/b2"
+      version = "0.12.1"
+    }
     random = {
       source  = "hashicorp/random"
       version = "3.9.0"

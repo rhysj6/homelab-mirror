@@ -1,5 +1,4 @@
 locals {
-  env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   s3_path  = "${replace(path_relative_to_include(), "//.terragrunt-stack//", "/")}"
 }
 
@@ -9,7 +8,7 @@ generate "backend" {
   contents  = <<EOF
 terraform {
   backend "s3" {
-    bucket         = "terraform"
+    bucket         = "homelab-terraform-state"
     key            = "${local.s3_path}/terraform.tfstate"
     region                      = "main"
     skip_region_validation      = true
@@ -17,7 +16,6 @@ terraform {
     skip_credentials_validation = true
     skip_metadata_api_check     = true
     use_path_style              = true
-    use_lockfile                = true
   }
 }
 EOF
