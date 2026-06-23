@@ -1,4 +1,8 @@
-variable "dns_server_ip" {
-  description = "IP address of the DNS server"
-  type        = string
+variable "network" {
+  description = "The network configuration"
+  type        = object({
+    ips = object({
+      technitium_dns = string
+    })
+  })
 }

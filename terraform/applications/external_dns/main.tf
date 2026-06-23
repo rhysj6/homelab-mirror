@@ -32,7 +32,7 @@ resource "helm_release" "external_dns" {
         }
       ]
       extraArgs = concat([
-        "--rfc2136-host=${var.dns_server_ip}",
+        "--rfc2136-host=${var.network.ips.technitium_dns}",
         "--rfc2136-port=53",
         "--rfc2136-tsig-secret=$(RFC2136_TSIG_SECRET)",
         "--rfc2136-tsig-secret-alg=hmac-sha256",

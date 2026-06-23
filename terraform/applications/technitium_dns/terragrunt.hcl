@@ -1,6 +1,10 @@
 include "root" {
   path = find_in_parent_folders("root.hcl")
 }
+include "kubernetes_providers" {
+  path = find_in_parent_folders("kubernetes.hcl")
+}
+
 
 include "env" {
   path   = find_in_parent_folders("env.hcl")
@@ -9,9 +13,4 @@ include "env" {
 
 terraform {
   source = "."
-}
-
-inputs = {
-  loadbalancer_ip = include.env.locals.network.ips.technitium_dns
-  env = include.env.locals.env
 }

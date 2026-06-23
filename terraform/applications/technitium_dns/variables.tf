@@ -1,5 +1,10 @@
-variable "loadbalancer_ip" {
-  description = "IP address for load balancer service"
+variable "network" {
+  description = "The network configuration"
+  type        = object({
+    ips = object({
+      technitium_dns = string
+    })
+  })
 }
 
 variable "env" {
