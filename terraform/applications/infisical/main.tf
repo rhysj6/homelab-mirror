@@ -83,6 +83,10 @@ resource "kubernetes_deployment" "infisical" {
               name = kubernetes_secret.infisical_secrets.metadata[0].name
             }
           }
+          env {
+            name = "ALLOW_INTERNAL_IP_CONNECTIONS"
+            value = true
+          }
 
           readiness_probe {
             http_get {
