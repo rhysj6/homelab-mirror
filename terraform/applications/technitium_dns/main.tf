@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "technitium" {
       spec {
         container {
           name  = "technitium"
-          image = "technitium/dns-server:15.3.0"
+          image = "technitium/dns-server:15.4.0"
           env_from {
             config_map_ref {
               name = kubernetes_config_map_v1.technitium_config.metadata[0].name
