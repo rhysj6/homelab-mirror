@@ -18,7 +18,7 @@ resource "kubernetes_manifest" "cluster" {
         size         = "100Gi"
       }
       walStorage = {
-        size         = "10Gi"
+        size         = "20Gi"
         storageClass = "longhorn-local"
       }
       ephemeralVolumesSizeLimit = {
