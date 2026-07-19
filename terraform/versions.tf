@@ -11,7 +11,7 @@ terraform {
     }
     minio = {
       source  = "aminueza/minio"
-      version = "3.38.4"
+      version = "3.38.5"
     }
     b2 = {
       source  = "Backblaze/b2"
