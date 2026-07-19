@@ -95,7 +95,7 @@ resource "kubernetes_manifest" "cluster" {
             compression = "gzip"
           }
         }
-        retentionPolicy = "90d"
+        retentionPolicy = "45d"
       }
     }
   }
