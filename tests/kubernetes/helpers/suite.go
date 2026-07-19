@@ -20,8 +20,7 @@ type Suite struct {
 func getInfisicalClient(t *testing.T) infisical.InfisicalClientInterface {
 	ctx := t.Context()
 	client := infisical.NewInfisicalClient(ctx, infisical.Config{
-		SiteUrl:          os.Getenv("INFISICAL_HOST"),
-		AutoTokenRefresh: true,
+		SiteUrl: os.Getenv("INFISICAL_HOST"),
 	})
 
 	// Using the same environment variables for authentication as the Terraform provider
