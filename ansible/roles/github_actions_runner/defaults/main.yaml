@@ -10,4 +10,4 @@ github_actions_runner_pat_token: "{{ lookup(vault_plugin,
   project_id=iac_infisical_project, env_slug='main',
   path='/applications/github_actions/', secret_name='github_pat').value }}"
 
-github_actions_runner_kubectl_version: "1.36.0"
+github_actions_runner_kubectl_version: "1.36.2"

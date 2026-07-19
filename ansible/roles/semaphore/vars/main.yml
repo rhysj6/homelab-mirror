@@ -1,4 +1,4 @@
-semaphore_version: "2.18.12"
+semaphore_version: "2.18.27"
 
 semaphore_oauth_client_id: "{{ lookup(vault_plugin,
   project_id=iac_infisical_project, env_slug='main',
