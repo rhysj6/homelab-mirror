@@ -8,6 +8,8 @@ inputs = {
       control_plane   = true
       storage_enabled = true
       vm              = true
+      iso_storage     = "BX-2TB-1"
+      node            = "clifton"
     },
     {
       name            = "test-node-2",
@@ -15,6 +17,8 @@ inputs = {
       control_plane   = false
       storage_enabled = true
       vm              = true
+      iso_storage     = "BX-2TB-1"
+      node            = "clifton"
     }
   ]
 

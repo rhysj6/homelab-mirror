@@ -1,5 +1,5 @@
 locals {
-  nodes = { for n in var.nodes : n.name => n }
+  nodes = { for n in var.nodes : n.name => n if n.vm }
 }
 
 resource "talos_image_factory_schematic" "vm_schematic" {
@@ -12,7 +12,7 @@ resource "talos_image_factory_schematic" "vm_schematic" {
         ]
       }
       extraKernelArgs = [
-        "ip=${each.value.ip_address}::10.10.20.1:255.255.255.0::ens18:off",
+        "ip=${each.value.ip_address}::${var.network.node_gateway}:255.255.255.0::ens18:off",
       ]
     }
   })
@@ -21,8 +21,8 @@ resource "talos_image_factory_schematic" "vm_schematic" {
 resource "proxmox_download_file" "talos_installer" {
   for_each = local.nodes
   content_type = "iso"
-  datastore_id = "BX-2TB-1"
-  node_name    = "clifton"
+  datastore_id = each.value.iso_storage
+  node_name    = each.value.node
   file_name    = "talos-${each.key}-installer.iso"
   url          = "https://factory.talos.dev/image/${talos_image_factory_schematic.vm_schematic[each.key].id}/v1.13.0/metal-amd64.iso"
   overwrite    = false
