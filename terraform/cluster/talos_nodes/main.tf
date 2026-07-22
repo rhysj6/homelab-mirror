@@ -38,7 +38,7 @@ resource "proxmox_virtual_environment_vm" "node" {
     datastore_id = each.value.storage
     interface    = "scsi0"
     size         = 512
-    file_format  = "qcow2"
+    file_format  = each.value.storage != "local-lvm" ? "qcow2" : "raw"
   }
 
   network_device {
