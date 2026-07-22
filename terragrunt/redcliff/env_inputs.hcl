@@ -53,13 +53,18 @@ inputs = {
     main_pod_cidr             = "10.42.0.0/17"
     native_routing_enabled    = true
     loadbalancer_ip_pool_cidr = "10.11.10.1/24"
-    loadbalancer_bgp_asn      = 65555
     ips = {
       kubevip            = "10.10.10.10"
       ingress_controller = "10.11.10.11"
       monitoring         = "10.11.10.12"
       postgresql         = "10.11.10.32"
       technitium_dns     = "10.11.10.53"
+    }
+        bgp = { 
+      cluster_asn = 65555
+      peer_name   = "opnsense"
+      peer_ip     = "10.0.0.1"
+      peer_asn    = 65551
     }
   }
 }

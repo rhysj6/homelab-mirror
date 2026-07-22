@@ -33,13 +33,19 @@ inputs = {
     main_pod_cidr             = "10.41.0.0/17"
     native_routing_enabled    = true
     loadbalancer_ip_pool_cidr = "10.11.20.1/24"
-    loadbalancer_bgp_asn      = 65553
     vmbridge                  = "testk8s"
     ips = {
       kubevip            = "10.10.20.10"
       ingress_controller = "10.11.20.11"
       monitoring         = "10.11.20.12"
       postgresql         = "10.11.20.32"
+    }
+
+    bgp = { 
+      cluster_asn = 65553
+      peer_name   = "opnsense"
+      peer_ip     = "10.0.0.1"
+      peer_asn    = 65551
     }
   }
 }

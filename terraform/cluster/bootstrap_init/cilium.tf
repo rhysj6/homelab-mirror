@@ -42,15 +42,15 @@ resource "kubernetes_manifest" "cilium_bgp_cluster_config" {
     spec = {
       bgpInstances = [
         {
-          name     = "management-1"
-          localASN = var.network.loadbalancer_bgp_asn
+          name     = "default"
+          localASN = var.network.bgp.cluster_asn
           peers = [
             {
-              name        = "opnsense"
-              peerASN     = 65551
-              peerAddress = "10.0.0.1"
+              name        = var.network.bgp.peer_name
+              peerASN     = var.network.bgp.peer_asn
+              peerAddress = var.network.bgp.peer_ip
               peerConfigRef = {
-                name = "opnsense-peer"
+                name = "default-peer"
               }
             }
           ]
@@ -66,7 +66,7 @@ resource "kubernetes_manifest" "cilium_bgp_peer_config" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumBGPPeerConfig"
     metadata = {
-      name = "opnsense-peer"
+      name = "default-peer"
     }
     spec = {
       families = [

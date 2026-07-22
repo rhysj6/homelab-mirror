@@ -7,11 +7,16 @@ variable "network" {
   description = "Network configuration"
   type = object({
     loadbalancer_ip_pool_cidr = string,
-    loadbalancer_bgp_asn     = number,
     ips = object({
       ingress_controller = string,
       monitoring         = string,
     }),
+    bgp = object({ 
+      cluster_asn = number
+      peer_name   = string
+      peer_ip     = string
+      peer_asn    = number
+    })
   })
 }
 
