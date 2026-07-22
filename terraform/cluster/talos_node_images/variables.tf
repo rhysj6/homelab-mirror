@@ -19,5 +19,6 @@ variable "network" {
   description = "Network config"
   type = object({
     node_gateway = string
+    node_netmask = string
   })
 }

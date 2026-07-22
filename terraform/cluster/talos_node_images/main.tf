@@ -12,7 +12,7 @@ resource "talos_image_factory_schematic" "vm_schematic" {
         ]
       }
       extraKernelArgs = [
-        "ip=${each.value.ip_address}::${var.network.node_gateway}:255.255.255.0::ens18:off",
+        "ip=${each.value.ip_address}::${var.network.node_gateway}:${var.network.node_netmask}::ens18:off",
       ]
     }
   })
