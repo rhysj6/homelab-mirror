@@ -26,8 +26,8 @@ For full topology, networking, data flow, and service relationships, see [ARCHIT
 - Primary environment: redcliff
 - Validation environment: test (ephemeral)
 - Network and version definitions are environment-scoped in:
-  - [terragrunt/redcliff/env.hcl](terragrunt/redcliff/env.hcl)
-  - [terragrunt/test/env.hcl](terragrunt/test/env.hcl)
+  - [terragrunt/redcliff/env_inputs.hcl](terragrunt/redcliff/env_inputs.hcl)
+  - [terragrunt/test/env_inputs.hcl](terragrunt/test/env_inputs.hcl)
 
 ## CI/CD And Validation
 

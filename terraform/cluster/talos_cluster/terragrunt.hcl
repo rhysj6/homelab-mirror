@@ -7,13 +7,13 @@ include "kubernetes_providers" {
 
 
 include "env" {
-  path   = find_in_parent_folders("env.hcl")
+  path   = find_in_parent_folders("env_inputs.hcl")
   expose = true
 }
 
 locals {
   versions = yamldecode(file(find_in_parent_folders("cluster_versions.yaml")))
-  env_name = basename(dirname(find_in_parent_folders("env.hcl")))
+  env_name = basename(dirname(find_in_parent_folders("env_inputs.hcl")))
 }
 
 dependency "nodes" {

@@ -1,5 +1,5 @@
 locals {
-    env_name = basename(dirname(find_in_parent_folders("env.hcl")))
+    env_name = basename(dirname(find_in_parent_folders("env_inputs.hcl")))
 }
 
 generate "kubernetes_providers" {

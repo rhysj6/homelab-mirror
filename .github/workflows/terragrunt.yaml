@@ -42,7 +42,7 @@ jobs:
         with:
           filters: |
             all:
-              - "terragrunt/redcliff/env.hcl"
+              - "terragrunt/redcliff/env_inputs.hcl"
               - "terragrunt/root.hcl"
               - "terraform/providers.tf"
               - "terraform/versions.tf"

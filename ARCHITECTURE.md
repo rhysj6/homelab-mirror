@@ -84,7 +84,7 @@ Implemented SDN VNets include:
 - Cilium native routing pod CIDR: `10.42.0.0/17`.
 - Cilium BGP ASN: `65555`.
 - OPNSense peer ASN: `65551`.
-- Talos and Kubernetes versions are configured in `terragrunt/redcliff/env.hcl`.
+- Talos and Kubernetes versions are configured in `terragrunt/redcliff/env_inputs.hcl`.
 
 Key Redcliff LoadBalancer IP allocations:
 
@@ -101,7 +101,7 @@ Key Redcliff LoadBalancer IP allocations:
 - LoadBalancer pool: `10.11.20.1/24`.
 - Cilium BGP ASN: `65553`.
 - This is an ephemeral validation cluster used with the Go-based test suite before promoting changes to redcliff (production).
-- Talos and Kubernetes versions are configured in `terragrunt/test/env.hcl`.
+- Talos and Kubernetes versions are configured in `terragrunt/test/env_inputs.hcl`.
 
 ## Request Flow
 

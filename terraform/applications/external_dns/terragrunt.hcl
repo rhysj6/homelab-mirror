@@ -7,7 +7,7 @@ include "kubernetes_providers" {
 
 
 include "env" {
-  path   = find_in_parent_folders("env.hcl")
+  path   = find_in_parent_folders("env_inputs.hcl")
   expose = true
 }
 

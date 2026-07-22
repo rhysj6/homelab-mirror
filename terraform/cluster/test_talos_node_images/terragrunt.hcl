@@ -7,7 +7,7 @@ include "proxmox" {
 }
 
 include "env" {
-  path   = find_in_parent_folders("env.hcl")
+  path   = find_in_parent_folders("env_inputs.hcl")
 }
 terraform {
   source = "."
