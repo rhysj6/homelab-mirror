@@ -8,7 +8,9 @@ inputs = {
       control_plane   = true
       storage_enabled = true
       vm              = true
+      vmid            = 3001
       iso_storage     = "BX-2TB-1"
+      storage         = "MX-2TB-1"
       node            = "clifton"
     },
     {
@@ -17,7 +19,9 @@ inputs = {
       control_plane   = false
       storage_enabled = true
       vm              = true
+      vmid            = 3001
       iso_storage     = "BX-2TB-1"
+      storage         = "BX-2TB-1"
       node            = "clifton"
     }
   ]
@@ -30,6 +34,7 @@ inputs = {
     native_routing_enabled    = true
     loadbalancer_ip_pool_cidr = "10.11.20.1/24"
     loadbalancer_bgp_asn      = 65553
+    vmbridge                  = "testk8s"
     ips = {
       kubevip            = "10.10.20.10"
       ingress_controller = "10.11.20.11"
