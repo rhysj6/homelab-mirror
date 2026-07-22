@@ -19,7 +19,7 @@ locals {
 dependency "nodes" {
   config_path  = "../talos_nodes"
   skip_outputs = true
-  enabled      = local.env_name == "test"
+  enabled      = local.env_name != "redcliff"
 }
 
 terraform {
