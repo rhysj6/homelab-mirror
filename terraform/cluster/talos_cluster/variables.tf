@@ -34,6 +34,7 @@ variable "network" {
   description = "Network configuration"
   type = object({
     node_gateway           = string,
+    node_dns               = optional(string, "")
     node_subnet_size       = string,
     native_routing_enabled = bool, # Disable this when initially setting up the cluster, then enable it after if you want to use native routing with Cilium.
     main_pod_cidr          = string
