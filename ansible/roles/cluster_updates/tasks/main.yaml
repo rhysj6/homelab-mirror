@@ -26,4 +26,4 @@
 
 - name: Update Kubernetes cluster
   when: cluster_updates_kubernetes_update_needed
-  ansible.builtin.include_tasks: kubernetes.yaml
+  ansible.builtin.include_tasks: k8s.yaml
