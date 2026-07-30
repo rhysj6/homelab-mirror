@@ -9,7 +9,7 @@ resource "helm_release" "cert_manager" {
   repository  = "https://charts.jetstack.io"
   name        = "cert-manager"
   namespace   = kubernetes_namespace.cert_manager.id
-  version     = "v1.21.0"
+  version     = "v1.21.1"
   max_history = 2
   set = [
     {
