@@ -28,6 +28,7 @@ jobs:
           cat > /tmp/replacements.txt << 'EOF'
           homelab.example==>homelab.example
           example.com==>example.com
+          example.net==>example.net
           EOF
 
           # Strip leading whitespace (heredoc indentation)

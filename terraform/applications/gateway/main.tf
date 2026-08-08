@@ -72,3 +72,11 @@ module "actualbudget" {
   portname   = "https"
   local-only = true
 }
+
+module "parox_immich" {
+  source     = "./pass_through_ingress"
+  name       = "parox-immich"
+  hostname   = "immich.example.net"
+  ip_address = "10.48.0.144"
+  port       = 2283
+}
