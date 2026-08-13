@@ -29,6 +29,7 @@ jobs:
           homelab.example==>homelab.example
           example.com==>example.com
           example.net==>example.net
+          cfacid==>cfacid
           EOF
 
           # Strip leading whitespace (heredoc indentation)
