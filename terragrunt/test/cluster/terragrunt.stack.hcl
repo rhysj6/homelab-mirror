@@ -17,3 +17,8 @@ unit "bootstrap_final" {
   source = "${get_repo_root()}/terraform/cluster/bootstrap_final"
   path   = "bootstrap_final"
 }
+
+unit "clouflared" {
+  source = "${get_repo_root()}/terraform/cluster/cloudflare_tunnel"
+  path   = "cloudflare_tunnel"
+}
