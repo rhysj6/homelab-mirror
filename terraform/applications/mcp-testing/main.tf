@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "mcp_test" {
       spec {
         container {
           name  = "mcp-test"
-          image = "rhysj6/mcp-testing:v0.1.3"
+          image = "rhysj6/mcp-testing:v0.1.4"
 
           port {
             name           = "http"
