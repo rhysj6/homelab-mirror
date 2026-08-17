@@ -98,7 +98,7 @@ resource "kubernetes_deployment_v1" "cloudflared" {
         }
         container {
           name  = "cloudflared"
-          image = "cloudflare/cloudflared:2026.7.3"
+          image = "cloudflare/cloudflared:2026.8.2"
           env_from {
             secret_ref {
               name = kubernetes_secret_v1.tunnel_secret.metadata[0].name
