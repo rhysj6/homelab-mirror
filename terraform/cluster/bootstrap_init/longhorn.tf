@@ -17,7 +17,7 @@ resource "helm_release" "longhorn" {
   repository  = "https://charts.longhorn.io"
   name        = "longhorn"
   namespace   = kubernetes_namespace.longhorn.id
-  version     = "1.12.0"
+  version     = "1.12.1"
   max_history = 2
   values = [
     yamlencode({
