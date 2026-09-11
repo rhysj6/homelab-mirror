@@ -24,7 +24,7 @@ resource "proxmox_download_file" "talos_installer" {
   datastore_id = each.value.iso_storage
   node_name    = each.value.node
   file_name    = "talos-${each.key}-installer.iso"
-  url          = "https://factory.talos.dev/image/${talos_image_factory_schematic.vm_schematic[each.key].id}/v1.13.0/metal-amd64.iso"
+  url          = "https://factory.talos.dev/image/${talos_image_factory_schematic.vm_schematic[each.key].id}/v1.14.0/metal-amd64.iso"
   overwrite    = false
 }
 
