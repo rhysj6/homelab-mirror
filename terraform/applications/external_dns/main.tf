@@ -17,6 +17,7 @@ resource "helm_release" "external_dns" {
   version    = "1.22.0"
   values = [
     yamlencode({
+      policy = "upsert-only"
       provider = {
         name = "rfc2136"
       }
