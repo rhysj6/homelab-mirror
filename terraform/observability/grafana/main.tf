@@ -1,5 +1,5 @@
 locals {
-  grafana_url = "grafana.homelab.example"
+  grafana_url = "grafana.example.com"
 }
 
 resource "helm_release" "grafana" {
