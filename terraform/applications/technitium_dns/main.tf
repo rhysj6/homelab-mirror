@@ -119,7 +119,7 @@ resource "kubernetes_service_v1" "technitium_lb" {
     }
     annotations = {
       "lbipam.cilium.io/ips" = var.network.ips.technitium_dns
-      "external-dns.alpha.kubernetes.io/hostname" = "dns.${var.env}.k8s.local"
+      "external-dns.kubernetes.io/hostname" = "dns.${var.env}.k8s.local"
     }
   }
   spec {

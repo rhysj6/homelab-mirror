@@ -50,7 +50,7 @@ resource "kubernetes_manifest" "cluster" {
                 metadata = {
                   name = "postgresql-rw-loadbalancer"
                   annotations = {
-                    "external-dns.alpha.kubernetes.io/hostname" = "${local.hostname}"
+                    "external-dns.kubernetes.io/hostname" = "${local.hostname}"
                   }
                 }
                 spec = {
