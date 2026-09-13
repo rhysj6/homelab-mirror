@@ -16,6 +16,12 @@ resource "kubernetes_manifest" "cilium_loadbalancer_ip_pool" {
   }
 }
 
+resource "netbox_prefix" "loadbalancer_ip_pool" {
+  prefix      = "${cidrhost(var.network.loadbalancer_ip_pool_cidr, 0)}/24"
+  status      = "active"
+  description = "K8S ${title(var.cluster)} loadbalancer ip pool"
+}
+
 # resource "kubernetes_manifest" "cilium_l2_announcement_policy" {
 #   count = var.cilium_use_bgp ? 0 : 1
 #   manifest = {
@@ -58,6 +64,12 @@ resource "kubernetes_manifest" "cilium_bgp_cluster_config" {
       ]
     }
   }
+}
+
+resource "netbox_asn" "cluster_asn" {
+  asn         = var.network.bgp.cluster_asn
+  rir_id      = data.netbox_rir.internal.id
+  description = "K8S ${title(var.cluster)} cillium"
 }
 
 resource "kubernetes_manifest" "cilium_bgp_peer_config" {

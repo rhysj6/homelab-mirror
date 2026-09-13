@@ -18,3 +18,10 @@ resource "helm_release" "kube_prometheus_stack" {
     })
   ]
 }
+
+resource "netbox_ip_address" "monitoring_vip" {
+  ip_address  = "${var.network.ips.monitoring}/24"
+  description = "K8S ${title(var.cluster)} monitoring"
+  status      = "active"
+  role        = "vip"
+}

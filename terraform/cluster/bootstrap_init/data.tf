@@ -3,3 +3,7 @@ data "infisical_secrets" "core" {
   workspace_id = "a313cae1-beb5-408e-be83-83fa189863b6"
   folder_path  = "/core_cluster"
 }
+
+data "netbox_rir" "internal" {
+  name = "Internal"
+}

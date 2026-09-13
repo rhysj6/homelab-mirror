@@ -15,15 +15,4 @@ resource "netbox_prefix" "notrust" {
   prefix      = proxmox_sdn_subnet.notrust.cidr
   status      = "active"
   description = "GH notrust"
-  vrf_id      = data.netbox_vrf.this.id
-}
-
-import {
-  id = "notrust"
-  to = proxmox_sdn_vnet.notrust
-}
-
-import {
-  id = "notrust/Main-10.48.17.0-24"
-  to = proxmox_sdn_subnet.notrust
 }

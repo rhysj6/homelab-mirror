@@ -1,3 +1,9 @@
+resource "netbox_prefix" "servers" {
+  prefix      = "10.10.0.0/16"
+  status      = "active"
+  description = "Server infrastructure"
+}
+
 resource "netbox_tag" "kubernetes" {
   name      = "Kubernetes"
   color_hex = "001eff"
@@ -19,6 +25,7 @@ resource "netbox_vlan" "redcliff" {
     netbox_tag.redcliff.name
   ]
 }
+
 resource "netbox_prefix" "gh_redcliff" {
   prefix      = "10.10.10.0/24"
   status      = "active"
@@ -46,6 +53,7 @@ resource "netbox_vlan" "test_k8s" {
     netbox_tag.test_k8s.name
   ]
 }
+
 resource "netbox_prefix" "gh_test_k8s" {
   prefix      = "10.10.20.0/24"
   status      = "active"

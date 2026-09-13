@@ -19,3 +19,11 @@ resource "helm_release" "traefik" {
     })
   ]
 }
+
+
+resource "netbox_ip_address" "ingress_vip" {
+  ip_address  = "${var.network.ips.ingress_controller}/24"
+  description = "K8S ${title(var.cluster)} ingress controller"
+  status      = "active"
+  role        = "vip"
+}

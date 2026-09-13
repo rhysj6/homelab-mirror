@@ -15,15 +15,4 @@ resource "netbox_prefix" "paroxos" {
   prefix      = proxmox_sdn_subnet.paroxos.cidr
   status      = "active"
   description = "GH paroxos"
-  vrf_id      = data.netbox_vrf.this.id
-}
-
-import {
-  id = "paroxos"
-  to = proxmox_sdn_vnet.paroxos
-}
-
-import {
-  id = "paroxos/Main-10.48.0.0-24"
-  to = proxmox_sdn_subnet.paroxos
 }

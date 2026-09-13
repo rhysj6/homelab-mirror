@@ -15,15 +15,4 @@ resource "netbox_prefix" "personal" {
   prefix      = proxmox_sdn_subnet.personal.cidr
   status      = "active"
   description = "GH personal"
-  vrf_id      = data.netbox_vrf.this.id
-}
-
-import {
-  id = "personal"
-  to = proxmox_sdn_vnet.personal
-}
-
-import {
-  id = "personal/Main-10.10.1.0-24"
-  to = proxmox_sdn_subnet.personal
 }

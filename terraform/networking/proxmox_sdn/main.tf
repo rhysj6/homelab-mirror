@@ -2,9 +2,6 @@ data "netbox_asn" "proxmox_evpn_asn" {
   tag = "proxmox-evpn"
 }
 
-data "netbox_vrf" "this" {
-  name = "Proxmox EVPN VRF"
-}
 resource "proxmox_sdn_controller_evpn" "main" {
   id  = "gh"
   asn = data.netbox_asn.proxmox_evpn_asn.asn

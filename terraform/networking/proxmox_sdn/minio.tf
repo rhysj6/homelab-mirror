@@ -17,15 +17,4 @@ resource "netbox_prefix" "minio" {
   prefix      = proxmox_sdn_subnet.minio.cidr
   status      = "active"
   description = "GH Minio"
-  vrf_id      = data.netbox_vrf.this.id
-}
-
-import {
-  id = "minio"
-  to = proxmox_sdn_vnet.minio
-}
-
-import {
-  id = "minio/Main-10.10.0.136-29"
-  to = proxmox_sdn_subnet.minio
 }

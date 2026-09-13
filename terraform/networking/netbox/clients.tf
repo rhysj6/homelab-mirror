@@ -3,6 +3,15 @@ resource "netbox_tag" "client" {
   color_hex = "40ff00"
 }
 
+resource "netbox_prefix" "clients" {
+  prefix      = "10.1.0.0/16"
+  status      = "active"
+  description = "Client infrastructure."
+  tags = [
+    netbox_tag.client.name
+  ]
+}
+
 resource "netbox_vlan" "client_main" {
   name = "Client Main"
   vid  = 21
@@ -36,6 +45,7 @@ resource "netbox_vlan" "client_iot" {
     netbox_tag.client.name
   ]
 }
+
 resource "netbox_prefix" "gh_client_iot" {
   prefix      = "10.1.4.0/24"
   status      = "active"
