@@ -4,28 +4,15 @@ resource "kubernetes_namespace" "external_hosts" {
   }
 }
 
-module "clifton" {
+module "pve" {
   source     = "./pass_through_ingress"
-  name       = "clifton"
-  hostname   = "clifton.homelab.example"
-  ip_address = "10.0.0.20"
-  port       = 8006
-  portname   = "https"
-  extra-ingress-annotations = {
-    "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-authentik@kubernetescrd"
-  }
-}
-
-module "pve-internal" {
-  source     = "./pass_through_ingress"
-  name       = "pve-internal"
-  hostname   = "pve.homelab.example"
+  name       = "pve"
+  hostname   = "pve.example.com"
   ip_address = "10.0.0.20"
   port       = 8006
   portname   = "https"
   local-only = true
 }
-
 
 module "pbs" {
   source     = "./pass_through_ingress"

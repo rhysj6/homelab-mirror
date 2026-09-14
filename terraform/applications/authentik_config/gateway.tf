@@ -5,9 +5,9 @@ module "clifton_authentik" {
   name   = "Clifton"
   slug   = "clifton"
   group  = "Infrastructure"
-  url    = "https://clifton.homelab.example"
+  url    = "https://pve.example.com"
   allowed_redirect_uris = [{
-    url           = "https://clifton.homelab.example"
+    url           = "https://pve.example.com"
     matching_mode = "strict"
   }]
   allowed_group = "pve-access"
