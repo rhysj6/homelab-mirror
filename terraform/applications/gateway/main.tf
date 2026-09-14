@@ -24,6 +24,15 @@ module "pbs" {
   local-only = true
 }
 
+module "netbox" {
+  source     = "./pass_through_ingress"
+  name       = "netbox"
+  hostname   = "netbox.example.com"
+  ip_address = "10.0.0.166"
+  port       = 8080
+  local-only = true
+}
+
 module "semaphore" {
   source     = "./pass_through_ingress"
   name       = "semaphore"

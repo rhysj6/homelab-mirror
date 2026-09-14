@@ -70,6 +70,6 @@ provider "authentik" {
 }
 
 provider "netbox" {
-  server_url = "http://10.0.0.166:8080"
+  server_url = "https://netbox.example.com"
   api_token  = ephemeral.infisical_secret.netbox_token.value
 }
