@@ -15,12 +15,7 @@ resource "kubernetes_service_v1" "service" {
 }
 
 locals {
-  public_annotations = {
-    "cert-manager.io/cluster-issuer" = "cert-manager"
-  }
   local_annotations = {
-    "cert-manager.io/cluster-issuer"                   = "infisical"
-    "cert-manager.io/common-name"                      = var.hostname
     "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-local-only@kubernetescrd"
   }
 }
@@ -29,8 +24,10 @@ resource "kubernetes_ingress_v1" "ingress" {
   metadata {
     name      = var.name
     namespace = "external-hosts"
-    annotations = merge(
-      var.local-only ? local.local_annotations : local.public_annotations,
+    annotations = merge({
+      "cert-manager.io/cluster-issuer" = "cert-manager"
+      },
+      var.local-only ? local.local_annotations : {},
     var.extra-ingress-annotations)
   }
   spec {
