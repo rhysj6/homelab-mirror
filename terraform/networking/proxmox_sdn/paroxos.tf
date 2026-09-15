@@ -17,3 +17,10 @@ resource "proxmox_sdn_subnet" "paroxos" {
   cidr = data.netbox_prefix.parox.prefix
   vnet = proxmox_sdn_vnet.paroxos.id
 }
+
+resource "netbox_ip_address" "paroxos_gw" {
+  ip_address  = "10.48.0.1/24"
+  description = "GH paroxos Gateway"
+  role        = "vip"
+  status      = "active"
+}

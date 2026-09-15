@@ -12,3 +12,9 @@ resource "netbox_ip_address" "gh_opnsense_lan_gateway" {
   object_type  = "dcim.interface"
   status       = "active"
 }
+
+resource "netbox_cluster" "gh_proxmox" {
+  cluster_type_id  = netbox_cluster_type.proxmox.id
+  name             = "gh-proxmox"
+}
+

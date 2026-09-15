@@ -16,3 +16,10 @@ resource "netbox_prefix" "personal" {
   status      = "active"
   description = "GH personal"
 }
+
+resource "netbox_ip_address" "personal_gw" {
+  ip_address  = "10.10.1.1/24"
+  description = "GH personal Gateway"
+  role        = "vip"
+  status      = "active"
+}

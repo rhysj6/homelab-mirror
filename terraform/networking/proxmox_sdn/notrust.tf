@@ -16,3 +16,10 @@ resource "netbox_prefix" "notrust" {
   status      = "active"
   description = "GH notrust"
 }
+
+resource "netbox_ip_address" "notrust_gw" {
+  ip_address  = "10.48.17.2/24"
+  description = "GH notrust Gateway"
+  role        = "vip"
+  status      = "active"
+}

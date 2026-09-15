@@ -18,3 +18,4 @@ resource "netbox_prefix" "minio" {
   status      = "active"
   description = "GH Minio"
 }
+
