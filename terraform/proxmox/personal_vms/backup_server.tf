@@ -64,3 +64,19 @@ resource "proxmox_download_file" "backup_server_image" {
   file_name    = "debian-13-generic-amd64.qcow2"
 }
 
+resource "netbox_virtual_machine" "backup_server" {
+  cluster_id   = data.netbox_cluster.gh_proxmox.id
+  name         = "backup-server"
+}
+
+resource "netbox_interface" "backup_server" {
+  name               = "eth0"
+  virtual_machine_id = netbox_virtual_machine.backup_server.id
+}
+
+resource "netbox_ip_address" "backup_server" {
+  ip_address   = "10.0.0.23/24"
+  status       = "active"
+  interface_id = netbox_interface.backup_server.id
+  object_type = "virtualization.vminterface"
+}

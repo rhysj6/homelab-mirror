@@ -11,3 +11,7 @@ data "http" "github_ssh_keys" {
     Accept = "application/vnd.github+json"
   }
 }
+
+data "netbox_cluster" "gh_proxmox" {
+  name = "gh-proxmox"
+}
