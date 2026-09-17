@@ -15,16 +15,23 @@ resource "proxmox_sdn_controller_evpn" "main" {
 data "proxmox_virtual_environment_nodes" "nodes" {}
 
 resource "proxmox_sdn_zone_evpn" "main" {
-  id = "Main"
-  nodes = data.proxmox_virtual_environment_nodes.nodes.names
+  id         = "Main"
+  nodes      = data.proxmox_virtual_environment_nodes.nodes.names
   controller = proxmox_sdn_controller_evpn.main.id
   vrf_vxlan  = 10000
 
   advertise_subnets          = true
   disable_arp_nd_suppression = false
   exit_nodes_local_routing   = false
-  exit_nodes = data.proxmox_virtual_environment_nodes.nodes.names
-  mtu = 1362
+  exit_nodes                 = data.proxmox_virtual_environment_nodes.nodes.names
+  mtu                        = 1362
 
   ipam = "pve"
+}
+
+resource "proxmox_sdn_zone_vlan" "main" {
+  id     = "main"
+  bridge = "vmbr0"
+  mtu    = 1500
+  ipam   = "pve"
 }
