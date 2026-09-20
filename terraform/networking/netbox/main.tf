@@ -18,3 +18,8 @@ resource "netbox_cluster" "gh_proxmox" {
   name             = "gh-proxmox"
 }
 
+resource "netbox_prefix" "servers" {
+  prefix      = "10.10.0.0/16"
+  status      = "active"
+  description = "Server infrastructure"
+}

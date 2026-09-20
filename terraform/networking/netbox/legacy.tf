@@ -11,7 +11,7 @@ resource "netbox_interface" "automator" {
 }
 
 resource "netbox_ip_address" "automator" {
-  ip_address   = "10.10.1.25/24"
+  ip_address   = "10.10.2.25/24"
   status       = "active"
   interface_id = netbox_interface.automator.id
   object_type = "virtualization.vminterface"

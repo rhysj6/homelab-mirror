@@ -37,7 +37,7 @@ module "semaphore" {
   source     = "./pass_through_ingress"
   name       = "semaphore"
   hostname   = "semaphore.homelab.example"
-  ip_address = "10.10.1.25"
+  ip_address = "10.10.2.25"
   port       = 80
   local-only = true
 }
