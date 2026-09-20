@@ -1,14 +1,22 @@
+
+data "netbox_vlan" "personal" {
+  name = "GH personal"
+}
+
+data "netbox_prefix" "personal" {
+  vlan_id = data.netbox_vlan.personal.id
+}
+
 resource "proxmox_sdn_vnet" "personal" {
   id    = "personal"
-  zone  = proxmox_sdn_zone_evpn.main.id
+  zone  = proxmox_sdn_zone_vlan.main.id
   alias = "Personal Util"
-  tag   = 30
+  tag   = data.netbox_vlan.personal.vid
 }
 
 resource "proxmox_sdn_subnet" "personal" {
-  cidr    = "10.10.1.0/24"
+  cidr    = data.netbox_prefix.personal.prefix
   vnet    = proxmox_sdn_vnet.personal.id
-  gateway = "10.10.1.1"
 }
 
 data "netbox_vlan" "temple" {
