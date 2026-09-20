@@ -1,12 +1,12 @@
 resource "proxmox_virtual_environment_vm" "backup_server" {
-  vm_id     = 302
-  name      = "backup-server"
+  vm_id       = 302
+  name        = "backup-server"
   description = "Open media vault and proxmox backup server \nManaged by Terraform"
-  node_name = local.node_name
+  node_name   = local.node_name
 
   cpu {
     cores = 4
-    type = "host"
+    type  = "host"
   }
 
   memory {
@@ -16,8 +16,8 @@ resource "proxmox_virtual_environment_vm" "backup_server" {
   initialization {
     ip_config {
       ipv4 {
-        address = "10.0.0.23/24"
-        gateway = "10.0.0.1"
+        address = "10.10.2.5/24"
+        gateway = "10.10.2.1"
       }
     }
 
@@ -45,6 +45,13 @@ resource "proxmox_virtual_environment_vm" "backup_server" {
     size         = 1000
   }
 
+  agent {
+    enabled = true
+    timeout = "15m"
+    trim    = true
+    type    = "virtio"
+  }
+
   # disk { # TODO: add this mid-migration
   #   datastore_id = ""
   #   path_in_datastore  = "/dev/path/to/block/device"
@@ -52,7 +59,7 @@ resource "proxmox_virtual_environment_vm" "backup_server" {
   # }
 
   network_device {
-    bridge = "vmbr0"
+    bridge = "temple"
   }
 }
 
@@ -65,8 +72,8 @@ resource "proxmox_download_file" "backup_server_image" {
 }
 
 resource "netbox_virtual_machine" "backup_server" {
-  cluster_id   = data.netbox_cluster.gh_proxmox.id
-  name         = "backup-server"
+  cluster_id = data.netbox_cluster.gh_proxmox.id
+  name       = "backup-server"
 }
 
 resource "netbox_interface" "backup_server" {
@@ -75,8 +82,8 @@ resource "netbox_interface" "backup_server" {
 }
 
 resource "netbox_ip_address" "backup_server" {
-  ip_address   = "10.0.0.23/24"
+  ip_address   = "10.10.2.5/24"
   status       = "active"
   interface_id = netbox_interface.backup_server.id
-  object_type = "virtualization.vminterface"
+  object_type  = "virtualization.vminterface"
 }
