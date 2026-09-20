@@ -45,7 +45,7 @@ resource "netbox_interface" "netbox" {
 }
 
 resource "netbox_ip_address" "netbox" {
-  ip_address   = "10.0.0.166/24"
+  ip_address   = "10.10.2.166/24"
   status       = "active"
   interface_id = netbox_interface.netbox.id
   object_type = "virtualization.vminterface"
