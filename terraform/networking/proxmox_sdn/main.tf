@@ -5,10 +5,9 @@ data "netbox_asn" "proxmox_evpn_asn" {
 resource "proxmox_sdn_controller_evpn" "main" {
   id  = "gh"
   asn = data.netbox_asn.proxmox_evpn_asn.asn
-  peers = [ ## TODO: These should be pulled from Netbox, but for now I'm hardcoding them here.
+  peers = [
     "10.0.0.20",
     "10.0.0.19",
-    "192.168.0.172"
   ]
 }
 
