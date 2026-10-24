@@ -1,10 +1,10 @@
 module github.com/rhysj6/homelab/tests/kubernetes
 
-go 1.26.0
+go 1.26.10
 
 require (
 	github.com/gruntwork-io/terratest v1.0.1
-	github.com/infisical/go-sdk v0.8.0
+	github.com/infisical/go-sdk v0.9.0
 	k8s.io/apimachinery v0.37.0
 	k8s.io/client-go v0.37.0
 )
